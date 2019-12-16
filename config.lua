@@ -117,10 +117,10 @@ end
 -- usage of stations to players in the same fraction on PvP servers
 travelnet.allow_travel = function( player_name, owner_name, network_name, station_name_start, station_name_target )
 
-   --minetest.chat_send_player( player_name, "Player "..tostring( player_name ).." tries to use station "..tostring( station_name_start )..
+   --minetest.chat_send_player( player_name, "Player "..tostring( player_name ).." tries to use station "..
+   -- tostring( station_name_start )..
    --    " on network "..tostring( network_name ).." owned by "..tostring( owner_name ).." in order to travel to "..
    --    tostring( station_name_target )..".");
 
    return true;
 end
-
