@@ -864,6 +864,12 @@ travelnet.on_receive_fields = function(pos, formname, fields, player)
    local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5;
    local player_model_vec = vector.new(0, player_model_bottom, 0);
    local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
+
+	 -- check if the node above the box (upper half) is air
+	 if minetest.get_node(vector.add(target_pos, {x=0, y=1, z=0})).name ~= "air" then
+		 -- replace with air if blocked
+		 minetest.set_node(target_pos, {name="air"})
+	 end
    player:move_to( vector.add(target_pos, player_model_vec), false);
 
    if( travelnet.enable_travelnet_effect ) then
