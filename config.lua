@@ -29,10 +29,11 @@ travelnet.elevator_recipe = {
 		{"default:steel_ingot", "",              "default:steel_ingot", },
 		{"default:steel_ingot", "default:glass", "default:steel_ingot", }
 }
+local color = "^[multiply:#0000ff"
 travelnet.tiles_travelnet = {
-		"travelnet_travelnet_front.png",  -- backward view
-		"travelnet_travelnet_back.png", -- front view
-		"travelnet_travelnet_side.png", -- sides :)
+		"(travelnet_travelnet_front_color.png"..color..")^travelnet_travelnet_front.png",  -- backward view
+		"(travelnet_travelnet_back_color.png"..color..")^travelnet_travelnet_back.png", -- front view
+		"(travelnet_travelnet_side_color.png"..color..")^travelnet_travelnet_side.png", -- sides :)
 		"default_steel_block.png",  -- view from top
 		"default_clay.png",  -- view from bottom
 		}
