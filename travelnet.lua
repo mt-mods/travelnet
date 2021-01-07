@@ -30,3 +30,10 @@ travelnet.register_travelnet_box({
 	dye = "dye:black",
 	light_source = 0
 })
+
+travelnet.register_travelnet_box({
+	nodename = "travelnet:travelnet_white",
+	color = "#ffffff",
+	dye = "dye:white",
+	light_source = 14
+})
