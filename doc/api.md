@@ -8,8 +8,8 @@ Example for a pink travelnet:
 ```lua
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_pink",
-	color = "^[multiply:#FFC0CB",
-	dye = "pink"
+	color = "#FFC0CB",
+	dye = "dye:pink"
 })
 ```
 
