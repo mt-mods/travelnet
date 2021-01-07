@@ -3,30 +3,30 @@
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet",
 	recipe = travelnet.travelnet_recipe,
-	color = "^[multiply:#ffff00"
+	color = "#ffff00"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_red",
-	color = "^[multiply:#ff0000",
-	dye = "red"
+	color = "#ff0000",
+	dye = "dye:red"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_blue",
-	color = "^[multiply:#0000ff",
-	dye = "blue"
+	color = "#0000ff",
+	dye = "dye:blue"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_green",
-	color = "^[multiply:#00ff00",
-	dye = "green"
+	color = "#00ff00",
+	dye = "dye:green"
 })
 
 travelnet.register_travelnet_box({
 	nodename = "travelnet:travelnet_black",
-	color = "^[multiply:#000000",
-	dye = "black",
+	color = "#000000",
+	dye = "dye:black",
 	light_source = 0
 })

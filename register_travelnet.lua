@@ -38,9 +38,9 @@ function travelnet.register_travelnet_box(cfg)
 		},
 
 		tiles = {
-			"(travelnet_travelnet_front_color.png"..cfg.color..")^travelnet_travelnet_front.png",  -- backward view
-			"(travelnet_travelnet_back_color.png"..cfg.color..")^travelnet_travelnet_back.png", -- front view
-			"(travelnet_travelnet_side_color.png"..cfg.color..")^travelnet_travelnet_side.png", -- sides :)
+			"(travelnet_travelnet_front_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_front.png",  -- backward view
+			"(travelnet_travelnet_back_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_back.png", -- front view
+			"(travelnet_travelnet_side_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_side.png", -- sides :)
 			"travelnet_top.png",  -- view from top
 			"travelnet_bottom.png",  -- view from bottom
 		},
@@ -110,7 +110,7 @@ function travelnet.register_travelnet_box(cfg)
 		minetest.register_craft({
 			output = cfg.nodename,
 			type = "shapeless",
-			recipe = {"group:travelnet", "dye:" .. cfg.dye},
+			recipe = {"group:travelnet", cfg.dye},
 		})
 	end
 end
