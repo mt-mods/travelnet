@@ -45,7 +45,7 @@ function travelnet.register_travelnet_box(cfg)
 			"travelnet_bottom.png",  -- view from bottom
 		},
 
-		--inventory_image = "travelnet_inv.png" .. cfg.color,
+		inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:"..cfg.color..")",
 		groups = {
 			travelnet = 1
 		},
