@@ -127,23 +127,27 @@ travelnet.remove_box = function(_, _, oldmetadata, digger )
 		return;
 	end
 
-	local owner_name      = oldmetadata.fields[ "owner" ];
-	local station_name    = oldmetadata.fields[ "station_name" ];
-	local station_network = oldmetadata.fields[ "station_network" ];
+	local owner_name = oldmetadata.fields["owner" ]
+	local station_name = oldmetadata.fields["station_name"]
+	local station_network = oldmetadata.fields["station_network"]
+	local networks = travelnet.get_networks(owner_name)
 
 	-- station is not known? then just remove it
-	if(  not( owner_name )
-		or not( station_name )
-		or not( station_network )
-		or not( travelnet.targets[ owner_name ] )
-		or not( travelnet.targets[ owner_name ][ station_network ] )) then
+	if  not owner_name
+		or not station_name
+		or not station_network
+		or not networks
+		or not networks[station_network] then
 
 		minetest.chat_send_player( digger:get_player_name(), S("Error")..": "..
-		S("Could not find the station that is to be removed."));
+		S("Could not find the station that is to be removed."))
 		return;
 	end
 
-	travelnet.targets[ owner_name ][ station_network ][ station_name ] = nil;
+	networks[station_network][station_name] = nil
+
+	-- save changed data
+	travelnet.set_networks(owner_name, networks)
 
 	-- inform the owner
 	minetest.chat_send_player( owner_name, S("Station '@1'" .." "..
@@ -154,7 +158,7 @@ travelnet.remove_box = function(_, _, oldmetadata, digger )
 	end
 
 	-- save the updated network data in a savefile over server restart
-	travelnet.save_data();
+	travelnet.set_networks(owner_name, networks)
 end
 
 
