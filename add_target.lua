@@ -95,13 +95,6 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       meta:set_string( "owner",           owner_name );
       meta:set_int( "timestamp",       travelnet.targets[ owner_name ][ network_name ][ station_name ].timestamp);
 
-      meta:set_string("formspec",
-                     "size[12,10]"..
-                     "field[0.3,0.6;6,0.7;station_name;"..S("Station:")..";"..
-										 minetest.formspec_escape(meta:get_string("station_name")).."]"..
-                     "field[0.3,3.6;6,0.7;station_network;"..S("Network:")..";"..
-										 minetest.formspec_escape(meta:get_string("station_network")).."]" );
-
       -- display a list of all stations that can be reached from here
       travelnet.update_formspec( pos, player_name, nil );
 

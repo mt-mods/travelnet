@@ -53,13 +53,17 @@ function travelnet.register_travelnet_box(cfg)
 		light_source = cfg.light_source or 10,
 		after_place_node  = function(pos, placer)
 			local meta = minetest.get_meta(pos);
-			travelnet.reset_formspec( meta );
 			meta:set_string("owner", placer:get_player_name());
 			local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 			minetest.set_node(top_pos, {name="travelnet:hidden_top"})
 		end,
 
 		on_receive_fields = travelnet.on_receive_fields,
+
+		on_rightclick = function(pos, _, player)
+			travelnet.update_formspec(pos, player:get_player_name(), nil)
+		end,
+
 		on_punch = function(pos, node, puncher)
 			local item = puncher:get_wielded_item()
 			if travelnet_dyes[item:get_name()] and puncher:get_player_control().sneak

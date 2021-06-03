@@ -26,7 +26,6 @@ minetest.override_item("default:mese", {
 
 	after_place_node  = function(pos, placer, itemstack)
 		local meta = minetest.get_meta(pos);
-		travelnet.reset_formspec( meta );
 		meta:set_string("owner", placer:get_player_name());
 	end,
 

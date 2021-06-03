@@ -28,7 +28,6 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 			return;
 		end
 
-		travelnet.reset_formspec( meta );
 		travelnet.show_message( pos, puncher_name, "Error", S("Update failed! Resetting this box on the travelnet."));
 		return;
 	end
