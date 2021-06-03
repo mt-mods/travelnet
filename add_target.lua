@@ -50,50 +50,51 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
    end
 
    -- first one by this player?
-   if( not( travelnet.targets[ owner_name ] )) then
-      travelnet.targets[       owner_name ] = {};
+   if not travelnet.get_networks(owner_name) then
+      travelnet.set_networks(owner_name, {})
    end
 
+   local networks = travelnet.get_networks(owner_name)
+
    -- first station on this network?
-   if( not( travelnet.targets[ owner_name ][ network_name ] )) then
-      travelnet.targets[       owner_name ][ network_name ] = {};
+   if not networks[network_name] then
+      networks[network_name] = {}
    end
 
    -- lua doesn't allow efficient counting here
    local anz = 0;
-   for k in pairs( travelnet.targets[ owner_name ][ network_name ] ) do
-
-      if( k == station_name ) then
+   for k in pairs(networks[network_name]) do
+      if  k == station_name then
          travelnet.show_message( pos, player_name, S("Error"),
-	    S("A station named '@1' already exists on this network. Please choose a different name!", station_name));
+	    S("A station named '@1' already exists on this network. Please choose a different name!", station_name))
          return;
       end
 
-      anz = anz + 1;
+      anz = anz + 1
    end
 
    -- we don't want too many stations in the same network because that would get confusing when displaying the targets
    if( anz+1 > travelnet.MAX_STATIONS_PER_NETWORK ) then
       travelnet.show_message( pos, player_name, S("Error"),
 	S("Network '@1', already contains the maximum number (@2) of allowed stations per network. "..
-	"Please choose a different/new network name.", network_name, travelnet.MAX_STATIONS_PER_NETWORK));
+	"Please choose a different/new network name.", network_name, travelnet.MAX_STATIONS_PER_NETWORK))
       return;
    end
 
    -- add this station
-   travelnet.targets[ owner_name ][ network_name ][ station_name ] = {pos=pos, timestamp=os.time() };
+   local timestamp = os.time()
+   networks[network_name][station_name] = {pos=pos, timestamp=timestamp }
 
    -- do we have a new node to set up? (and are not just reading from a safefile?)
-   if( meta ) then
-
+   if meta then
       minetest.chat_send_player(player_name, S("Station '@1'" .." "..
 		"has been added to the network '@2'" ..
-		", which now consists of @3 station(s).", station_name, network_name, anz+1));
+		", which now consists of @3 station(s).", station_name, network_name, anz+1))
 
-      meta:set_string( "station_name",    station_name );
-      meta:set_string( "station_network", network_name );
-      meta:set_string( "owner",           owner_name );
-      meta:set_int( "timestamp",       travelnet.targets[ owner_name ][ network_name ][ station_name ].timestamp);
+      meta:set_string( "station_name", station_name)
+      meta:set_string( "station_network", network_name)
+      meta:set_string( "owner", owner_name)
+      meta:set_int("timestamp", timestamp);
 
       meta:set_string("formspec",
                      "size[12,10]"..
@@ -105,7 +106,7 @@ travelnet.add_target = function( station_name, network_name, pos, player_name, m
       -- display a list of all stations that can be reached from here
       travelnet.update_formspec( pos, player_name, nil );
 
-      -- save the updated network data in a savefile over server restart
-      travelnet.save_data();
+      -- save networks
+      travelnet.set_networks(owner_name, networks)
    end
 end

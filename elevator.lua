@@ -4,34 +4,35 @@
 local S = minetest.get_translator("travelnet")
 
 travelnet.show_nearest_elevator = function( pos, owner_name, param2 )
-	if( not( pos ) or not(pos.x) or not(pos.z) or not( owner_name )) then
-		return;
+	if not pos or not pos.x or not pos.z or not owner_name then
+		return
 	end
 
-	if( not( travelnet.targets[ owner_name ] )) then
+	if travelnet.get_networks(owner_name) then
 		minetest.chat_send_player( owner_name, S("Congratulations! This is your first elevator. "..
 			"You can build an elevator network by placing further elevators somewhere above "..
-			"or below this one. Just make sure that the x and z coordinate are the same."));
+			"or below this one. Just make sure that the x and z coordinate are the same."))
 		return;
 	end
 
-	local network_name = tostring( pos.x )..','..tostring( pos.z );
+	local network_name = tostring( pos.x )..','..tostring( pos.z )
+	local networks = travelnet.get_networks(owner_name)
 	-- will this be an elevator that will be added to an existing network?
-	if( travelnet.targets[ owner_name ][ network_name ]
+	if( networks[network_name]
 	  -- does the network have any members at all?
-	  and next( travelnet.targets[ owner_name ][ network_name ], nil )) then
+	  and next( networks[network_name], nil )) then
 		minetest.chat_send_player( owner_name, S("This elevator will automaticly connect to the "..
 			"other elevators you have placed at different heights. Just enter a station name "..
 			"and click on \"store\" to set it up. Or just punch it to set the height as station "..
-			"name."));
-		return;
+			"name."))
+		return
 	end
 
 	local nearest_name = "";
 	local nearest_dist = 100000000;
 	local nearest_dist_x = 0;
 	local nearest_dist_z = 0;
-	for target_network_name, data in pairs( travelnet.targets[ owner_name ] ) do
+	for target_network_name, data in pairs(networks) do
 		local station_name = next( data, nil );
 		if( station_name and data[ station_name ][ "nr" ] and data[ station_name ].pos) then
 			local station_pos = data[ station_name ].pos;

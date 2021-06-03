@@ -12,19 +12,17 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 	end
 
 	if not meta then
-		return;
+		return
 	end
 
-	local owner_name      = meta:get_string( "owner" );
-	local station_name    = meta:get_string( "station_name" );
-	local station_network = meta:get_string( "station_network" );
+	local owner_name = meta:get_string("owner")
+	local station_name = meta:get_string("station_name")
+	local station_network = meta:get_string("station_network")
+	local networks = travelnet.get_networks(owner_name)
 
-	if(  not( owner_name )
-		or not( station_name ) or station_network == ''
-		or not( station_network )) then
-
+	if not owner_name or not station_name or station_network == '' or not station_network then
 		if is_elevator then
-			travelnet.add_target( nil, nil, pos, puncher_name, meta, owner_name );
+			travelnet.add_target( nil, nil, pos, puncher_name, meta, owner_name )
 			return;
 		end
 
@@ -34,33 +32,33 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 	end
 
 	-- if the station got lost from the network for some reason (savefile corrupted?) then add it again
-	if(  not( travelnet.targets[ owner_name ] )
-		or not( travelnet.targets[ owner_name ][ station_network ] )
-		or not( travelnet.targets[ owner_name ][ station_network ][ station_name ] )) then
+	if not networks
+		or not networks[station_network]
+		or not networks[station_network][station_name] then
 
 		-- first one by this player?
-		if not travelnet.targets[owner_name] then
-			travelnet.targets[owner_name ] = {};
+		if not networks then
+			networks = {};
 		end
 
 		-- first station on this network?
-		if not travelnet.targets[ owner_name ][ station_network ] then
-			travelnet.targets[owner_name ][ station_network ] = {};
+		if not networks[station_network] then
+			networks[station_network] = {}
 		end
 
 
 		local zeit = meta:get_int("timestamp");
 		if not( zeit) or type(zeit)~="number" or zeit<100000 then
-			zeit = os.time();
+			zeit = os.time()
 		end
 
 		-- add this station
-		travelnet.targets[ owner_name ][ station_network ][ station_name ] = {pos=pos, timestamp=zeit };
+		networks[station_network][station_name] = {pos=pos, timestamp=zeit }
 
 		minetest.chat_send_player(owner_name, S("Station '@1'" .." "..
 			"has been reattached to the network '@2'.", station_name, station_network)
 		);
-		travelnet.save_data();
+		travelnet.set_networks(owner_name, networks)
 	end
 
 
@@ -88,38 +86,39 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 	-- collect all station names in a table
 	local stations = {};
 
-	for k in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
-		table.insert( stations, k );
+	for k in pairs(networks[ station_network]) do
+		table.insert(stations, k);
 	end
 
 	local ground_level = 1;
 	if is_elevator then
-		table.sort( stations, function(a,b) return travelnet.targets[ owner_name ][ station_network ][ a ].pos.y >
-		travelnet.targets[ owner_name ][ station_network ][ b ].pos.y  end);
+		table.sort(stations, function(a,b)
+			return networks[station_network][a].pos.y > networks[station_network][b].pos.y
+		end);
 		-- find ground level
 		local vgl_timestamp = 999999999999;
 		for index,k in ipairs( stations ) do
-			if not travelnet.targets[ owner_name ][ station_network ][ k ].timestamp then
-				travelnet.targets[ owner_name ][ station_network ][ k ].timestamp = os.time();
+			if not networks[station_network][k].timestamp then
+				networks[station_network][k].timestamp = os.time()
 			end
-			if travelnet.targets[ owner_name ][ station_network ][ k ].timestamp < vgl_timestamp then
-				vgl_timestamp = travelnet.targets[ owner_name ][ station_network ][ k ].timestamp;
-				ground_level  = index;
+			if networks[station_network][k].timestamp < vgl_timestamp then
+				vgl_timestamp = networks[station_network][k].timestamp
+				ground_level  = index
 			end
 		end
 
-		for index,k in ipairs( stations ) do
+		for index,k in ipairs(stations) do
 			if( index == ground_level ) then
-				travelnet.targets[ owner_name ][ station_network ][ k ].nr = 'G';
+				networks[station_network][k].nr = 'G';
 			else
-				travelnet.targets[ owner_name ][ station_network ][ k ].nr = tostring( ground_level - index );
+				networks[station_network][k].nr = tostring( ground_level - index );
 			end
 		end
 	else
 		-- sort the table according to the timestamp (=time the station was configured)
 		table.sort( stations, function(a,b)
-			return travelnet.targets[ owner_name ][ station_network ][ a ].timestamp <
-				travelnet.targets[ owner_name ][ station_network ][ b ].timestamp
+			return networks[station_network][a].timestamp <
+				networks[station_network][b].timestamp
 		end);
 	end
 
@@ -156,11 +155,11 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 			return;
 		else
 			-- swap the actual data by which the stations are sorted
-			local old_timestamp = travelnet.targets[ owner_name ][ station_network ][ stations[swap_with_pos]].timestamp;
-			travelnet.targets[    owner_name ][ station_network ][ stations[swap_with_pos]].timestamp =
-			travelnet.targets[ owner_name ][ station_network ][ stations[current_pos  ]].timestamp;
-			travelnet.targets[    owner_name ][ station_network ][ stations[current_pos  ]].timestamp =
-			old_timestamp;
+			local old_timestamp = networks[ station_network ][ stations[swap_with_pos]].timestamp
+			networks[station_network][stations[swap_with_pos]].timestamp =
+				networks[station_network][stations[current_pos]].timestamp
+			networks[station_network][stations[current_pos]].timestamp =
+				old_timestamp;
 
 			-- for elevators, only the "G"(round) marking is moved; no point in swapping stations
 			if( not( is_elevator )) then
@@ -171,7 +170,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 			end
 
 			-- store the changed order
-			travelnet.save_data();
+			travelnet.set_networks(owner_name, networks)
 		end
 	end
 
@@ -201,7 +200,7 @@ travelnet.update_formspec = function( pos, puncher_name, fields )
 					"label["..(x+0.9)..","..(y+2.35)..";"..tostring( k ).."]";
 			elseif( is_elevator ) then
 				formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";1,0.5;target;"..
-					tostring( travelnet.targets[ owner_name ][ station_network ][ k ].nr ).."]"..
+					tostring( networks[ station_network ][ k ].nr ).."]"..
 					"label["..(x+0.9)..","..(y+2.35)..";"..tostring( k ).."]";
 			else
 				formspec = formspec .."button_exit["..(x)..","..(y+2.5)..";4,0.5;target;"..k.."]";

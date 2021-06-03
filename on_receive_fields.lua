@@ -77,8 +77,8 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 
 
 	-- if the box has not been configured yet
-	if( meta:get_string("station_network")=="" ) then
-		travelnet.add_target( fields.station_name, fields.station_network, pos, name, meta, fields.owner );
+	if meta:get_string("station_network") == "" then
+		travelnet.add_target(fields.station_name, fields.station_network, pos, name, meta, fields.owner)
 		return;
 	end
 
@@ -100,78 +100,75 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 
 
 	-- if there is something wrong with the data
-	local owner_name      = meta:get_string( "owner" );
-	local station_name    = meta:get_string( "station_name" );
-	local station_network = meta:get_string( "station_network" );
+	local owner_name = meta:get_string("owner")
+	local station_name = meta:get_string("station_name")
+	local station_network = meta:get_string("station_network")
+	local networks = travelnet.get_networks(owner_name)
 
-	if(  not( owner_name  )
-		or not( station_name )
-		or not( station_network )
-		or not( travelnet.targets[ owner_name ] )
-		or not( travelnet.targets[ owner_name ][ station_network ] )) then
+	if not owner_name
+		or not station_name
+		or not station_network
+		or not networks
+		or not networks[station_network] then
 
-			if owner_name
-				and station_name
-				and station_network then
-					travelnet.add_target( station_name, station_network, pos, owner_name, meta, owner_name );
+			if owner_name and station_name and station_network then
+					travelnet.add_target( station_name, station_network, pos, owner_name, meta, owner_name )
 				else
 					minetest.chat_send_player(name, S("Error")..": "..
 						S("There is something wrong with the configuration of this station.")..
 						" DEBUG DATA: owner: "..(  owner_name or "?")..
 						" station_name: "..(station_name or "?")..
 						" station_network: "..(station_network or "?").."."
-					);
+					)
 				return
 			end
 	end
 
-	if(  not( owner_name )
-		or not( station_network )
-		or not( travelnet.targets )
-		or not( travelnet.targets[ owner_name ] )
-		or not( travelnet.targets[ owner_name ][ station_network ] )) then
+	if not owner_name
+		or not station_network
+		or not networks
+		or not networks[station_network] then
 			minetest.chat_send_player(name, S("Error")..": "..
 				S("This travelnet is lacking data and/or improperly configured."));
 				print( "ERROR: The travelnet at "..minetest.pos_to_string( pos ).." has a problem: "..
 				" DATA: owner: "..(  owner_name or "?")..
 				" station_name: "..(station_name or "?")..
 				" station_network: "..(station_network or "?").."."
-			);
-		return;
+			)
+		return
 	end
 
-	local this_node = minetest.get_node( pos );
+	local this_node = minetest.get_node(pos)
 	if this_node ~= nil and this_node.name == 'travelnet:elevator' then
-		for k,_ in pairs( travelnet.targets[ owner_name ][ station_network ] ) do
-			if( travelnet.targets[ owner_name ][ station_network ][ k ].nr
-			== fields.target) then
-				fields.target = k;
+		for k,_ in pairs(networks[station_network]) do
+			if networks[station_network][k].nr == fields.target then
+				fields.target = k
 			end
 		end
 	end
 
 	-- if the target station is gone
-	if not travelnet.targets[ owner_name ][ station_network ][ fields.target ] then
+	if not networks[station_network][fields.target] then
 		minetest.chat_send_player(name, S("Station '@1' does not exist (anymore?)" ..
 			" " .. "on this network.", fields.target or "?")
-		);
-		travelnet.update_formspec( pos, name, nil );
-		return;
+		)
+		travelnet.update_formspec( pos, name, nil )
+		return
 	end
 
 
-	if( not( travelnet.allow_travel( name, owner_name, station_network, station_name, fields.target ))) then
-		return;
+	if not travelnet.allow_travel(name, owner_name, station_network, station_name, fields.target) then
+		return
 	end
-	minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"));
+	minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"))
 
 
 
 	if travelnet.travelnet_sound_enabled then
 		if this_node.name == 'travelnet:elevator' then
-			minetest.sound_play("travelnet_bell", {pos = pos, gain = 0.75, max_hear_distance = 10,});
+			minetest.sound_play("travelnet_bell", {pos = pos, gain = 0.75, max_hear_distance = 10,})
 		else
-			minetest.sound_play("travelnet_travel", {pos = pos, gain = 0.75, max_hear_distance = 10,});
+			minetest.sound_play("travelnet_travel", {pos = pos, gain = 0.75, max_hear_distance = 10,})
 		end
 	end
 
@@ -187,7 +184,7 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	-- may be 0.0 for some versions of MT 5 player model
 	local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5;
 	local player_model_vec = vector.new(0, player_model_bottom, 0);
-	local target_pos = travelnet.targets[ owner_name ][ station_network ][ fields.target ].pos;
+	local target_pos = networks[station_network][fields.target].pos
 
 	local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 	local top_node = minetest.get_node(top_pos)
