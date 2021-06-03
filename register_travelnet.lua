@@ -37,7 +37,7 @@ function travelnet.register_travelnet_box(cfg)
 			},
 		},
 
-		tiles = {
+		tiles = cfg.tiles or {
 			"(travelnet_travelnet_front_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_front.png",  -- backward view
 			"(travelnet_travelnet_back_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_back.png", -- front view
 			"(travelnet_travelnet_side_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_side.png", -- sides :)
@@ -46,7 +46,8 @@ function travelnet.register_travelnet_box(cfg)
 		},
 
 		use_texture_alpha = "clip",
-		inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:"..cfg.color..")",
+		inventory_image = cfg.inventory_image or
+			"travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:"..cfg.color..")",
 		groups = {
 			travelnet = 1
 		},

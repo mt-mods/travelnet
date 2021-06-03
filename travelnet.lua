@@ -38,3 +38,16 @@ travelnet.register_travelnet_box({
 	dye = "dye:white",
 	light_source = 14
 })
+
+travelnet.register_travelnet_box({
+	nodename = "travelnet:travelnet_fancy",
+	tiles = {
+		"travelnet_fancy_front.png",
+		"travelnet_fancy_back.png",
+		"travelnet_fancy_side.png",
+		"travelnet_top.png",
+		"travelnet_bottom.png",
+	},
+	inventory_image = "travelnet_inv_base.png", --TODO: proper inv
+	light_source = 14
+})
