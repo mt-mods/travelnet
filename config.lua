@@ -20,14 +20,14 @@ travelnet.abm_enabled              = false
 
 -- change these if you want other receipes for travelnet or elevator
 travelnet.travelnet_recipe = {
-	{"default:glass", "default:steel_ingot", "default:glass", },
-	{"default:glass", "default:mese",        "default:glass", },
-	{"default:glass", "default:steel_ingot", "default:glass", }
+	{"default:glass", "default:steel_ingot", "default:glass" },
+	{"default:glass", "default:mese",        "default:glass" },
+	{"default:glass", "default:steel_ingot", "default:glass" }
 }
 travelnet.elevator_recipe = {
-	{"default:steel_ingot", "default:glass", "default:steel_ingot", },
-	{"default:steel_ingot", "",              "default:steel_ingot", },
-	{"default:steel_ingot", "default:glass", "default:steel_ingot", }
+	{"default:steel_ingot", "default:glass", "default:steel_ingot" },
+	{"default:steel_ingot", "",              "default:steel_ingot" },
+	{"default:steel_ingot", "default:glass", "default:steel_ingot" }
 }
 travelnet.tiles_elevator = {
 	"travelnet_elevator_front.png",
@@ -39,22 +39,22 @@ travelnet.tiles_elevator = {
 }
 travelnet.elevator_inventory_image  = "travelnet_elevator_inv.png"
 
-if minetest.registered_nodes["mcl_core:wood"] then
+if minetest.registered_nodes[ "mcl_core:wood" ] then
 	travelnet.travelnet_recipe = {
-		{"mcl_stairs:slab_wood", "mcl_stairs:slab_wood", "mcl_stairs:slab_wood",},
-		{"mesecons_torch:mesecon_torch_on", "mcl_chests:chest", "mesecons_torch:mesecon_torch_on"},
-		{"mesecons_torch:mesecon_torch_on", "mcl_chests:chest", "mesecons_torch:mesecon_torch_on"},
-		-- {"core:glass", "mcl_core:iron_ingot",           "mcl_core:glass", },
-		-- {"mcl_core:glass", "mesecons_torch:redstoneblock", "mcl_core:glass", },
-		-- {"mcl_core:glass", "mcl_core:iron_ingot",           "mcl_core:glass", }
+		{ "mcl_stairs:slab_wood",            "mcl_stairs:slab_wood", "mcl_stairs:slab_wood" },
+		{ "mesecons_torch:mesecon_torch_on", "mcl_chests:chest",     "mesecons_torch:mesecon_torch_on" },
+		{ "mesecons_torch:mesecon_torch_on", "mcl_chests:chest",     "mesecons_torch:mesecon_torch_on" },
+		-- { "core:glass",     "mcl_core:iron_ingot",          "mcl_core:glass" },
+		-- { "mcl_core:glass", "mesecons_torch:redstoneblock", "mcl_core:glass" },
+		-- { "mcl_core:glass", "mcl_core:iron_ingot",          "mcl_core:glass" }
 	}
 	travelnet.elevator_recipe = {
-		{"mcl_stairs:slab_wood", "mcl_stairs:slab_wood", "mcl_stairs:slab_wood",},
-		{"mesecons_torch:mesecon_torch_on", "", "mesecons_torch:mesecon_torch_on"},
-		{"mesecons_torch:mesecon_torch_on", "", "mesecons_torch:mesecon_torch_on"},
-		-- {"mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot", },
-		-- {"mcl_core:iron_ingot", "",               "mcl_core:iron_ingot", },
-		-- {"mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot", }
+		{ "mcl_stairs:slab_wood", "mcl_stairs:slab_wood", "mcl_stairs:slab_wood" },
+		{ "mesecons_torch:mesecon_torch_on", "", "mesecons_torch:mesecon_torch_on" },
+		{ "mesecons_torch:mesecon_torch_on", "", "mesecons_torch:mesecon_torch_on" },
+		-- { "mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot" },
+		-- { "mcl_core:iron_ingot", "",               "mcl_core:iron_ingot" },
+		-- { "mcl_core:iron_ingot", "mcl_core:glass", "mcl_core:iron_ingot" }
 	}
 	travelnet.tiles_elevator = {
 		"mcl_core_planks_big_oak.png^[transformR90", -- front
