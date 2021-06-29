@@ -41,7 +41,7 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 	minetest.register_node(node_base_name.."_closed", {
 		description = S("elevator door (closed)"),
 		drawtype = "nodebox",
-                -- top, bottom, side1, side2, inner, outer
+		-- top, bottom, side1, side2, inner, outer
 		tiles = def_tiles,
 		use_texture_alpha = "clip",
 		paramtype = "light",
@@ -70,34 +70,36 @@ travelnet.register_door = function( node_base_name, def_tiles, material )
 	minetest.register_craft({
 		output = node_base_name.."_closed",
 		recipe = {
-			{material, '', material },
-			{material, '', material },
-			{material, '', material }
+			{ material, '', material },
+			{ material, '', material },
+			{ material, '', material }
 		}
 	})
 
 
 	-- Make doors reacts to mesecons
 	if minetest.get_modpath("mesecons") then
-		local mesecons = {effector = {
-			action_on = function(pos, node)
-			minetest.add_node(pos, {name = node_base_name.."_open", param2 = node.param2})
-		end,
-		action_off = function(pos, node)
-			minetest.add_node(pos, {name = node_base_name.."_closed", param2 = node.param2})
-		end,
-		rules = mesecon.rules.pplate
-	}}
+		local mesecons = {
+			effector = {
+				action_on = function(pos, node)
+					minetest.add_node(pos, {name = node_base_name.."_open", param2 = node.param2})
+				end,
+				action_off = function(pos, node)
+					minetest.add_node(pos, {name = node_base_name.."_closed", param2 = node.param2})
+				end,
+				rules = mesecon.rules.pplate
+			}
+		}
 
-	minetest.override_item( node_base_name.."_closed", { mesecons = mesecons })
-	minetest.override_item( node_base_name.."_open", { mesecons = mesecons })
-   end
+		minetest.override_item( node_base_name.."_closed", { mesecons = mesecons })
+		minetest.override_item( node_base_name.."_open", { mesecons = mesecons })
+	end
 end
 
 -- actually register the doors
 -- (but only if the materials for them exist)
-if(minetest.get_modpath("default")) then
-	travelnet.register_door( "travelnet:elevator_door_steel", {"default_stone.png"}, "default:steel_ingot");
-	travelnet.register_door( "travelnet:elevator_door_glass", {"travelnet_elevator_door_glass.png"}, "default:glass");
-	travelnet.register_door( "travelnet:elevator_door_tin", {"default_clay.png"}, "default:tin_ingot");
+if minetest.get_modpath("default") then
+	travelnet.register_door( "travelnet:elevator_door_steel", {"default_stone.png"}, "default:steel_ingot")
+	travelnet.register_door( "travelnet:elevator_door_glass", {"travelnet_elevator_door_glass.png"}, "default:glass")
+	travelnet.register_door( "travelnet:elevator_door_tin", {"default_clay.png"}, "default:tin_ingot")
 end

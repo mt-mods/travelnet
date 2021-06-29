@@ -52,9 +52,9 @@ function travelnet.register_travelnet_box(cfg)
 		},
 		light_source = cfg.light_source or 10,
 		after_place_node  = function(pos, placer)
-			local meta = minetest.get_meta(pos);
-			travelnet.reset_formspec( meta );
-			meta:set_string("owner", placer:get_player_name());
+			local meta = minetest.get_meta(pos)
+			travelnet.reset_formspec( meta )
+			meta:set_string("owner", placer:get_player_name())
 			local top_pos = {x=pos.x, y=pos.y+1, z=pos.z}
 			minetest.set_node(top_pos, {name="travelnet:hidden_top"})
 		end,
@@ -88,7 +88,7 @@ function travelnet.register_travelnet_box(cfg)
 		-- taken from VanessaEs homedecor fridge
 		on_place = function(itemstack, placer, pointed_thing)
 
-			local pos = pointed_thing.above;
+			local pos = pointed_thing.above
 			local node = minetest.get_node({x=pos.x, y=pos.y+1, z=pos.z})
 			local def = minetest.registered_nodes[node.name]
 			-- leftover top nodes can be removed by placing a new travelnet underneath
@@ -97,9 +97,9 @@ function travelnet.register_travelnet_box(cfg)
 					placer:get_player_name(),
 					S('Not enough vertical space to place the travelnet box!')
 				)
-				return;
+				return
 			end
-			return minetest.item_place(itemstack, placer, pointed_thing);
+			return minetest.item_place(itemstack, placer, pointed_thing)
 		end,
 
 		on_destruct = function(pos)
