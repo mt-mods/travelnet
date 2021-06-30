@@ -38,20 +38,20 @@ function travelnet.register_travelnet_box(cfg)
 		},
 
 		tiles = {
-			"(travelnet_travelnet_front_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_front.png",  -- backward view
-			"(travelnet_travelnet_back_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_back.png", -- front view
-			"(travelnet_travelnet_side_color.png^[multiply:"..cfg.color..")^travelnet_travelnet_side.png", -- sides :)
-			"travelnet_top.png",  -- view from top
-			"travelnet_bottom.png",  -- view from bottom
+			"(travelnet_travelnet_front_color.png^[multiply:" .. cfg.color .. ")^travelnet_travelnet_front.png", -- backward view
+			"(travelnet_travelnet_back_color.png^[multiply:"  .. cfg.color .. ")^travelnet_travelnet_back.png",  -- front view
+			"(travelnet_travelnet_side_color.png^[multiply:"  .. cfg.color .. ")^travelnet_travelnet_side.png",  -- sides :)
+			"travelnet_top.png", -- view from top
+			"travelnet_bottom.png", -- view from bottom
 		},
 
 		use_texture_alpha = "clip",
-		inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:"..cfg.color..")",
+		inventory_image = "travelnet_inv_base.png^(travelnet_inv_colorable.png^[multiply:" .. cfg.color .. ")",
 		groups = {
 			travelnet = 1
 		},
 		light_source = cfg.light_source or 10,
-		after_place_node  = function(pos, placer)
+		after_place_node = function(pos, placer)
 			local meta = minetest.get_meta(pos)
 			travelnet.reset_formspec(meta)
 			meta:set_string("owner", placer:get_player_name())
@@ -62,8 +62,10 @@ function travelnet.register_travelnet_box(cfg)
 		on_receive_fields = travelnet.on_receive_fields,
 		on_punch = function(pos, node, puncher)
 			local item = puncher:get_wielded_item()
-			if travelnet_dyes[item:get_name()] and puncher:get_player_control().sneak
-					and not minetest.is_protected(pos, puncher:get_player_name()) then
+			if	    travelnet_dyes[item:get_name()]
+				and puncher:get_player_control().sneak
+				and not minetest.is_protected(pos, puncher:get_player_name())
+			then
 				-- in-place travelnet coloring
 				node.name = travelnet_dyes[item:get_name()]
 				minetest.swap_node(pos, node)
@@ -87,7 +89,6 @@ function travelnet.register_travelnet_box(cfg)
 
 		-- taken from VanessaEs homedecor fridge
 		on_place = function(itemstack, placer, pointed_thing)
-
 			local pos = pointed_thing.above
 			local node = minetest.get_node({ x=pos.x, y=pos.y+1, z=pos.z })
 			local def = minetest.registered_nodes[node.name]
@@ -121,7 +122,7 @@ function travelnet.register_travelnet_box(cfg)
 		minetest.register_craft({
 			output = cfg.nodename,
 			type = "shapeless",
-			recipe = {"group:travelnet", cfg.dye},
+			recipe = { "group:travelnet", cfg.dye },
 		})
 	end
 end

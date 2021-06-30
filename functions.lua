@@ -44,22 +44,30 @@ travelnet.open_close_door = function(pos, player, mode)
 
 		-- at least for homedecor, same facedir would mean "door closed"
 		-- do not close the elevator door if it is already closed
-		if mode == 1 and (string.sub(door_node.name, -7) == '_closed'
-		-- handle doors that change their facedir
-		or (door_node.param2 == ((this_node.param2 + 2) % 4)
-		and door_node.name ~= 'travelnet:elevator_door_glass_open'
-		and door_node.name ~= 'travelnet:elevator_door_tin_open'
-		and door_node.name ~= 'travelnet:elevator_door_steel_open')) then
+		if mode == 1 and (
+			string.sub(door_node.name, -7) == '_closed'
+			-- handle doors that change their facedir
+			or (
+				door_node.param2 == (this_node.param2 + 2) % 4
+				and door_node.name ~= 'travelnet:elevator_door_glass_open'
+				and door_node.name ~= 'travelnet:elevator_door_tin_open'
+				and door_node.name ~= 'travelnet:elevator_door_steel_open'
+			)
+		) then
 			return
 		end
 
 		-- do not open the doors if they are already open (works only on elevator-doors; not on doors in general)
-		if mode == 2 and (string.sub(door_node.name, -5) == '_open'
-		-- handle doors that change their facedir
-		or (door_node.param2 ~= ((this_node.param2 + 2) % 4)
-		and door_node.name ~= 'travelnet:elevator_door_glass_closed'
-		and door_node.name ~= 'travelnet:elevator_door_tin_closed'
-		and door_node.name ~= 'travelnet:elevator_door_steel_closed')) then
+		if mode == 2 and (
+			string.sub(door_node.name, -5) == '_open'
+			-- handle doors that change their facedir
+			or (
+				door_node.param2 ~= ((this_node.param2 + 2) % 4)
+				and door_node.name ~= 'travelnet:elevator_door_glass_closed'
+				and door_node.name ~= 'travelnet:elevator_door_tin_closed'
+				and door_node.name ~= 'travelnet:elevator_door_steel_closed'
+			)
+		) then
 			return
 		end
 
@@ -83,7 +91,7 @@ travelnet.rotate_player = function(target_pos, player, tries)
 	local node2 = minetest.get_node_or_nil(target_pos)
 	if node2 == nil then
 		if tries < 30 then
-			minetest.after(0, travelnet.rotate_player, target_pos, player, tries + 1)
+			minetest.after(0, travelnet.rotate_player, target_pos, player, tries+1)
 		end
 		return
 	end
@@ -130,8 +138,8 @@ end
 
 travelnet.remove_box = function(_, _, oldmetadata, digger)
 	if not oldmetadata or oldmetadata == "nil" or not oldmetadata.fields then
-		minetest.chat_send_player(digger:get_player_name(), S("Error")..": "..
-			S("Could not find information about the station that is to be removed."))
+		minetest.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..
+				S("Could not find information about the station that is to be removed."))
 		return
 	end
 
@@ -140,25 +148,25 @@ travelnet.remove_box = function(_, _, oldmetadata, digger)
 	local station_network = oldmetadata.fields["station_network"]
 
 	-- station is not known? then just remove it
-	if not owner_name
-	or not station_name
-	or not station_network
-	or not travelnet.targets[owner_name]
-	or not travelnet.targets[owner_name][station_network]
+	if	   not owner_name
+		or not station_name
+		or not station_network
+		or not travelnet.targets[owner_name]
+		or not travelnet.targets[owner_name][station_network]
 	then
-		minetest.chat_send_player(digger:get_player_name(), S("Error")..": "..
-		S("Could not find the station that is to be removed."))
+		minetest.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..
+				S("Could not find the station that is to be removed."))
 		return
 	end
 
 	travelnet.targets[owner_name][station_network][station_name] = nil
 
 	-- inform the owner
-	minetest.chat_send_player(owner_name, S("Station '@1'" .." "..
-		"has been REMOVED from the network '@2'.", station_name, station_network))
-	if digger ~= nil and owner_name ~= digger:get_player_name() then
-		minetest.chat_send_player(digger:get_player_name(), S("Station '@1'" .." "..
+	minetest.chat_send_player(owner_name, S("Station '@1'" .. " " ..
 			"has been REMOVED from the network '@2'.", station_name, station_network))
+	if digger ~= nil and owner_name ~= digger:get_player_name() then
+		minetest.chat_send_player(digger:get_player_name(), S("Station '@1'" .. " " ..
+				"has been REMOVED from the network '@2'.", station_name, station_network))
 	end
 
 	-- save the updated network data in a savefile over server restart

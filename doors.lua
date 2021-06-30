@@ -6,7 +6,7 @@ local S = minetest.get_translator("travelnet")
 
 travelnet.register_door = function(node_base_name, def_tiles, material)
 
-	minetest.register_node(node_base_name.."_open", {
+	minetest.register_node(node_base_name .. "_open", {
 		description = S("elevator door (open)"),
 		drawtype = "nodebox",
 		-- top, bottom, side1, side2, inner, outer
@@ -37,16 +37,16 @@ travelnet.register_door = function(node_base_name, def_tiles, material)
 				{ -0.9, -0.5, 0.4, 0.9, 1.5, 0.5 },
 			},
 		},
-		drop = node_base_name.."_closed",
+		drop = node_base_name .. "_closed",
 		on_rightclick = function(pos, node)
 			minetest.add_node(pos, {
-				name = node_base_name.."_closed",
+				name = node_base_name .. "_closed",
 				param2 = node.param2
 			})
 		end,
 	})
 
-	minetest.register_node(node_base_name.."_closed", {
+	minetest.register_node(node_base_name .. "_closed", {
 		description = S("elevator door (closed)"),
 		drawtype = "nodebox",
 		-- top, bottom, side1, side2, inner, outer
@@ -75,7 +75,7 @@ travelnet.register_door = function(node_base_name, def_tiles, material)
 		},
 		on_rightclick = function(pos, node)
 			minetest.add_node(pos, {
-				name = node_base_name.."_open",
+				name = node_base_name .. "_open",
 				param2 = node.param2
 			})
 		end,
@@ -83,7 +83,7 @@ travelnet.register_door = function(node_base_name, def_tiles, material)
 
 	-- add a craft receipe for the door
 	minetest.register_craft({
-		output = node_base_name.."_closed",
+		output = node_base_name .. "_closed",
 		recipe = {
 			{ material, '', material },
 			{ material, '', material },
@@ -98,13 +98,13 @@ travelnet.register_door = function(node_base_name, def_tiles, material)
 			effector = {
 				action_on = function(pos, node)
 					minetest.add_node(pos, {
-						name = node_base_name.."_open",
+						name = node_base_name .. "_open",
 						param2 = node.param2
 					})
 				end,
 				action_off = function(pos, node)
 					minetest.add_node(pos, {
-						name = node_base_name.."_closed",
+						name = node_base_name .. "_closed",
 						param2 = node.param2
 					})
 				end,
@@ -112,8 +112,8 @@ travelnet.register_door = function(node_base_name, def_tiles, material)
 			}
 		}
 
-		minetest.override_item(node_base_name.."_closed", { mesecons=mesecons })
-		minetest.override_item(node_base_name.."_open",   { mesecons=mesecons })
+		minetest.override_item(node_base_name .. "_closed", { mesecons=mesecons })
+		minetest.override_item(node_base_name .. "_open",   { mesecons=mesecons })
 	end
 end
 

@@ -1,5 +1,3 @@
-
-
 --[[
 	Teleporter networks that allow players to choose a destination out of a list
 	Copyright (C) 2013 Sokomine
@@ -35,28 +33,28 @@ travelnet.targets = {}
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
 -- privs
-dofile(travelnet.path.."/privs.lua")
+dofile(travelnet.path .. "/privs.lua")
 
 -- read the configuration
-dofile(travelnet.path.."/config.lua")
+dofile(travelnet.path .. "/config.lua")
 
 -- saving / reading
-dofile(travelnet.path.."/persistence.lua")
+dofile(travelnet.path .. "/persistence.lua")
 
 -- common functions
-dofile(travelnet.path.."/functions.lua")
+dofile(travelnet.path .. "/functions.lua")
 
 -- formspec stuff
-dofile(travelnet.path.."/formspecs.lua")
+dofile(travelnet.path .. "/formspecs.lua")
 
 -- travelnet / elevator update
-dofile(travelnet.path.."/update_formspec.lua")
+dofile(travelnet.path .. "/update_formspec.lua")
 
 -- add button
-dofile(travelnet.path.."/add_target.lua")
+dofile(travelnet.path .. "/add_target.lua")
 
 -- receive fields handler
-dofile(travelnet.path.."/on_receive_fields.lua")
+dofile(travelnet.path .. "/on_receive_fields.lua")
 
 -- invisible node to place inside top of travelnet box and elevator
 minetest.register_node("travelnet:hidden_top", {
@@ -112,21 +110,21 @@ end
 
 if travelnet.travelnet_enabled then
 	-- register-functions for travelnet nodes
-	dofile(travelnet.path.."/register_travelnet.lua")
+	dofile(travelnet.path .. "/register_travelnet.lua")
 	-- default travelnet registrations
-	dofile(travelnet.path.."/travelnet.lua")
+	dofile(travelnet.path .. "/travelnet.lua")
 end
 if travelnet.elevator_enabled then
-	dofile(travelnet.path.."/elevator.lua")  -- allows up/down transfers only
+	dofile(travelnet.path .. "/elevator.lua")  -- allows up/down transfers only
 end
 if travelnet.doors_enabled then
 	-- doors that open and close automaticly when the travelnet or elevator is used
-	dofile(travelnet.path.."/doors.lua")
+	dofile(travelnet.path .. "/doors.lua")
 end
 
 if travelnet.enable_abm then
 	-- restore travelnet data when players pass by broken networks
-	dofile(travelnet.path.."/restore_network_via_abm.lua")
+	dofile(travelnet.path .. "/restore_network_via_abm.lua")
 end
 
 -- upon server start, read the savefile

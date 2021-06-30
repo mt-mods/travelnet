@@ -39,7 +39,7 @@ travelnet.tiles_elevator = {
 }
 travelnet.elevator_inventory_image  = "travelnet_elevator_inv.png"
 
-if minetest.registered_nodes[ "mcl_core:wood" ] then
+if minetest.registered_nodes["mcl_core:wood"] then
 	travelnet.travelnet_recipe = {
 		{ "mcl_stairs:slab_wood",            "mcl_stairs:slab_wood", "mcl_stairs:slab_wood" },
 		{ "mesecons_torch:mesecon_torch_on", "mcl_chests:chest",     "mesecons_torch:mesecon_torch_on" },
@@ -64,7 +64,7 @@ if minetest.registered_nodes[ "mcl_core:wood" ] then
 		"mcl_core_planks_big_oak.png^[transformR90", -- inside floor
 		"mcl_core_planks_big_oak.png^[transformR90", -- top
 	}
-	travelnet.elevator_inventory_image  = nil
+	travelnet.elevator_inventory_image = nil
 end
 
 -- if this function returns true, the player with the name player_name is

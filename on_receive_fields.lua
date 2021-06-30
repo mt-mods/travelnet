@@ -35,13 +35,14 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 		end
 
 		-- players with travelnet_remove priv can dig the station
-		if not minetest.check_player_privs(name, { travelnet_remove=true })
-		-- the function travelnet.allow_dig(..) may allow additional digging
-		and not travelnet.allow_dig(name, owner, network_name, pos)
-		-- the owner can remove the station
-		and owner ~= name
-		-- stations without owner can be removed by anybody
-		and owner ~= "" then
+		if	    not minetest.check_player_privs(name, { travelnet_remove=true })
+			-- the function travelnet.allow_dig(..) may allow additional digging
+			and not travelnet.allow_dig(name, owner, network_name, pos)
+			-- the owner can remove the station
+			and owner ~= name
+			-- stations without owner can be removed by anybody
+			and owner ~= ""
+		then
 			minetest.chat_send_player(name,
 				S("This %s belongs to %s. You can't remove it."):format(
 					description,
@@ -52,8 +53,9 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 		end
 
 		-- abort if protected by another mod
-		if minetest.is_protected(pos, name)
-		and not(minetest.check_player_privs(name, { protection_bypass=true })) then
+		if	minetest.is_protected(pos, name)
+			and not minetest.check_player_privs(name, { protection_bypass=true })
+		then
 			minetest.record_protection_violation(pos, name)
 			return
 		end
@@ -72,8 +74,6 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 		minetest.remove_node(pos)
 		return
 	end
-
-
 
 
 	-- if the box has not been configured yet
@@ -104,39 +104,42 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	local station_name    = meta:get_string("station_name")
 	local station_network = meta:get_string("station_network")
 
-	if not owner_name
-	or not station_name
-	or not station_network
-	or not travelnet.targets[owner_name]
-	or not travelnet.targets[owner_name][station_network] then
-
-		if owner_name
-		and station_name
-		and station_network then
+	if	   not owner_name
+		or not station_name
+		or not station_network
+		or not travelnet.targets[owner_name]
+		or not travelnet.targets[owner_name][station_network]
+	then
+		if	    owner_name
+			and station_name
+			and station_network
+		then
 			travelnet.add_target(station_name, station_network, pos, owner_name, meta, owner_name)
 		else
-			minetest.chat_send_player(name, S("Error")..": "..
-				S("There is something wrong with the configuration of this station.")..
-				" DEBUG DATA: owner: "..(owner_name or "?")..
-				" station_name: "..(station_name or "?")..
-				" station_network: "..(station_network or "?").."."
+			minetest.chat_send_player(name, S("Error") .. ": " ..
+				S("There is something wrong with the configuration of this station.") ..
+					" DEBUG DATA: owner: " .. (owner_name or "?") ..
+					" station_name: " .. (station_name or "?") ..
+					" station_network: " .. (station_network or "?") .. "."
 			)
 			return
 		end
 	end
 
-	if not owner_name
-	or not station_network
-	or not travelnet.targets
-	or not travelnet.targets[owner_name]
-	or not travelnet.targets[owner_name][station_network] then
-		minetest.chat_send_player(name, S("Error")..": "..
+	if	   not owner_name
+		or not station_network
+		or not travelnet.targets
+		or not travelnet.targets[owner_name]
+		or not travelnet.targets[owner_name][station_network]
+	then
+		minetest.chat_send_player(name, S("Error") .. ": " ..
 			S("This travelnet is lacking data and/or improperly configured."))
-			print("ERROR: The travelnet at "..minetest.pos_to_string(pos).." has a problem: "..
-			" DATA: owner: "..(owner_name or "?")..
-			" station_name: "..(station_name or "?")..
-			" station_network: "..(station_network or "?").."."
-		)
+			print(
+				"ERROR: The travelnet at " .. minetest.pos_to_string(pos) .. " has a problem: " ..
+				" DATA: owner: " .. (owner_name or "?") ..
+				" station_name: " .. (station_name or "?") ..
+				" station_network: " .. (station_network or "?") .. "."
+			)
 		return
 	end
 
@@ -151,8 +154,9 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 
 	-- if the target station is gone
 	if not travelnet.targets[owner_name][station_network][fields.target] then
-		minetest.chat_send_player(name, S("Station '@1' does not exist (anymore?)" ..
-			" " .. "on this network.", fields.target or "?")
+		minetest.chat_send_player(name,
+				S("Station '@1' does not exist (anymore?)" ..
+					" " .. "on this network.", fields.target or "?")
 		)
 		travelnet.update_formspec(pos, name, nil)
 		return

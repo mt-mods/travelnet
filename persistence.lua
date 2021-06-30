@@ -1,6 +1,6 @@
 local S = minetest.get_translator("travelnet")
 
-local mod_data_path = minetest.get_worldpath().."/mod_travelnet.data"
+local mod_data_path = minetest.get_worldpath() .. "/mod_travelnet.data"
 
 -- called whenever a station is added or removed
 travelnet.save_data = function()
@@ -24,9 +24,9 @@ travelnet.restore_data = function()
 	travelnet.targets = minetest.deserialize(data)
 
 	if not travelnet.targets then
-		local backup_file = mod_data_path..".bak"
+		local backup_file = mod_data_path .. ".bak"
 		print(S("[Mod travelnet] Error: Savefile '@1' is damaged." .. " " ..
-			"Saved the backup as '@2'.", mod_data_path, backup_file))
+					"Saved the backup as '@2'.", mod_data_path, backup_file))
 
 		minetest.safe_file_write(backup_file, data)
 		travelnet.targets = {}
