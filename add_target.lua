@@ -8,11 +8,11 @@ travelnet.add_target = function(station_name, network_name, pos, player_name, me
 	local this_node   = minetest.get_node(pos)
 	local is_elevator = false
 
-	if this_node.name == 'travelnet:elevator' then
-		--      owner_name   = '*'; -- the owner name is not relevant here
+	if this_node.name == "travelnet:elevator" then
+		--      owner_name   = "*"; -- the owner name is not relevant here
 		is_elevator  = true
-		network_name = tostring(pos.x) .. ',' .. tostring(pos.z)
-		if not station_name or station_name == '' then
+		network_name = tostring(pos.x) .. "," .. tostring(pos.z)
+		if not station_name or station_name == "" then
 			station_name = S("at @1 m", tostring(pos.y))
 		end
 	end
@@ -28,7 +28,7 @@ travelnet.add_target = function(station_name, network_name, pos, player_name, me
 		return
 	end
 
-	if owner_name == nil or owner_name == '' or owner_name == player_name then
+	if owner_name == nil or owner_name == "" or owner_name == player_name then
 		owner_name = player_name
 	elseif is_elevator then -- elevator networks
 		owner_name = player_name

@@ -20,8 +20,8 @@ minetest.register_abm({
 			)
 		then
 			travelnet.add_target(station_name, station_network, pos, owner_name, meta, owner_name)
-			print('TRAVELNET: re-adding ' .. tostring(station_name) .. ' to ' ..
-					tostring(station_network) .. ' owned by ' .. tostring(owner_name))
+			print("TRAVELNET: re-adding " .. tostring(station_name) .. " to " ..
+					tostring(station_network) .. " owned by " .. tostring(owner_name))
 		end
 	end
 })

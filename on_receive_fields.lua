@@ -46,7 +46,7 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 			minetest.chat_send_player(name,
 				S("This %s belongs to %s. You can't remove it."):format(
 					description,
-					tostring(meta:get_string('owner'))
+					tostring(meta:get_string("owner"))
 				)
 			)
 			return
@@ -144,7 +144,7 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	end
 
 	local this_node = minetest.get_node(pos)
-	if this_node ~= nil and this_node.name == 'travelnet:elevator' then
+	if this_node ~= nil and this_node.name == "travelnet:elevator" then
 		for k,_ in pairs(travelnet.targets[owner_name][station_network]) do
 			if travelnet.targets[owner_name][station_network][k].nr == fields.target then
 				fields.target = k
@@ -169,7 +169,7 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	minetest.chat_send_player(name, S("Initiating transfer to station '@1'.", fields.target or "?"))
 
 	if travelnet.travelnet_sound_enabled then
-		if this_node.name == 'travelnet:elevator' then
+		if this_node.name == "travelnet:elevator" then
 			minetest.sound_play("travelnet_bell", {
 				pos = pos,
 				gain = 0.75,

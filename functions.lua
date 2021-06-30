@@ -38,20 +38,20 @@ travelnet.open_close_door = function(pos, player, mode)
 	end
 
 	local door_node = minetest.get_node(pos2)
-	if door_node and door_node.name ~= 'ignore' and door_node.name ~= 'air' and
+	if door_node and door_node.name ~= "ignore" and door_node.name ~= "air" and
 		minetest.registered_nodes[door_node.name] ~= nil and
 		minetest.registered_nodes[door_node.name].on_rightclick ~= nil then
 
 		-- at least for homedecor, same facedir would mean "door closed"
 		-- do not close the elevator door if it is already closed
 		if mode == 1 and (
-			string.sub(door_node.name, -7) == '_closed'
+			string.sub(door_node.name, -7) == "_closed"
 			-- handle doors that change their facedir
 			or (
 				door_node.param2 == (this_node.param2 + 2) % 4
-				and door_node.name ~= 'travelnet:elevator_door_glass_open'
-				and door_node.name ~= 'travelnet:elevator_door_tin_open'
-				and door_node.name ~= 'travelnet:elevator_door_steel_open'
+				and door_node.name ~= "travelnet:elevator_door_glass_open"
+				and door_node.name ~= "travelnet:elevator_door_tin_open"
+				and door_node.name ~= "travelnet:elevator_door_steel_open"
 			)
 		) then
 			return
@@ -59,13 +59,13 @@ travelnet.open_close_door = function(pos, player, mode)
 
 		-- do not open the doors if they are already open (works only on elevator-doors; not on doors in general)
 		if mode == 2 and (
-			string.sub(door_node.name, -5) == '_open'
+			string.sub(door_node.name, -5) == "_open"
 			-- handle doors that change their facedir
 			or (
 				door_node.param2 ~= ((this_node.param2 + 2) % 4)
-				and door_node.name ~= 'travelnet:elevator_door_glass_closed'
-				and door_node.name ~= 'travelnet:elevator_door_tin_closed'
-				and door_node.name ~= 'travelnet:elevator_door_steel_closed'
+				and door_node.name ~= "travelnet:elevator_door_glass_closed"
+				and door_node.name ~= "travelnet:elevator_door_tin_closed"
+				and door_node.name ~= "travelnet:elevator_door_steel_closed"
 			)
 		) then
 			return
@@ -98,7 +98,7 @@ travelnet.rotate_player = function(target_pos, player, tries)
 
 	-- play sound at the target position as well
 	if travelnet.travelnet_sound_enabled then
-		if node2.name == 'travelnet:elevator' then
+		if node2.name == "travelnet:elevator" then
 			minetest.sound_play("travelnet_bell",   {
 				pos = target_pos,
 				gain = 0.75,

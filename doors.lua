@@ -85,9 +85,9 @@ travelnet.register_door = function(node_base_name, def_tiles, material)
 	minetest.register_craft({
 		output = node_base_name .. "_closed",
 		recipe = {
-			{ material, '', material },
-			{ material, '', material },
-			{ material, '', material }
+			{ material, "", material },
+			{ material, "", material },
+			{ material, "", material }
 		}
 	})
 

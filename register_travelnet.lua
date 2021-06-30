@@ -16,7 +16,7 @@ function travelnet.register_travelnet_box(cfg)
 		drawtype = "mesh",
 		mesh = "travelnet.obj",
 		sunlight_propagates = true,
-		paramtype = 'light',
+		paramtype = "light",
 		paramtype2 = "facedir",
 		wield_scale = { x=0.6, y=0.6, z=0.6 },
 		selection_box = {
@@ -77,7 +77,7 @@ function travelnet.register_travelnet_box(cfg)
 		end,
 
 		can_dig = function(pos, player)
-			return travelnet.can_dig(pos, player, 'travelnet box')
+			return travelnet.can_dig(pos, player, "travelnet box")
 		end,
 
 		after_dig_node = function(pos, oldnode, oldmetadata, digger)
@@ -96,7 +96,7 @@ function travelnet.register_travelnet_box(cfg)
 			if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
 				minetest.chat_send_player(
 					placer:get_player_name(),
-					S('Not enough vertical space to place the travelnet box!')
+					S("Not enough vertical space to place the travelnet box!")
 				)
 				return
 			end

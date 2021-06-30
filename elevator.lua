@@ -16,7 +16,7 @@ travelnet.show_nearest_elevator = function(pos, owner_name, param2)
 		return
 	end
 
-	local network_name = tostring(pos.x) .. ',' .. tostring(pos.z)
+	local network_name = tostring(pos.x) .. "," .. tostring(pos.z)
 	-- will this be an elevator that will be added to an existing network?
 	if	    travelnet.targets[owner_name][network_name]
 		-- does the network have any members at all?
@@ -98,7 +98,7 @@ minetest.register_node("travelnet:elevator", {
 	drawtype = "mesh",
 	mesh = "travelnet_elevator.obj",
 	sunlight_propagates = true,
-	paramtype = 'light',
+	paramtype = "light",
 	paramtype2 = "facedir",
 	wield_scale = { x=0.6, y=0.6, z=0.6 },
 
@@ -153,7 +153,7 @@ minetest.register_node("travelnet:elevator", {
 	end,
 
 	can_dig = function(pos, player)
-		return travelnet.can_dig(pos, player, 'elevator')
+		return travelnet.can_dig(pos, player, "elevator")
 	end,
 
 	after_dig_node = function(pos, oldnode, oldmetadata, digger)
@@ -173,7 +173,7 @@ minetest.register_node("travelnet:elevator", {
 		if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
 			minetest.chat_send_player(
 				placer:get_player_name(),
-				S('Not enough vertical space to place the travelnet box!')
+				S("Not enough vertical space to place the travelnet box!")
 			)
 			return
 		end

@@ -7,7 +7,7 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 	local this_node   = minetest.get_node(pos)
 	local is_elevator = false
 
-	if this_node ~= nil and this_node.name == 'travelnet:elevator' then
+	if this_node ~= nil and this_node.name == "travelnet:elevator" then
 		is_elevator = true
 	end
 
@@ -20,7 +20,7 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 	local station_network = meta:get_string("station_network")
 
 	if	   not owner_name
-		or not station_name or station_network == ''
+		or not station_name or station_network == ""
 		or not station_network
 	then
 		if is_elevator then
@@ -114,7 +114,7 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 
 		for index,k in ipairs(stations) do
 			if index == ground_level then
-				travelnet.targets[owner_name][station_network][k].nr = 'G'
+				travelnet.targets[owner_name][station_network][k].nr = "G"
 			else
 				travelnet.targets[owner_name][station_network][k].nr = tostring(ground_level - index)
 			end
