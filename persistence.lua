@@ -26,7 +26,7 @@ travelnet.restore_data = function()
 	if not travelnet.targets then
 		local backup_file = mod_data_path .. ".bak"
 		print(S("[Mod travelnet] Error: Savefile '@1' is damaged." .. " " ..
-					"Saved the backup as '@2'.", mod_data_path, backup_file))
+				"Saved the backup as '@2'.", mod_data_path, backup_file))
 
 		minetest.safe_file_write(backup_file, data)
 		travelnet.targets = {}

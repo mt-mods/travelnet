@@ -162,11 +162,13 @@ travelnet.remove_box = function(_, _, oldmetadata, digger)
 	travelnet.targets[owner_name][station_network][station_name] = nil
 
 	-- inform the owner
-	minetest.chat_send_player(owner_name, S("Station '@1'" .. " " ..
-			"has been REMOVED from the network '@2'.", station_name, station_network))
-	if digger ~= nil and owner_name ~= digger:get_player_name() then
-		minetest.chat_send_player(digger:get_player_name(), S("Station '@1'" .. " " ..
+	minetest.chat_send_player(owner_name,
+			S("Station '@1'" .. " " ..
 				"has been REMOVED from the network '@2'.", station_name, station_network))
+	if digger ~= nil and owner_name ~= digger:get_player_name() then
+		minetest.chat_send_player(digger:get_player_name(),
+				S("Station '@1'" .. " " ..
+					"has been REMOVED from the network '@2'.", station_name, station_network))
 	end
 
 	-- save the updated network data in a savefile over server restart

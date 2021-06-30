@@ -59,9 +59,9 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 			timestamp = zeit
 		}
 
-		minetest.chat_send_player(owner_name, S("Station '@1'" .. " " ..
-			"has been reattached to the network '@2'.", station_name, station_network)
-		)
+		minetest.chat_send_player(owner_name,
+				S("Station '@1'" .. " " ..
+					"has been reattached to the network '@2'.", station_name, station_network))
 		travelnet.save_data()
 	end
 
@@ -226,10 +226,11 @@ travelnet.update_formspec = function(pos, puncher_name, fields)
 
 	meta:set_string("formspec", formspec)
 
-	meta:set_string("infotext", S("Station '@1'" .. " " ..
-		"on travelnet '@2' (owned by @3)" .. " " ..
-		"ready for usage. Right-click to travel, punch to update.",
-		tostring(station_name), tostring(station_network), tostring(owner_name)))
+	meta:set_string("infotext",
+			S("Station '@1'" .. " " ..
+				"on travelnet '@2' (owned by @3)" .. " " ..
+				"ready for usage. Right-click to travel, punch to update.",
+				tostring(station_name), tostring(station_network), tostring(owner_name)))
 
 	-- show the player the updated formspec
 	travelnet.show_current_formspec(pos, meta, puncher_name)

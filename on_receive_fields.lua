@@ -117,10 +117,10 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 			travelnet.add_target(station_name, station_network, pos, owner_name, meta, owner_name)
 		else
 			minetest.chat_send_player(name, S("Error") .. ": " ..
-				S("There is something wrong with the configuration of this station.") ..
-					" DEBUG DATA: owner: " .. (owner_name or "?") ..
-					" station_name: " .. (station_name or "?") ..
-					" station_network: " .. (station_network or "?") .. "."
+					S("There is something wrong with the configuration of this station.") ..
+						" DEBUG DATA: owner: " .. (owner_name or "?") ..
+						" station_name: " .. (station_name or "?") ..
+						" station_network: " .. (station_network or "?") .. "."
 			)
 			return
 		end
@@ -185,7 +185,7 @@ travelnet.on_receive_fields = function(pos, _, fields, player)
 	end
 
 	if travelnet.travelnet_effect_enabled then
-		minetest.add_entity({ x=pos.x, y=pos.y + 0.5, z=pos.z }, "travelnet:effect") -- it self-destructs after 20 turns
+		minetest.add_entity({ x=pos.x, y=pos.y + 0.5, z=pos.z }, "travelnet:effect")  -- it self-destructs after 20 turns
 	end
 
 	-- close the doors at the sending station

@@ -9,7 +9,7 @@ travelnet.add_target = function(station_name, network_name, pos, player_name, me
 	local is_elevator = false
 
 	if this_node.name == "travelnet:elevator" then
-		--      owner_name   = "*"; -- the owner name is not relevant here
+		--      owner_name   = "*"  -- the owner name is not relevant here
 		is_elevator  = true
 		network_name = tostring(pos.x) .. "," .. tostring(pos.z)
 		if not station_name or station_name == "" then
@@ -92,11 +92,11 @@ travelnet.add_target = function(station_name, network_name, pos, player_name, me
 		meta:set_int   ("timestamp",       travelnet.targets[owner_name][network_name][station_name].timestamp)
 
 		meta:set_string("formspec",
-			"size[12,10]" ..
-			"field[0.3,0.6;6,0.7;station_name;" .. S("Station:") .. ";" ..
-			minetest.formspec_escape(meta:get_string("station_name")) .. "]" ..
-			"field[0.3,3.6;6,0.7;station_network;" .. S("Network:") .. ";" ..
-			minetest.formspec_escape(meta:get_string("station_network")) .. "]")
+				"size[12,10]" ..
+				"field[0.3,0.6;6,0.7;station_name;" .. S("Station:") .. ";" ..
+				minetest.formspec_escape(meta:get_string("station_name")) .. "]" ..
+				"field[0.3,3.6;6,0.7;station_network;" .. S("Network:") .. ";" ..
+				minetest.formspec_escape(meta:get_string("station_network")) .. "]")
 
 		-- display a list of all stations that can be reached from here
 		travelnet.update_formspec(pos, player_name, nil)
