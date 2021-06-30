@@ -10,8 +10,8 @@ travelnet.show_nearest_elevator = function(pos, owner_name, param2)
 
 	if not travelnet.targets[owner_name] then
 		minetest.chat_send_player(owner_name,
-				S("Congratulations! This is your first elevator. "..
-					"You can build an elevator network by placing further elevators somewhere above "..
+				S("Congratulations! This is your first elevator. " ..
+					"You can build an elevator network by placing further elevators somewhere above " ..
 					"or below this one. Just make sure that the x and z coordinate are the same."))
 		return
 	end
@@ -23,9 +23,9 @@ travelnet.show_nearest_elevator = function(pos, owner_name, param2)
 		and next(travelnet.targets[owner_name][network_name], nil)
 	then
 		minetest.chat_send_player(owner_name,
-				S("This elevator will automaticly connect to the "..
-					"other elevators you have placed at different heights. Just enter a station name "..
-					"and click on \"store\" to set it up. Or just punch it to set the height as station "..
+				S("This elevator will automaticly connect to the " ..
+					"other elevators you have placed at different heights. Just enter a station name " ..
+					"and click on \"store\" to set it up. Or just punch it to set the height as station " ..
 					"name."))
 		return
 	end
@@ -64,7 +64,7 @@ travelnet.show_nearest_elevator = function(pos, owner_name, param2)
 		else
 			text = text .. S(" ERROR")
 		end
-		text = text.." "
+		text = text .. " "
 
 		-- right/left
 		if     (param2 == 0 and nearest_dist_x <  0) or (param2 == 2 and nearest_dist_x >  0) then

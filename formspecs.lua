@@ -65,16 +65,18 @@ travelnet.reset_formspec = function(meta)
 
 	-- request initinal data
 	meta:set_string("formspec",
-			"size[10,6.0]"..
-			"label[2.0,0.0;--> "..S("Configure this travelnet station").." <--]"..
-			"button_exit[8.0,0.0;2.2,0.7;station_dig;"..S("Remove station").."]"..
-			"field[0.3,1.2;9,0.9;station_name;"..S("Name of this station")..":;]"..
-			"label[0.3,1.5;"..S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"...").."]"..
-
-			"field[0.3,2.8;9,0.9;station_network;"..S("Assign to Network:")..";"..minetest.formspec_escape(station_network or "").."]"..
-			"label[0.3,3.1;"..S("You can have more than one network. If unsure, use \"@1\"", tostring(station_network)) .. ".]"..
-			"field[0.3,4.4;9,0.9;owner;"..S("Owned by:")..";]"..
-			"label[0.3,4.7;"..S("Unless you know what you are doing, leave this empty.").."]"..
-			"button_exit[3.8,5.3;1.7,0.7;station_set;"..S("Save").."]"..
-			"button_exit[6.3,5.3;1.7,0.7;station_exit;"..S("Exit").."]")
+			"size[10,6.0]" ..
+			"label[2.0,0.0;--> " .. S("Configure this travelnet station") .. " <--]" ..
+			"button_exit[8.0,0.0;2.2,0.7;station_dig;" .. S("Remove station") .. "]" ..
+			"field[0.3,1.2;9,0.9;station_name;" .. S("Name of this station") .. ":;]" ..
+			"label[0.3,1.5;" ..
+				S("How do you call this place here? Example: \"my first house\", \"mine\", \"shop\"...") .. "]" ..
+			"field[0.3,2.8;9,0.9;station_network;" ..
+				S("Assign to Network:") .. ";" .. minetest.formspec_escape(station_network or "") .. "]" ..
+			"label[0.3,3.1;" ..
+				S("You can have more than one network. If unsure, use \"@1\"", tostring(station_network)) .. ".]" ..
+			"field[0.3,4.4;9,0.9;owner;" .. S("Owned by:") .. ";]" ..
+			"label[0.3,4.7;" .. S("Unless you know what you are doing, leave this empty.") .. "]" ..
+			"button_exit[3.8,5.3;1.7,0.7;station_set;" .. S("Save") .. "]" ..
+			"button_exit[6.3,5.3;1.7,0.7;station_exit;" .. S("Exit") .. "]")
 end
