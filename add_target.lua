@@ -83,7 +83,8 @@ travelnet.add_target = function(station_name, network_name, pos, player_name, me
 	-- do we have a new node to set up? (and are not just reading from a safefile?)
 	if meta then
 		minetest.chat_send_player(player_name,
-				S("Station '@1' has been added to the network '@2'" ..
+				S("Station '@1'" .. " " ..
+					"has been added to the network '@2'" ..
 					", which now consists of @3 station(s).", station_name, network_name, anz+1))
 
 		meta:set_string("station_name",    station_name)
