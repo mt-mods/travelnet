@@ -98,7 +98,7 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 					S("Station:"),
 					minetest.formspec_escape(station_name),
 					S("Network:"),
-					minetest.formspec_escape(station_network)
+					minetest.formspec_escape(network_name)
 				))
 
 		-- display a list of all stations that can be reached from here

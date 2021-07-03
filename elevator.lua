@@ -57,7 +57,7 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 	for index, direction in ipairs(direction_order) do
 		local nearest_dist_direction = nearest_dist[direction]
 		local direction_index = direction_indexes[direction]
-		if math.sign(nearest_dist_direction) == -1 then
+		if nearest_dist_direction < 0 then
 			direction_index = ((direction_indexes[direction]+1) % 4)+1
 		end
 		text = text .. tostring(math.abs(nearest_dist_direction)) .. " " .. direction_strings[direction_index]

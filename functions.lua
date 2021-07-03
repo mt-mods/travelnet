@@ -188,9 +188,10 @@ function travelnet.open_close_door(pos, player, mode)
 	if mode == "open" then
 		local playername = player:get_player_name()
 		minetest.after(1, function()
-			local player = minetest.get_player_by_name(playername)
-			if player then
-				right_click_action(door_pos, door_node, player)
+			-- Get the player again in case it doesn't exist anymore (logged out)
+			local pplayer = minetest.get_player_by_name(playername)
+			if pplayer then
+				right_click_action(door_pos, door_node, pplayer)
 			end
 		end)
 	else

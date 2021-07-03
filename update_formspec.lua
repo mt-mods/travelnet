@@ -202,7 +202,7 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 				("button_exit[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
 						:format(x, y + 2.5, x + 0.9, y + 2.35, k)
 		elseif is_elevator then
-			formspec = formspec .. 
+			formspec = formspec ..
 				("button_exit[%f,%f;1,0.5;target;%s]label[%f,%f;%s]")
 						:format(x, y + 2.5, tostring(network[k].nr), x + 0.9, y + 2.35, k)
 		else
