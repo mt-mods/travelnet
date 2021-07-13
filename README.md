@@ -22,7 +22,8 @@ All stations that have the same network name set and are owned by the same user 
 ## Screenshots
 
 <img src="./screenshot.png"/>
-<img src="./screenshot_colors.png"/>
+<img src="./screenshot_day.png"/>
+<img src="./screenshot_night.png"/>
 
 ## License
 
