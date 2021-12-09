@@ -111,7 +111,6 @@ function travelnet.edit_formspec(pos, meta, player_name)
 	end
 
 	local owner = meta:get_string("owner")
-	-- TODO: check if player is owner or has privs
 	local station_name = meta:get_string("station_name")
 	local station_network = meta:get_string("station_network")
 	local default_network = "net1"

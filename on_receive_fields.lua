@@ -93,7 +93,6 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		return
 	end
 
-
 	-- if the box has not been configured yet
 	if station_network == "" then
 		travelnet.add_target(fields.station_name, fields.station_network, pos, name, meta, fields.owner)

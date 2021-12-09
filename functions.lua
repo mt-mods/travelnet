@@ -311,7 +311,6 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 	local owner_name	  = meta:get_string("owner")
 	local station_network = meta:get_string("station_network")
 	local station_name	= meta:get_string("station_name")
--- TODO: check for elevator and network_name
 	-- did anything change at all?
 	if owner_name == fields.owner
 		and station_network == fields.station_network
