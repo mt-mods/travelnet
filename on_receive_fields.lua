@@ -52,7 +52,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			and not travelnet.allow_dig(name, owner_name, station_network, pos)
 			-- the owner can remove the station
 			and owner_name ~= name
-			-- stations without owner can be removed by anybody
+			-- stations without owner can be removed/edited by anybody
 			and owner_name ~= ""
 		then
 			minetest.chat_send_player(name,
