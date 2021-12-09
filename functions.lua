@@ -15,6 +15,9 @@ local function string_startswith(str, start)
 	end
 end
 
+function travelnet.is_falsey_string(str)
+	return not str or str == ""
+end
 function travelnet.find_nearest_elevator_network(pos, owner_name)
 	local nearest_network = false
 	local nearest_dist = false
