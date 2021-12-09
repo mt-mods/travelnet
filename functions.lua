@@ -18,6 +18,31 @@ end
 function travelnet.is_falsey_string(str)
 	return not str or str == ""
 end
+
+function travelnet.node_description(pos)
+
+	local node = minetest.get_node_or_nil(pos)
+	if not node then return end
+
+	local description
+
+	if minetest.get_item_group(node.name, "travelnet") == 1 then
+		description = "travelnet box"
+	elseif minetest.get_item_group(node.name, "elevator") == 1 then
+		description = "elevator"
+	elseif node.name == "locked_travelnet:travelnet" then
+		description = "locked travelnet"
+	elseif node.name == "locked_travelnet:elevator" then
+		description = "locked elevator"
+	else
+		description = nil
+	end
+
+	return description, node.name
+
+end
+
+
 function travelnet.find_nearest_elevator_network(pos, owner_name)
 	local nearest_network = false
 	local nearest_dist = false

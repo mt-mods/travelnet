@@ -39,17 +39,9 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 
 	-- the player wants to remove the station
 	if fields.station_dig or fields.station_edit then
-		local description
+		local description = travelnet.node_description(pos)
 
-		if node and minetest.get_item_group(node.name, "travelnet") == 1 then
-			description = "travelnet box"
-		elseif node and minetest.get_item_group(node.name, "elevator") == 1 then
-			description = "elevator"
-		elseif node and node.name == "locked_travelnet:travelnet" then
-			description = "locked travelnet"
-		elseif node and node.name == "locked_travelnet:elevator" then
-			description = "locked elevator"
-		else
+		if not description then
 			minetest.chat_send_player(name, "Error: Unknown node.")
 			return
 		end
