@@ -100,6 +100,11 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		return
 	end
 
+	-- save pressed after editing
+	if fields.station_set then
+		travelnet.edit_box(pos, fields, meta, name)
+	end
+
 	if fields.open_door then
 		travelnet.open_close_door(pos, player, "toggle")
 		return
