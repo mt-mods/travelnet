@@ -311,7 +311,17 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 	local owner_name	  = meta:get_string("owner")
 	local station_network = meta:get_string("station_network")
 	local station_name	= meta:get_string("station_name")
-	-- did anything change at all?
+	local description, node_name  = travelnet.node_description(pos)
+
+	if not description then
+		minetest.chat_send_player(player_name, "Error: Unknown node.")
+		return
+	end
+
+	if travelnet.is_elevator(node_name) then
+		return travelnet.edit_elevator(pos, fields, meta, player_name)
+	end
+
 	if owner_name == fields.owner
 		and station_network == fields.station_network
 		and station_name == fields.station_name
@@ -319,25 +329,21 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		return
 	end
 
-	local description, node_name  = travelnet.node_description(pos)
-	if not description then
-		minetest.chat_send_player(player_name, "Error: Unknown node.")
-		return
-	end
-
-	local is_elevator = travelnet.is_elevator(node_name)
-
 	-- sanitize inputs
+	local error_message = ''
 	if travelnet.is_falsey_string(fields.station_name) then
-		if not is_elevator then return end
-		fields.station_name = S("at @1 m", tostring(pos.y))
+		error_message = S('Please provide a station name.')
 	end
-
 	if travelnet.is_falsey_string(fields.station_network) then
-		return
+		error_message = error_message .. ' '
+			..S('Please provide a network name.')
 	end
-
 	if travelnet.is_falsey_string(fields.owner) then
+		error_message = error_message .. ' '
+			..S('Please provide an owner.')
+	end
+	if '' ~= error_message then
+		minetest.chat_send_player(player_name, error_message)
 		return
 	end
 
@@ -481,6 +487,94 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 			S('Station "@1" has been renamed to "@2" on network "@3".',
 				station_name, fields.station_name, station_network))
 	end
+
+	meta:set_string("formspec",
+		([[
+			size[12,10]
+			field[0.3,0.6;6,0.7;station_name;%s;%s]
+			field[0.3,3.6;6,0.7;station_network;%s;%s]
+		]]):format(
+			S("Station:"),
+			minetest.formspec_escape(fields.station_name),
+			S("Network:"),
+			minetest.formspec_escape(fields.network_name)
+	))
+
+	-- update the formspec of this station
+	travelnet.update_formspec(pos, player_name, nil)
+
+	-- save the updated network data in a savefile over server restart
+	travelnet.save_data()
+end
+
+
+function travelnet.edit_elevator(pos, fields, meta, player_name)
+	if not pos or not fields or not meta or not player_name then return end
+
+	local owner_name	  = meta:get_string("owner")
+	local station_network = meta:get_string("station_network")
+	local station_name	= meta:get_string("station_name")
+
+	-- sanitize inputs
+	if travelnet.is_falsey_string(fields.station_name) then
+		fields.station_name = S("at @1 m", tostring(pos.y))
+	end
+
+	-- nothing changed?
+	if station_name == fields.station_name then
+		return
+	end
+
+	-- players with travelnet_remove priv can dig the station
+	if not minetest.check_player_privs(player_name, { travelnet_remove = true })
+		-- the function travelnet.allow_dig(..) may allow additional digging
+		and not travelnet.allow_dig(player_name, owner_name, station_network, pos)
+		-- the owner can remove the station
+		and owner_name ~= player_name
+		-- stations without owner can be removed/edited by anybody
+		and owner_name ~= ""
+	then
+		minetest.chat_send_player(player_name,
+			S("This %s belongs to %s. You can't remove or edit it."):format(
+				"elevator",
+				tostring(owner_name)
+			)
+		)
+		return
+	end
+
+	-- abort if protected by another mod
+	if minetest.is_protected(pos, player_name)
+		and not minetest.check_player_privs(player_name, { protection_bypass = true })
+	then
+		minetest.record_protection_violation(pos, player_name)
+		return
+	end
+
+	local network
+	local timestamp = os.time()
+	network = travelnet.get_network(owner_name, station_network)
+	-- does a station with the new name already exist?
+	if network[fields.station_name] then
+		minetest.chat_send_player(player_name,
+			S('Station "@1" already exists on network "@2".',
+				fields.station_name, station_network))
+		return
+	end
+
+	-- get the old station table
+	local old_station = network[station_name]
+	if not old_station then return end
+	-- apply the old table to the new station
+	network[fields.station_name] = old_station
+	-- remove old station
+	network[station_name] = nil
+	-- update station name in node meta
+	meta:set_string("station_name", fields.station_name)
+
+	minetest.chat_send_player(player_name,
+		S('Station "@1" has been renamed to "@2" on network "@3".',
+			station_name, fields.station_name, station_network))
 
 	meta:set_string("formspec",
 		([[

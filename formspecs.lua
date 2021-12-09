@@ -110,6 +110,12 @@ function travelnet.edit_formspec(pos, meta, player_name)
 		return
 	end
 
+	local node = minetest.get_node_or_nil(pos)
+	if not node then return end
+	if travelnet.is_elevator(node.name) then
+		return travelnet.edit_formspec_elevator(pos, meta, player_name)
+	end
+
 	local owner = meta:get_string("owner")
 	local station_name = meta:get_string("station_name")
 	local station_network = meta:get_string("station_network")
@@ -141,6 +147,37 @@ function travelnet.edit_formspec(pos, meta, player_name)
 		S("Owned by:"),
 		minetest.formspec_escape(owner),
 		S("Unless you know what you are doing, leave this empty."),
+		S("Save"),
+		S("Exit"),
+		minetest.pos_to_string(pos)
+	)
+
+	-- show the formspec manually
+	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+end
+
+
+function travelnet.edit_formspec_elevator(pos, meta, player_name)
+	if not pos or not meta or not player_name then
+		return
+	end
+
+	local station_name = meta:get_string("station_name")
+
+	-- request changed data
+	local formspec = ([[
+		size[10,6.0]
+		label[2.0,0.0;--> %s <--]
+		button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+		field[0.3,1.2;9,0.9;station_name;%s:;%s]
+		button_exit[3.8,5.3;1.7,0.7;station_set;%s]
+		button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+		field[20,20;0.1,0.1;pos2str;Pos;%s]
+	]]):format(
+		S("Configure this elevator station"),
+		S("Remove station"),
+		S("Name of this station"),
+		minetest.formspec_escape(station_name),
 		S("Save"),
 		S("Exit"),
 		minetest.pos_to_string(pos)
