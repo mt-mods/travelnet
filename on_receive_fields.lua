@@ -88,7 +88,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			minetest.remove_node(pos)
 		else
 			-- edit station
-			travelnet.edit_formspec(pos, meta, name)
+			minetest.after(0.2, travelnet.edit_formspec, pos, meta, name)
 		end
 		return
 	end
