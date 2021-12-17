@@ -551,9 +551,7 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 		return
 	end
 
-	local network
-	local timestamp = os.time()
-	network = travelnet.get_network(owner_name, station_network)
+	local network = travelnet.get_network(owner_name, station_network)
 	-- does a station with the new name already exist?
 	if network[fields.station_name] then
 		minetest.chat_send_player(player_name,
