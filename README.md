@@ -36,4 +36,4 @@ Exceptions:
 
 * `textures/travelnet_top.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) https://github.com/minetest/minetest_game (`default_steel_block.png`)
 * `textures/travelnet_bottom.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) https://github.com/minetest/minetest_game (`default_clay.png`)
-* `textures/travelnet_fancy*` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) provided by @El-Naso
+* `textures/travelnet_fancy_*.png` [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/) provided by @El-Naso
