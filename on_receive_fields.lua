@@ -210,7 +210,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			-- send the player back as there's no receiving travelnet
 			player:move_to(pos, false)
 		else
-			travelnet.rotate_player(target_pos, player, 0)
+			travelnet.rotate_player(target_pos, player)
 		end
 	end, function ()
 		-- Send them back on failure
