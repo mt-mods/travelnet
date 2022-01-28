@@ -191,10 +191,8 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	end
 
 	player:move_to(vector.add(target_pos, player_model_vec), false)
-
-	-- check if the box has at the other end has been removed.
-	local target_node = minetest.get_node_or_nil(target_pos)
-	if target_node ~= nil then
+	travelnet.on_load(target_pos, function (target_node)
+		-- check if the box has at the other end has been removed.
 		local target_node_def = minetest.registered_nodes[target_node.name]
 		local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
 
@@ -214,6 +212,10 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		else
 			travelnet.rotate_player(target_pos, player, 0)
 		end
-	end
-end
+	end, function ()
+		-- Send them back on failure
+		player:move_to(pos, false)
+		minetest.chat_send_player(name, S("Teleportation failed. The area could not be loaded."))
+	end)
 
+end

@@ -227,16 +227,28 @@ function travelnet.open_close_door(pos, player, mode)
 	end
 end
 
-
-travelnet.rotate_player = function(target_pos, player, tries)
-	-- try later when the box is loaded
+local function on_load_internal(target_pos, callback, failure, tries)
 	local target_node = minetest.get_node_or_nil(target_pos)
 	if target_node == nil then
-		if tries < 30 then
-			minetest.after(0, travelnet.rotate_player, target_pos, player, tries+1)
+		if tries < 40 then
+			local delay = tries < 20 and 0.1 or 1 -- Short delay for the first tries, only try once per second after that for laggy servers
+			minetest.after(delay, on_load_internal, target_pos, callback, failure, tries+1)
+		elseif type(failure) == 'function' then
+			failure()
 		end
 		return
 	end
+	if type(callback) == 'function' then
+		callback(target_node)
+	end
+end
+travelnet.on_load = function (target_pos, callback, failure)
+	on_load_internal(target_pos, callback, failure, 0)
+end
+
+travelnet.rotate_player = function(target_pos, player, tries)
+	local target_node = minetest.get_node_or_nil(target_pos)
+	if target_node == nil then return end
 
 	-- play sound at the target position as well
 	if travelnet.travelnet_sound_enabled then
@@ -598,4 +610,3 @@ travelnet.can_dig = function()
 	-- forbid digging of the travelnet
 	return false
 end
-
