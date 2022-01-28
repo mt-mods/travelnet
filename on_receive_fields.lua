@@ -215,7 +215,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	end, function ()
 		-- Send them back on failure
 		player:move_to(pos, false)
-		minetest.chat_send_player(name, S("Teleportation failed. The area could not be loaded."))
+		minetest.chat_send_player(name, S("Transfer failed. The area could not be loaded."))
 	end)
 
 end
