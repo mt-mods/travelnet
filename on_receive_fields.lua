@@ -190,32 +190,27 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		end
 	end
 
-	player:move_to(vector.add(target_pos, player_model_vec), false)
-	travelnet.on_load(target_pos, function (target_node)
-		-- check if the box has at the other end has been removed.
-		local target_node_def = minetest.registered_nodes[target_node.name]
-		local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
+	minetest.load_area(target_pos)
 
-		if not has_travelnet_group then
-			-- provide information necessary to identify the removed box
-			local oldmetadata = {
-				fields = {
-					owner           = owner_name,
-					station_name    = fields.target,
-					station_network = station_network
-				}
+	-- check if the box has at the other end has been removed.
+	local target_node = minetest.get_node(target_pos)
+	local target_node_def = minetest.registered_nodes[target_node.name]
+	local has_travelnet_group = target_node_def.groups.travelnet or target_node_def.groups.elevator
+
+	if not has_travelnet_group then
+		-- provide information necessary to identify the removed box
+		local oldmetadata = {
+			fields = {
+				owner           = owner_name,
+				station_name    = fields.target,
+				station_network = station_network
 			}
+		}
 
-			travelnet.remove_box(target_pos, nil, oldmetadata, player)
-			-- send the player back as there's no receiving travelnet
-			player:move_to(pos, false)
-		else
-			travelnet.rotate_player(target_pos, player)
-		end
-	end, function ()
-		-- Send them back on failure
-		player:move_to(pos, false)
-		minetest.chat_send_player(name, S("Transfer failed. The area could not be loaded."))
-	end)
+		travelnet.remove_box(target_pos, nil, oldmetadata, player)
+	else
+		player:move_to(vector.add(target_pos, player_model_vec), false)
+		travelnet.rotate_player(target_pos, player)
+	end
 
 end

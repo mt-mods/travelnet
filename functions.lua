@@ -227,26 +227,6 @@ function travelnet.open_close_door(pos, player, mode)
 	end
 end
 
-local function on_load_internal(target_pos, callback, failure, tries)
-	local target_node = minetest.get_node_or_nil(target_pos)
-	if target_node == nil then
-		if tries < 40 then
-			-- Short delay for the first tries, only try once per second after that for laggy servers
-			local delay = tries < 20 and 0.1 or 1
-			minetest.after(delay, on_load_internal, target_pos, callback, failure, tries+1)
-		elseif type(failure) == 'function' then
-			failure()
-		end
-		return
-	end
-	if type(callback) == 'function' then
-		callback(target_node)
-	end
-end
-travelnet.on_load = function (target_pos, callback, failure)
-	on_load_internal(target_pos, callback, failure, 0)
-end
-
 travelnet.rotate_player = function(target_pos, player)
 	local target_node = minetest.get_node_or_nil(target_pos)
 	if target_node == nil then return end
