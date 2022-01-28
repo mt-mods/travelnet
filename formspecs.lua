@@ -10,7 +10,7 @@ function travelnet.show_message(pos, player_name, title, message)
 	local formspec = ([[
 			size[8,3]
 			label[3,0;%s]
-			textlist[0,0.5;8,1.5;;%s;]
+			textarea[0.5,0.5;7,1.5;;%s;]
 			button_exit[3.5,2.5;1.0,0.5;back;%s]
 			button_exit[6.8,2.5;1.0,0.5;station_exit;%s]
 			field[20,20;0.1,0.1;pos2str;Pos;%s]
@@ -21,7 +21,9 @@ function travelnet.show_message(pos, player_name, title, message)
 			S("Exit"),
 			minetest.pos_to_string(pos)
 		)
-	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	minetest.after(0.1, function ()
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	end)
 end
 
 -- show the player the formspec they would see when right-clicking the node;
@@ -34,7 +36,9 @@ function travelnet.show_current_formspec(pos, meta, player_name)
 	local formspec = meta:get_string("formspec") ..
 		("field[20,20;0.1,0.1;pos2str;Pos;%s]"):format(minetest.pos_to_string(pos))
 	-- show the formspec manually
-	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	minetest.after(0.1, function ()
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	end)
 end
 
 -- a player clicked on something in the formspec hse was manually shown
@@ -186,4 +190,3 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	-- show the formspec manually
 	minetest.show_formspec(player_name, travelnet_form_name, formspec)
 end
-

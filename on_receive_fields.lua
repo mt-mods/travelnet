@@ -216,4 +216,3 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		end
 	end
 end
-
