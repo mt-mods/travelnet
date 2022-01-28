@@ -21,7 +21,7 @@ function travelnet.restore_data()
 	end
 
 	local data = file:read("*all")
-	if data:sub(1, 1) == "[" then
+	if data:sub(1, 1) == "{" then
 		travelnet.targets = minetest.parse_json(data)
 	else
 		travelnet.targets = minetest.deserialize(data)
