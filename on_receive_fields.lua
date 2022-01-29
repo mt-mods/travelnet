@@ -212,4 +212,5 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		player:move_to(vector.add(target_pos, player_model_vec), false)
 		travelnet.rotate_player(target_pos, player)
 	end
+
 end
