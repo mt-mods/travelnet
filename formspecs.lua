@@ -189,7 +189,6 @@ end
 local player_formspec_data = travelnet.player_formspec_data
 function travelnet.set_formspec(player_name, formspec)
 	if player_formspec_data[player_name] and player_formspec_data[player_name].wait_mode then
-		minetest.log("error", "set "..type(formspec))
 		player_formspec_data[player_name] = player_formspec_data[player_name] or {}
 		player_formspec_data[player_name].formspec = formspec
 	else
@@ -199,7 +198,6 @@ end
 
 function travelnet.show_formspec(player_name)
 	local formspec = player_formspec_data[player_name] and player_formspec_data[player_name].formspec
-	minetest.log("error", "sho "..type(formspec))
 	if formspec then
 		minetest.show_formspec(player_name, travelnet_form_name, formspec)
 	else
