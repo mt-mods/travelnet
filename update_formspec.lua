@@ -185,13 +185,27 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 	if #stations < 10 then
 		x = 4
 	end
+	local paging = true
+	local column_size = paging and 7 or 8
+	local page_size = column_size*3
+	local page_number = 1
+	if paging then
+		for number,k in ipairs(stations) do
+			if k == station_name then
+				page_number = math.ceil(number/page_size)
+				break
+			end
+		end
+	end
 
-	for _,k in ipairs(stations) do
-
+	-- for number,k in ipairs(stations) do
+	for n=((page_number-1)*page_size)+1,(page_number*page_size) do
+		local k = stations[n]
+		if not k then break end
 		i = i+1
 
 		-- new column
-		if y == 8 then
+		if y == column_size then
 			x = x + 4
 			y = 0
 		end
@@ -227,6 +241,19 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 			S("move up"),
 			S("move down")
 		)
+	if paging then
+		formspec = formspec .. ([[
+			button[0,9.2;2,1;first_page;%s]
+			button[2,9.2;2,1;prev_page;%s]
+			button[8,9.2;2,1;next_page;%s]
+			button[10,9.2;2,1;last_page;%s]
+		]]):format(
+			minetest.formspec_escape(S("<<")),
+			minetest.formspec_escape(S("<")),
+			minetest.formspec_escape(S(">")),
+			minetest.formspec_escape(S(">>"))
+		)
+	end
 
 
 	meta:set_string("formspec", formspec)
@@ -240,4 +267,3 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 	-- show the player the updated formspec
 	travelnet.show_current_formspec(pos, meta, puncher_name)
 end
-
