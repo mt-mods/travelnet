@@ -103,4 +103,3 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 		travelnet.save_data()
 	end
 end
-

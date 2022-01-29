@@ -10,9 +10,9 @@ function travelnet.show_message(pos, player_name, title, message)
 	local formspec = ([[
 			size[8,3]
 			label[3,0;%s]
-			textlist[0,0.5;8,1.5;;%s;]
-			button_exit[3.5,2.5;1.0,0.5;back;%s]
-			button_exit[6.8,2.5;1.0,0.5;station_exit;%s]
+			textarea[0.5,0.5;7,1.5;;%s;]
+			button[3.5,2.5;1.0,0.5;back;%s]
+			button[6.8,2.5;1.0,0.5;station_exit;%s]
 			field[20,20;0.1,0.1;pos2str;Pos;%s]
 		]]):format(
 			minetest.formspec_escape(title or S("Error")),
@@ -79,15 +79,15 @@ function travelnet.reset_formspec(meta)
 			([[
 				size[10,6.0]
 				label[2.0,0.0;--> %s <--]
-				button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+				button[8.0,0.0;2.2,0.7;station_dig;%s]
 				field[0.3,1.2;9,0.9;station_name;%s:;]
 				label[0.3,1.5;%s]
 				field[0.3,2.8;9,0.9;station_network;%s;%s]
 				label[0.3,3.1;%s]
 				field[0.3,4.4;9,0.9;owner;%s;]
 				label[0.3,4.7;%s]
-				button_exit[3.8,5.3;1.7,0.7;station_set;%s]
-				button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+				button[3.8,5.3;1.7,0.7;station_set;%s]
+				button[6.3,5.3;1.7,0.7;station_exit;%s]
 			]]):format(
 				S("Configure this travelnet station"),
 				S("Remove station"),
@@ -125,15 +125,15 @@ function travelnet.edit_formspec(pos, meta, player_name)
 	local formspec = ([[
 		size[10,6.0]
 		label[2.0,0.0;--> %s <--]
-		button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+		button[8.0,0.0;2.2,0.7;station_dig;%s]
 		field[0.3,1.2;9,0.9;station_name;%s:;%s]
 		label[0.3,1.5;%s]
 		field[0.3,2.8;9,0.9;station_network;%s;%s]
 		label[0.3,3.1;%s]
 		field[0.3,4.4;9,0.9;owner;%s;%s]
 		label[0.3,4.7;%s]
-		button_exit[3.8,5.3;1.7,0.7;station_set;%s]
-		button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+		button[3.8,5.3;1.7,0.7;station_set;%s]
+		button[6.3,5.3;1.7,0.7;station_exit;%s]
 		field[20,20;0.1,0.1;pos2str;Pos;%s]
 	]]):format(
 		S("Configure this travelnet station"),
@@ -168,10 +168,10 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	local formspec = ([[
 		size[10,6.0]
 		label[2.0,0.0;--> %s <--]
-		button_exit[8.0,0.0;2.2,0.7;station_dig;%s]
+		button[8.0,0.0;2.2,0.7;station_dig;%s]
 		field[0.3,1.2;9,0.9;station_name;%s:;%s]
-		button_exit[3.8,5.3;1.7,0.7;station_set;%s]
-		button_exit[6.3,5.3;1.7,0.7;station_exit;%s]
+		button[3.8,5.3;1.7,0.7;station_set;%s]
+		button[6.3,5.3;1.7,0.7;station_exit;%s]
 		field[20,20;0.1,0.1;pos2str;Pos;%s]
 	]]):format(
 		S("Configure this elevator station"),
@@ -186,14 +186,24 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	-- show the formspec manually
 	travelnet.set_formspec(player_name, formspec)
 end
-
-local player_formspecs = {}
+local player_formspec_data = travelnet.player_formspec_data
 function travelnet.set_formspec(player_name, formspec)
-	player_formspecs[player_name] = formspec
+	if player_formspec_data[player_name] and player_formspec_data[player_name].wait_mode then
+		minetest.log("error", "set "..type(formspec))
+		player_formspec_data[player_name] = player_formspec_data[player_name] or {}
+		player_formspec_data[player_name].formspec = formspec
+	else
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	end
 end
 
 function travelnet.show_formspec(player_name)
-	minetest.log("error", "show"..player_name)
-	minetest.show_formspec(player_name, travelnet_form_name, player_formspecs[player_name] or "")
-	player_formspecs[player_name] = nil
+	local formspec = player_formspec_data[player_name] and player_formspec_data[player_name].formspec
+	minetest.log("error", "sho "..type(formspec))
+	if formspec then
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+	else
+		minetest.show_formspec(player_name, "", "")
+	end
+	player_formspec_data[player_name].formspec = nil
 end

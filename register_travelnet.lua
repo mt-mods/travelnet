@@ -60,7 +60,6 @@ function travelnet.register_travelnet_box(cfg)
 
 		on_receive_fields = travelnet.on_receive_fields,
 		on_punch = function(pos, node, puncher)
-		minetest.log("error", "punch")
 			local item = puncher:get_wielded_item()
 			local item_name = item:get_name()
 			local player_name = puncher:get_player_name()
@@ -76,7 +75,6 @@ function travelnet.register_travelnet_box(cfg)
 				return
 			end
 			travelnet.update_formspec(pos, player_name, nil)
-			travelnet.show_formspec(player_name)
 		end,
 
 		can_dig = function(pos, player)

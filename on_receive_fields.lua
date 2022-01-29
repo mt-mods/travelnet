@@ -214,9 +214,11 @@ local function on_receive_fields_internal(pos, _, fields, player)
 
 end
 
+local player_formspec_data = travelnet.player_formspec_data
 function travelnet.on_receive_fields(pos, _, fields, player)
 	local name = player:get_player_name()
-	travelnet.set_formspec(name, nil)
+	player_formspec_data[name] = {wait_mode=true}
 	on_receive_fields_internal(pos, _, fields, player)
 	travelnet.show_formspec(name)
+	player_formspec_data[name] = nil
 end
