@@ -37,6 +37,35 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 
 	local node = minetest.get_node(pos)
 
+	if travelnet.paging_enabled and fields.page_number and (fields.next_page or fields.prev_page or fields.last_page or fields.first_page) then
+		local page = 1
+		local network = travelnet.get_network(owner_name, station_network)
+		local station_count = 0
+		local network = travelnet.targets[owner_name][station_network]
+		for k in pairs(network) do
+			station_count = station_count+1
+		end
+		local page_size = 7*3
+		local pages = math.ceil(station_count/page_size)
+
+		if fields.last_page then
+			page = pages
+		else
+			local current_page = fields.page_number
+			if fields.next_page then
+				page = math.min(current_page+1, pages)
+			elseif fields.prev_page then
+				page = math.max(current_page-1, 1)
+			end
+		end
+
+		local formspec = travelnet.primary_formspec(pos, name, nil, page)
+		if formspec then
+			minetest.show_formspec(name, "travelnet:show", formspec)
+			return
+		end
+	end
+
 	-- the player wants to remove the station
 	if fields.station_dig or fields.station_edit then
 		local description = travelnet.node_description(pos)

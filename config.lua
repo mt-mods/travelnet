@@ -1,4 +1,7 @@
 
+travelnet.paging_enabled = true
+
+-- if paging is enabled this will be ignored
 travelnet.MAX_STATIONS_PER_NETWORK = 24
 
 -- set this to true if you want a simulated beam effect
