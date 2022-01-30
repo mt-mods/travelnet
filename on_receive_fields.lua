@@ -58,12 +58,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 				page = math.max(current_page-1, 1)
 			end
 		end
-
-		local formspec = travelnet.primary_formspec(pos, name, nil, page)
-		if formspec then
-			minetest.show_formspec(name, "travelnet:show", formspec)
-			return
-		end
+		travelnet.page_formspec(pos, name, page)
 	end
 
 	-- the player wants to remove the station
