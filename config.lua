@@ -1,5 +1,5 @@
 
-travelnet.paging_enabled = true
+travelnet.paging_enabled = false
 
 -- if paging is enabled this will be ignored
 travelnet.MAX_STATIONS_PER_NETWORK = 24

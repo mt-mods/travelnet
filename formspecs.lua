@@ -186,3 +186,4 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	-- show the formspec manually
 	minetest.show_formspec(player_name, travelnet_form_name, formspec)
 end
+
