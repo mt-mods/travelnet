@@ -83,7 +83,7 @@ end
 function travelnet.is_travelnet_or_elevator(pos)
 	local node = minetest.get_node(pos)
 	local node_def = minetest.registered_nodes[node.name]
-	return node_def.groups.travelnet or node_def.groups.elevator
+	return node_def and node_def.groups and (node_def.groups.travelnet or node_def.groups.elevator)
 end
 
 function travelnet.door_is_open(node, opposite_direction)
