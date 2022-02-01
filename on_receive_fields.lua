@@ -58,11 +58,13 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		if fields.last_page then
 			page = pages
 		else
-			local current_page = fields.page_number
-			if fields.next_page then
-				page = math.min(current_page+1, pages)
-			elseif fields.prev_page then
-				page = math.max(current_page-1, 1)
+			local current_page = tonumber(fields.page_number)
+			if current_page then
+				if fields.next_page then
+					page = math.min(current_page+1, pages)
+				elseif fields.prev_page then
+					page = math.max(current_page-1, 1)
+				end
 			end
 		end
 		travelnet.page_formspec(pos, name, page)
