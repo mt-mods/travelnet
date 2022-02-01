@@ -46,6 +46,9 @@ function travelnet.form_input_handler(player, formname, fields)
 		if not pos then
 			return
 		end
+		if not travelnet.is_travelnet_or_elevator(pos) then
+			return
+		end
 
 		-- back button leads back to the main menu
 		if fields.back and fields.back ~= "" then
@@ -185,4 +188,12 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 
 	-- show the formspec manually
 	minetest.show_formspec(player_name, travelnet_form_name, formspec)
+end
+
+function travelnet.page_formspec(pos, player_name, page)
+	local formspec = travelnet.primary_formspec(pos, player_name, nil, page)
+	if formspec then
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+		return
+	end
 end
