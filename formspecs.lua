@@ -189,3 +189,11 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	-- show the formspec manually
 	minetest.show_formspec(player_name, travelnet_form_name, formspec)
 end
+
+function travelnet.page_formspec(pos, player_name, page)
+	local formspec = travelnet.primary_formspec(pos, player_name, nil, page)
+	if formspec then
+		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+		return
+	end
+end
