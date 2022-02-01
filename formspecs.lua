@@ -21,7 +21,7 @@ function travelnet.show_message(pos, player_name, title, message)
 			S("Exit"),
 			minetest.pos_to_string(pos)
 		)
-		minetest.after(0.1, minetest.show_formspec, player_name, travelnet_form_name, formspec)
+	minetest.after(0.1, minetest.show_formspec, player_name, travelnet_form_name, formspec)
 end
 
 -- show the player the formspec they would see when right-clicking the node;
