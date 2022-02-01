@@ -186,7 +186,7 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 	if #stations < 10 then
 		x = 4
 	end
-	local paging = travelnet.paging_enabled and (#stations > 24)
+	local paging = (travelnet.MAX_STATIONS_PER_NETWORK == 0 or travelnet.MAX_STATIONS_PER_NETWORK > 24) and (#stations > 24)
 	local column_size = paging and 7 or 8
 	local page_size = column_size*3
 	local pages = math.ceil(#stations/page_size)

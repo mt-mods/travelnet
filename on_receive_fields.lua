@@ -37,7 +37,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 
 	local node = minetest.get_node(pos)
 
-	if travelnet.paging_enabled
+	if (travelnet.MAX_STATIONS_PER_NETWORK == 0 or travelnet.MAX_STATIONS_PER_NETWORK > 24)
 		and fields.page_number
 		and (
 			fields.next_page
