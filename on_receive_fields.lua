@@ -212,7 +212,8 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	-- may be 0.0 for some versions of MT 5 player model
 	local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5
 	local player_model_vec = vector.new(0, player_model_bottom, 0)
-	local target_pos, tnode = target_station.pos, minetest.get_node(target_station.pos)
+	local target_pos = target_station.pos
+	local tnode = minetest.get_node(target_pos)
 
 	local top_pos = vector.add(pos, { x=0, y=1, z=0 })
 	local top_node = minetest.get_node(top_pos)
