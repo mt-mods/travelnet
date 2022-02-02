@@ -5,7 +5,7 @@ travelnet.MAX_STATIONS_PER_NETWORK = tonumber(minetest.settings:get("travelnet.M
 -- set this to true if you want a simulated beam effect
 travelnet.travelnet_effect_enabled = minetest.settings:get_bool("travelnet.travelnet_effect_enabled", false)
 -- set this to true if you want a sound to be played when the travelnet is used
-travelnet.travelnet_sound_enabled  = minetest.settings:get_bool("travelnet.travelnet_sound_enabled", false)
+travelnet.travelnet_sound_enabled  = minetest.settings:get_bool("travelnet.travelnet_sound_enabled", true)
 
 -- if you set this to false, travelnets cannot be created
 -- (this may be useful if you want nothing but the elevators on your server)
@@ -100,5 +100,3 @@ end
 travelnet.allow_travel = function()
 	return minetest.settings:get_bool("travelnet.allow_travel", true)
 end
-
-travelnet.travelnet_sound_enabled = minetest.settings:get_bool("travelnet.travelnet_sound_enabled", true)
