@@ -1,5 +1,7 @@
 local S = minetest.get_translator("travelnet")
 
+local player_formspec_data = travelnet.player_formspec_data
+
 local function is_falsey_string(str)
 	return not str or str == ""
 end
@@ -290,6 +292,9 @@ function travelnet.update_formspec(pos, puncher_name, fields)
 				"on travelnet '@2' (owned by @3)" .. " " ..
 				"ready for usage. Right-click to travel, punch to update.",
 				tostring(station_name), tostring(station_network), tostring(owner_name)))
+
+	player_formspec_data[puncher_name] = player_formspec_data[puncher_name] or {}
+	player_formspec_data[puncher_name].pos = pos
 
 	-- show the player the updated formspec
 	travelnet.show_current_formspec(pos, meta, puncher_name)
