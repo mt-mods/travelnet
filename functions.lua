@@ -142,7 +142,54 @@ function travelnet.get_network(owner_name, network_name)
 	local owners_targets = travelnet.targets[owner_name]
 	if not owners_targets then return end
 
-	return travelnet.targets[owner_name][network_name]
+	return owners_targets[network_name]
+end
+
+function travelnet.get_ordered_stations(owner_name, network_name, is_elevator)
+		local network = travelnet.get_network(owner_name, network_name)
+
+		if not network then return {} end
+
+		local stations = {}
+		for k in pairs(network) do
+			table.insert(stations, k)
+		end
+
+		if is_elevator then
+			local ground_level = 1
+			table.sort(stations, function(a, b)
+				return network[a].pos.y > network[b].pos.y
+			end)
+
+			-- find ground level
+			local vgl_timestamp = 999999999999
+			for index,k in ipairs(stations) do
+				local station = network[k]
+				if not station.timestamp then
+					station.timestamp = os.time()
+				end
+				if station.timestamp < vgl_timestamp then
+					vgl_timestamp = station.timestamp
+					ground_level  = index
+				end
+			end
+
+			for index,k in ipairs(stations) do
+				local station = network[k]
+				if index == ground_level then
+					station.nr = "G"
+				else
+					station.nr = tostring(ground_level - index)
+				end
+			end
+		else
+			-- sort the table according to the timestamp (=time the station was configured)
+			table.sort(stations, function(a, b)
+				return network[a].timestamp < network[b].timestamp
+			end)
+		end
+
+		return stations
 end
 
 function travelnet.get_station(owner_name, station_network, station_name)
@@ -605,47 +652,10 @@ function travelnet.change_order(pos, player_name, fields)
 			or (minetest.check_player_privs(player_name, { travelnet_attach=true }))
 		)
 	then
+		local network = travelnet.get_network(owner_name, station_network)
 
-		local stations = {}
-		local network = travelnet.targets[owner_name][station_network]
-
-		for k in pairs(network) do
-			table.insert(stations, k)
-		end
-
-		local ground_level = 1
-		if is_elevator then
-			table.sort(stations, function(a, b)
-				return network[a].pos.y > network[b].pos.y
-			end)
-
-			-- find ground level
-			local vgl_timestamp = 999999999999
-			for index,k in ipairs(stations) do
-				local station = network[k]
-				if not station.timestamp then
-					station.timestamp = os.time()
-				end
-				if station.timestamp < vgl_timestamp then
-					vgl_timestamp = station.timestamp
-					ground_level  = index
-				end
-			end
-
-			for index,k in ipairs(stations) do
-				local station = network[k]
-				if index == ground_level then
-					station.nr = "G"
-				else
-					station.nr = tostring(ground_level - index)
-				end
-			end
-		else
-			-- sort the table according to the timestamp (=time the station was configured)
-			table.sort(stations, function(a, b)
-				return network[a].timestamp < network[b].timestamp
-			end)
-		end
+		if not network then return end
+		local stations = travelnet.get_ordered_stations(owner_name, station_network, is_elevator)
 
 		local current_pos = -1
 		for index, k in ipairs(stations) do

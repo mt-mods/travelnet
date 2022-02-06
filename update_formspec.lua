@@ -25,10 +25,10 @@ function travelnet.primary_formspec(pos, puncher_name, _, page_number)
 		return
 	end
 
+
+	local network = travelnet.get_or_create_network(owner_name, station_network)
 	-- if the station got lost from the network for some reason (savefile corrupted?) then add it again
 	if not travelnet.get_station(owner_name, station_network, station_name) then
-
-		local network = travelnet.get_or_create_network(owner_name, station_network)
 
 		local zeit = meta:get_int("timestamp")
 		if not zeit or type(zeit) ~= "number" or zeit < 100000 then
@@ -78,46 +78,7 @@ function travelnet.primary_formspec(pos, puncher_name, _, page_number)
 	local i = 0
 
 	-- collect all station names in a table
-	local stations = {}
-	local network = travelnet.targets[owner_name][station_network]
-
-	for k in pairs(network) do
-		table.insert(stations, k)
-	end
-
-	local ground_level = 1
-	if is_elevator then
-		table.sort(stations, function(a, b)
-			return network[a].pos.y > network[b].pos.y
-		end)
-
-		-- find ground level
-		local vgl_timestamp = 999999999999
-		for index,k in ipairs(stations) do
-			local station = network[k]
-			if not station.timestamp then
-				station.timestamp = os.time()
-			end
-			if station.timestamp < vgl_timestamp then
-				vgl_timestamp = station.timestamp
-				ground_level  = index
-			end
-		end
-
-		for index,k in ipairs(stations) do
-			local station = network[k]
-			if index == ground_level then
-				station.nr = "G"
-			else
-				station.nr = tostring(ground_level - index)
-			end
-		end
-	else
-		-- sort the table according to the timestamp (=time the station was configured)
-		table.sort(stations, function(a, b)
-			return network[a].timestamp < network[b].timestamp
-		end)
-	end
+	local stations = travelnet.get_ordered_stations(owner_name, station_network, is_elevator)
 
 	-- if there are only 8 stations (plus this one), center them in the formspec
 	if #stations < 10 then
