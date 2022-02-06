@@ -2,11 +2,6 @@ local S = minetest.get_translator("travelnet")
 
 local player_formspec_data = travelnet.player_formspec_data
 
-local function is_falsey_string(str)
-	return not str or str == ""
-end
-
-
 function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 
 	local meta = minetest.get_meta(pos)
@@ -24,14 +19,14 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 
 	if	   not owner_name
 		or not station_name
-		or is_falsey_string(station_network)
+		or travelnet.is_falsey_string(station_network)
 	then
 		if is_elevator then
 			travelnet.add_target(nil, nil, pos, puncher_name, meta, owner_name)
 			return
 		end
 
-		travelnet.reset_formspec(meta)
+		-- travelnet.reset_formspec(meta)
 		travelnet.show_message(pos, puncher_name, "Error", S("Update failed! Resetting this box on the travelnet."))
 		return
 	end
@@ -130,60 +125,6 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 		end)
 	end
 
-	-- does the player want to move this station one position up in the list?
-	-- only the owner and players with the travelnet_attach priv can change the order of the list
-	-- Note: With elevators, only the "G"(round) marking is actually moved
-	if	    fields and (fields.move_up or fields.move_down)
-		and not is_falsey_string(owner_name)
-		and (
-			   (owner_name == puncher_name)
-			or (minetest.check_player_privs(puncher_name, { travelnet_attach=true }))
-		)
-	then
-
-		local current_pos = -1
-		for index, k in ipairs(stations) do
-			if k == station_name then
-				current_pos = index
-				-- break??
-			end
-		end
-
-		local swap_with_pos
-		if fields.move_up then
-			swap_with_pos = current_pos-1
-		else
-			swap_with_pos = current_pos+1
-		end
-
-		-- handle errors
-		if swap_with_pos < 1 then
-			travelnet.show_message(pos, puncher_name, "Info", S("This station is already the first one on the list."))
-			return
-		elseif swap_with_pos > #stations then
-			travelnet.show_message(pos, puncher_name, "Info", S("This station is already the last one on the list."))
-			return
-		else
-			local current_station = stations[current_pos]
-			local swap_with_station = stations[swap_with_pos]
-
-			-- swap the actual data by which the stations are sorted
-			local old_timestamp = network[swap_with_station].timestamp
-			network[swap_with_station].timestamp = network[current_station].timestamp
-			network[current_station].timestamp = old_timestamp
-
-			-- for elevators, only the "G"(round) marking is moved; no point in swapping stations
-			if not is_elevator then
-				-- actually swap the stations
-				stations[swap_with_pos] = current_station
-				stations[current_pos]   = swap_with_station
-			end
-
-			-- store the changed order
-			travelnet.save_data()
-		end
-	end
-
 	-- if there are only 8 stations (plus this one), center them in the formspec
 	if #stations < 10 then
 		x = 4
@@ -272,30 +213,6 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 	return formspec
 end
 
--- called "on_punch" of travelnet and elevator
 function travelnet.update_formspec(pos, puncher_name, fields)
-
-	local formspec = travelnet.primary_formspec(pos, puncher_name, fields)
-
-	if not formspec then return end
-
-	local meta = minetest.get_meta(pos)
-
-	meta:set_string("formspec", formspec)
-
-	local owner_name      = meta:get_string("owner")
-	local station_name    = meta:get_string("station_name")
-	local station_network = meta:get_string("station_network")
-
-	meta:set_string("infotext",
-			S("Station '@1'" .. " " ..
-				"on travelnet '@2' (owned by @3)" .. " " ..
-				"ready for usage. Right-click to travel, punch to update.",
-				tostring(station_name), tostring(station_network), tostring(owner_name)))
-
-	player_formspec_data[puncher_name] = player_formspec_data[puncher_name] or {}
-	player_formspec_data[puncher_name].pos = pos
-
-	-- show the player the updated formspec
-	travelnet.show_current_formspec(pos, meta, puncher_name)
+	minetest.log("warning", "[travelnet] the travelnet.update_formspec method is deprecated. The formspec is now generated on each interaction.")
 end

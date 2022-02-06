@@ -413,6 +413,12 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 				station_name, fields.station_name,
 				station_network, fields.station_network,
 				owner_name, fields.owner))
+
+		meta:set_string("infotext",
+				S("Station '@1'" .. " " ..
+					"on travelnet '@2' (owned by @3)" .. " " ..
+					"ready for usage.",
+					tostring(fields.station_name), tostring(fields.station_network), tostring(fields.owner)))
 	elseif station_network ~= fields.station_network then
 		-- same owner but different network -> remove station from old network
 		-- but only if there is space on the new network and no other station with that name
@@ -455,6 +461,12 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 				.. 'from network "@3" to network "@4".',
 				station_name, fields.station_name,
 				station_network, fields.station_network))
+
+		meta:set_string("infotext",
+				S("Station '@1'" .. " " ..
+					"on travelnet '@2' (owned by @3)" .. " " ..
+					"ready for usage.",
+					tostring(fields.station_name), tostring(fields.station_network), tostring(owner_name)))
 	else
 		-- only name changed -> change name but keep timestamp to preserve order
 		network = travelnet.get_network(owner_name, station_network)
@@ -479,22 +491,13 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		minetest.chat_send_player(player_name,
 			S('Station "@1" has been renamed to "@2" on network "@3".',
 				station_name, fields.station_name, station_network))
+
+		meta:set_string("infotext",
+				S("Station '@1'" .. " " ..
+					"on travelnet '@2' (owned by @3)" .. " " ..
+					"ready for usage.",
+					tostring(fields.station_name), tostring(station_network), tostring(owner_name)))
 	end
-
-	meta:set_string("formspec",
-		([[
-			size[12,10]
-			field[0.3,0.6;6,0.7;station_name;%s;%s]
-			field[0.3,3.6;6,0.7;station_network;%s;%s]
-		]]):format(
-			S("Station:"),
-			minetest.formspec_escape(fields.station_name),
-			S("Network:"),
-			minetest.formspec_escape(fields.network_name)
-	))
-
-	-- update the formspec of this station
-	travelnet.update_formspec(pos, player_name, nil)
 
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
@@ -567,20 +570,11 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 		S('Station "@1" has been renamed to "@2" on network "@3".',
 			station_name, fields.station_name, station_network))
 
-	meta:set_string("formspec",
-		([[
-			size[12,10]
-			field[0.3,0.6;6,0.7;station_name;%s;%s]
-			field[0.3,3.6;6,0.7;station_network;%s;%s]
-		]]):format(
-			S("Station:"),
-			minetest.formspec_escape(fields.station_name),
-			S("Network:"),
-			minetest.formspec_escape(fields.network_name)
-	))
-
-	-- update the formspec of this station
-	travelnet.update_formspec(pos, player_name, nil)
+	meta:set_string("infotext",
+			S("Station '@1'" .. " " ..
+				"on travelnet '@2' (owned by @3)" .. " " ..
+				"ready for usage.",
+				tostring(fields.station_name), tostring(station_network), tostring(owner_name)))
 
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
@@ -590,4 +584,110 @@ end
 travelnet.can_dig = function()
 	-- forbid digging of the travelnet
 	return false
+end
+
+function travelnet.change_order(pos, player_name, fields)
+	local node = minetest.get_node(pos)
+	local is_elevator = travelnet.is_elevator(node.name)
+
+	local meta = minetest.get_meta(pos)
+	local owner_name      = meta:get_string("owner")
+	local station_network = meta:get_string("station_network")
+	local station_name    = meta:get_string("station_name")
+
+	-- does the player want to move this station one position up in the list?
+	-- only the owner and players with the travelnet_attach priv can change the order of the list
+	-- Note: With elevators, only the "G"(round) marking is actually moved
+	if	    fields and (fields.move_up or fields.move_down)
+		and not travelnet.is_falsey_string(owner_name)
+		and (
+			   (owner_name == player_name)
+			or (minetest.check_player_privs(player_name, { travelnet_attach=true }))
+		)
+	then
+
+		local stations = {}
+		local network = travelnet.targets[owner_name][station_network]
+
+		for k in pairs(network) do
+			table.insert(stations, k)
+		end
+
+		local ground_level = 1
+		if is_elevator then
+			table.sort(stations, function(a, b)
+				return network[a].pos.y > network[b].pos.y
+			end)
+
+			-- find ground level
+			local vgl_timestamp = 999999999999
+			for index,k in ipairs(stations) do
+				local station = network[k]
+				if not station.timestamp then
+					station.timestamp = os.time()
+				end
+				if station.timestamp < vgl_timestamp then
+					vgl_timestamp = station.timestamp
+					ground_level  = index
+				end
+			end
+
+			for index,k in ipairs(stations) do
+				local station = network[k]
+				if index == ground_level then
+					station.nr = "G"
+				else
+					station.nr = tostring(ground_level - index)
+				end
+			end
+		else
+			-- sort the table according to the timestamp (=time the station was configured)
+			table.sort(stations, function(a, b)
+				return network[a].timestamp < network[b].timestamp
+			end)
+		end
+
+		local current_pos = -1
+		for index, k in ipairs(stations) do
+			if k == station_name then
+				current_pos = index
+				break
+			end
+		end
+
+		local swap_with_pos
+		if fields.move_up then
+			swap_with_pos = current_pos-1
+		else
+			swap_with_pos = current_pos+1
+		end
+
+		-- handle errors
+		if swap_with_pos < 1 then
+			travelnet.show_message(pos, player_name, "Info", S("This station is already the first one on the list."))
+			return
+		elseif swap_with_pos > #stations then
+			travelnet.show_message(pos, player_name, "Info", S("This station is already the last one on the list."))
+			return
+		else
+			local current_station = stations[current_pos]
+			local swap_with_station = stations[swap_with_pos]
+
+			-- swap the actual data by which the stations are sorted
+			local old_timestamp = network[swap_with_station].timestamp
+			network[swap_with_station].timestamp = network[current_station].timestamp
+			network[current_station].timestamp = old_timestamp
+
+			-- for elevators, only the "G"(round) marking is moved; no point in swapping stations
+			if not is_elevator then
+				-- actually swap the stations
+				stations[swap_with_pos] = current_station
+				stations[current_pos]   = swap_with_station
+			end
+
+			-- store the changed order
+			travelnet.save_data()
+			travelnet.page_formspec(pos, player_name)
+		end
+	end
 end
