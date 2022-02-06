@@ -352,6 +352,7 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 	local station_network = meta:get_string("station_network")
 	local station_name	= meta:get_string("station_name")
 	local description, node_name  = travelnet.node_description(pos)
+	local new_owner_name, new_station_network, new_station_name
 
 	if not description then
 		minetest.chat_send_player(player_name, "Error: Unknown node.")
@@ -461,11 +462,9 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 				station_network, fields.station_network,
 				owner_name, fields.owner))
 
-		meta:set_string("infotext",
-				S("Station '@1'" .. " " ..
-					"on travelnet '@2' (owned by @3)" .. " " ..
-					"ready for usage.",
-					tostring(fields.station_name), tostring(fields.station_network), tostring(fields.owner)))
+		new_owner_name = fields.owner
+		new_station_network = fields.station_network
+		new_station_name = fields.station_name
 	elseif station_network ~= fields.station_network then
 		-- same owner but different network -> remove station from old network
 		-- but only if there is space on the new network and no other station with that name
@@ -509,11 +508,8 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 				station_name, fields.station_name,
 				station_network, fields.station_network))
 
-		meta:set_string("infotext",
-				S("Station '@1'" .. " " ..
-					"on travelnet '@2' (owned by @3)" .. " " ..
-					"ready for usage.",
-					tostring(fields.station_name), tostring(fields.station_network), tostring(owner_name)))
+		new_station_network = fields.station_network
+		new_station_name = fields.station_name
 	else
 		-- only name changed -> change name but keep timestamp to preserve order
 		network = travelnet.get_network(owner_name, station_network)
@@ -539,12 +535,17 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 			S('Station "@1" has been renamed to "@2" on network "@3".',
 				station_name, fields.station_name, station_network))
 
-		meta:set_string("infotext",
-				S("Station '@1'" .. " " ..
-					"on travelnet '@2' (owned by @3)" .. " " ..
-					"ready for usage.",
-					tostring(fields.station_name), tostring(station_network), tostring(owner_name)))
+		new_station_name = fields.station_name
 	end
+
+	meta:set_string("infotext",
+			S("Station '@1'" .. " " ..
+				"on travelnet '@2' (owned by @3)" .. " " ..
+				"ready for usage.",
+				tostring(new_station_name or station_name),
+				tostring(new_station_network or station_network),
+				tostring(new_owner_name or owner_name)
+			))
 
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
