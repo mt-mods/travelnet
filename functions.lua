@@ -687,7 +687,7 @@ function travelnet.change_order(pos, player_name, fields)
 
 			-- store the changed order
 			travelnet.save_data()
-			travelnet.page_formspec(pos, player_name)
+			travelnet.show_current_formspec(pos, nil, player_name)
 		end
 	end
 end

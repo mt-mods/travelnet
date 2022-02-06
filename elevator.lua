@@ -88,7 +88,7 @@ local function on_interact(pos, _, player)
 			button[6.3,6.2;1.7,0.7;station_set;%s]
 		]]):format(S("Name of this station:"), S("Store")))
 	else
-		travelnet.page_formspec(pos, player_name)
+		travelnet.show_current_formspec(pos, nil, player_name)
 	end
 end
 

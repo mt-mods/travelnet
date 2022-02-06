@@ -175,7 +175,7 @@ local function on_receive_fields_internal(pos, fields, player)
 				S("Station '@1' does not exist (anymore?)" ..
 					" " .. "on this network.", fields.target or "?")
 		)
-		travelnet.page_formspec(pos, player_name)
+		travelnet.show_current_formspec(pos, nil, name)
 		return
 	end
 

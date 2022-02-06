@@ -53,7 +53,7 @@ local function on_interact(pos, _, player)
 				)
 		)
 	else
-		travelnet.page_formspec(pos, player_name)
+		travelnet.show_current_formspec(pos, nil, player_name)
 	end
 end
 

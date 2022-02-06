@@ -27,7 +27,7 @@ end
 
 -- show the player the formspec they would see when right-clicking the node;
 -- needs to be simulated this way as calling on_rightclick would not do
-function travelnet.show_current_formspec(pos, meta, player_name)
+function travelnet.show_current_formspec(pos, _, player_name)
 	travelnet.page_formspec(pos, player_name)
 end
 
@@ -43,8 +43,7 @@ function travelnet.form_input_handler(player, formname, fields)
 			if not pos then
 				return
 			end
-			return travelnet.show_current_formspec(pos,
-					minetest.get_meta(pos), player_name)
+			return travelnet.show_current_formspec(pos, nil, player_name)
 		end
 		return travelnet.on_receive_fields(nil, formname, fields, player)
 	end
@@ -56,8 +55,10 @@ end
 minetest.register_on_player_receive_fields(travelnet.form_input_handler)
 
 
-function travelnet.reset_formspec(meta)
-	minetest.log("warning", "[travelnet] the travelnet.reset_formspec method is deprecated. Run meta:set_string('station_network', '') to reset the travelnet.")
+function travelnet.reset_formspec()
+	minetest.log("warning",
+		"[travelnet] the travelnet.reset_formspec method is deprecated. "..
+		"Run meta:set_string('station_network', '') to reset the travelnet.")
 end
 
 

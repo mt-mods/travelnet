@@ -1,8 +1,6 @@
 local S = minetest.get_translator("travelnet")
 
-local player_formspec_data = travelnet.player_formspec_data
-
-function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
+function travelnet.primary_formspec(pos, puncher_name, _, page_number)
 
 	local meta = minetest.get_meta(pos)
 
@@ -213,6 +211,8 @@ function travelnet.primary_formspec(pos, puncher_name, fields, page_number)
 	return formspec
 end
 
-function travelnet.update_formspec(pos, puncher_name, fields)
-	minetest.log("warning", "[travelnet] the travelnet.update_formspec method is deprecated. The formspec is now generated on each interaction.")
+function travelnet.update_formspec()
+	minetest.log("warning",
+		"[travelnet] the travelnet.update_formspec method is deprecated. "..
+		"The formspec is now generated on each interaction.")
 end
