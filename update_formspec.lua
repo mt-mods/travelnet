@@ -21,8 +21,6 @@ function travelnet.primary_formspec(pos, puncher_name, _, page_number)
 			travelnet.add_target(nil, nil, pos, puncher_name, meta, owner_name)
 			return
 		end
-
-		-- travelnet.reset_formspec(meta)
 		travelnet.show_message(pos, puncher_name, "Error", S("Update failed! Resetting this box on the travelnet."))
 		return
 	end
