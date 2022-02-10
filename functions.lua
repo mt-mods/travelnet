@@ -355,8 +355,7 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 	local new_owner_name, new_station_network, new_station_name
 
 	if not description then
-		minetest.chat_send_player(player_name, "Error: Unknown node.")
-		return
+		return false, S("Error: Unknown node.")
 	end
 
 	if travelnet.is_elevator(node_name) then
@@ -367,7 +366,7 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		and station_network == fields.station_network
 		and station_name == fields.station_name
 	then
-		return
+		return true, { formspec = "primary" }
 	end
 
 	-- sanitize inputs
@@ -384,8 +383,7 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 			..S('Please provide an owner.')
 	end
 	if '' ~= error_message then
-		minetest.chat_send_player(player_name, error_message)
-		return
+		return false, error_message
 	end
 
 	-- players with travelnet_remove priv can dig the station
@@ -397,13 +395,10 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		-- stations without owner can be removed/edited by anybody
 		and owner_name ~= ""
 	then
-		minetest.chat_send_player(player_name,
-			S("This %s belongs to %s. You can't remove or edit it."):format(
+		return false, S("This %s belongs to %s. You can't edit it.",
 				description,
 				tostring(owner_name)
 			)
-		)
-		return
 	end
 
 	-- abort if protected by another mod
@@ -411,7 +406,10 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		and not minetest.check_player_privs(player_name, { protection_bypass = true })
 	then
 		minetest.record_protection_violation(pos, player_name)
-		return
+		return false, S("This @1 belongs to @2. You can't edit it.",
+				description,
+				tostring(owner_name)
+			)
 	end
 
 	local network
@@ -423,26 +421,24 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		network = travelnet.get_or_create_network(fields.owner, fields.station_network)
 		-- does a station with the new name already exist?
 		if network[fields.station_name] then
-			minetest.chat_send_player(player_name,
+			return false, player_name,
 				S('Station "@1" already exists on network "@2" of player "@3".',
-					fields.station_name, fields.station_network, fields.owner))
-			return
+					fields.station_name, fields.station_network, fields.owner)
 		end
 		-- does the new network have space at all?
 		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
-			travelnet.show_message(pos, player_name, S("Error"),
+			return false,
 				S('Network "@1", already contains the maximum number (@2) of '
 					.. 'allowed stations per network. Please choose a '
 					.. 'different network name.', fields.station_network,
-						travelnet.MAX_STATIONS_PER_NETWORK))
-			return
+						travelnet.MAX_STATIONS_PER_NETWORK)
 		end
 		-- get the old network
 		local old_network = travelnet.get_network(owner_name, station_network)
 		if not old_network then
 			print("TRAVELNET: failed to get old network when re-owning "
 				.. "travelnet/elevator at pos " .. minetest.pos_to_string(pos))
-			return
+			return false, S("Station does not have network.")
 		end
 		-- remove old station from old network
 		old_network[station_name] = nil
@@ -472,26 +468,23 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		network = travelnet.get_or_create_network(owner_name, fields.station_network)
 		-- does a station with the new name already exist?
 		if network[fields.station_name] then
-			minetest.chat_send_player(player_name,
-				S('Station "@1" already exists on network "@2".',
-					fields.station_name, fields.station_network))
-			return
+			return false, S('Station "@1" already exists on network "@2".',
+					fields.station_name, fields.station_network)
 		end
 		-- does the new network have space at all?
 		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
-			travelnet.show_message(pos, player_name, S("Error"),
+			return false,
 				S('Network "@1", already contains the maximum number (@2) of '
 					.. 'allowed stations per network. Please choose a '
 					.. 'different network name.', fields.station_network,
-						travelnet.MAX_STATIONS_PER_NETWORK))
-			return
+						travelnet.MAX_STATIONS_PER_NETWORK)
 		end
 		-- get the old network
 		local old_network = travelnet.get_network(owner_name, station_network)
 		if not old_network then
 			print("TRAVELNET: failed to get old network when re-networking "
 				.. "travelnet/elevator at pos " .. minetest.pos_to_string(pos))
-			return
+			return false, S("Station does not have network.")
 		end
 		-- remove old station from old network
 		old_network[station_name] = nil
@@ -515,10 +508,8 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 		network = travelnet.get_network(owner_name, station_network)
 		-- does a station with the new name already exist?
 		if network[fields.station_name] then
-			minetest.chat_send_player(player_name,
-				S('Station "@1" already exists on network "@2".',
-					fields.station_name, station_network))
-			return
+			return false, S('Station "@1" already exists on network "@2".',
+					fields.station_name, station_network)
 		end
 
 		-- get the old station table
@@ -549,6 +540,12 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
+
+	return true, { formspec = "primary", options = {
+		station_name = new_station_name or station_name,
+		station_network = new_station_network or station_network,
+		owner_name = new_owner_name or owner_name
+	} }
 end
 
 
@@ -578,13 +575,10 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 		-- stations without owner can be removed/edited by anybody
 		and owner_name ~= ""
 	then
-		minetest.chat_send_player(player_name,
-			S("This %s belongs to %s. You can't remove or edit it."):format(
+		return false, S("This %s belongs to %s. You can't edit it.",
 				"elevator",
 				tostring(owner_name)
 			)
-		)
-		return
 	end
 
 	-- abort if protected by another mod
@@ -592,16 +586,17 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 		and not minetest.check_player_privs(player_name, { protection_bypass = true })
 	then
 		minetest.record_protection_violation(pos, player_name)
-		return
+		return false, S("This %s belongs to %s. You can't edit it.",
+				"elevator",
+				tostring(owner_name)
+			)
 	end
 
 	local network = travelnet.get_network(owner_name, station_network)
 	-- does a station with the new name already exist?
 	if network[fields.station_name] then
-		minetest.chat_send_player(player_name,
-			S('Station "@1" already exists on network "@2".',
-				fields.station_name, station_network))
-		return
+		return false, S('Station "@1" already exists on network "@2".',
+			fields.station_name, station_network)
 	end
 
 	-- get the old station table
@@ -626,79 +621,14 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
+
+	return true, { formspec = "primary", {
+		station_name = fields.station_name
+	}}
 end
 
 
 travelnet.can_dig = function()
 	-- forbid digging of the travelnet
 	return false
-end
-
-function travelnet.change_order(pos, player_name, fields)
-	local node = minetest.get_node(pos)
-	local is_elevator = travelnet.is_elevator(node.name)
-
-	local meta = minetest.get_meta(pos)
-	local owner_name      = meta:get_string("owner")
-	local station_network = meta:get_string("station_network")
-	local station_name    = meta:get_string("station_name")
-
-	-- does the player want to move this station one position up in the list?
-	-- only the owner and players with the travelnet_attach priv can change the order of the list
-	-- Note: With elevators, only the "G"(round) marking is actually moved
-	if	    fields and (fields.move_up or fields.move_down)
-		and not travelnet.is_falsey_string(owner_name)
-		and (
-			   (owner_name == player_name)
-			or (minetest.check_player_privs(player_name, { travelnet_attach=true }))
-		)
-	then
-		local network = travelnet.get_network(owner_name, station_network)
-
-		if not network then return end
-		local stations = travelnet.get_ordered_stations(owner_name, station_network, is_elevator)
-
-		local current_pos = -1
-		for index, k in ipairs(stations) do
-			if k == station_name then
-				current_pos = index
-				break
-			end
-		end
-
-		local swap_with_pos
-		if fields.move_up then
-			swap_with_pos = current_pos-1
-		else
-			swap_with_pos = current_pos+1
-		end
-
-		-- handle errors
-		if swap_with_pos < 1 then
-			travelnet.show_message(pos, player_name, "Info", S("This station is already the first one on the list."))
-			return
-		elseif swap_with_pos > #stations then
-			travelnet.show_message(pos, player_name, "Info", S("This station is already the last one on the list."))
-			return
-		else
-			local current_station = stations[current_pos]
-			local swap_with_station = stations[swap_with_pos]
-
-			-- swap the actual data by which the stations are sorted
-			local old_timestamp = network[swap_with_station].timestamp
-			network[swap_with_station].timestamp = network[current_station].timestamp
-			network[current_station].timestamp = old_timestamp
-
-			-- for elevators, only the "G"(round) marking is moved; no point in swapping stations
-			if not is_elevator then
-				-- actually swap the stations
-				stations[swap_with_pos] = current_station
-				stations[current_pos]   = swap_with_station
-			end
-
-			-- store the changed order
-			travelnet.save_data()
-			travelnet.show_current_formspec(pos, nil, player_name)
-		end
-	end
 end

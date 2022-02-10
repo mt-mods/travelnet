@@ -86,11 +86,7 @@ local function on_interact(pos, _, player)
 
 	if travelnet.is_falsey_string(station_network) then
 		-- request initial data
-		travelnet.set_formspec(player:get_player_name(), ([[
-			size[12,10]
-			field[0.3,5.6;6,0.7;station_name;%s;]
-			button[6.3,6.2;1.7,0.7;station_set;%s]
-		]]):format(S("Name of this station:"), S("Store")))
+		travelnet.set_formspec(player:get_player_name(), travelnet.formspecs.create_elevator())
 	else
 		travelnet.show_current_formspec(pos, nil, player_name)
 	end

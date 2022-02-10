@@ -48,9 +48,11 @@ mod_dofile("persistence")
 
 -- common functions
 mod_dofile("functions")
+mod_dofile("actions")
 
 -- formspec stuff
 mod_dofile("formspecs")
+mod_dofile("formspecs-legacy")
 
 -- travelnet / elevator update
 mod_dofile("update_formspec")

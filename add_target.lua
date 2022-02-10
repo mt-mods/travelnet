@@ -6,9 +6,7 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 	if not player_name then return end -- this should never happen, but just in case
 
 	if not minetest.check_player_privs(player_name, { interact=true }) then
-		travelnet.show_message(pos, player_name, S("Error"),
-				S("There is no player with interact privilege named '@1'. Aborting.", player_name))
-		return
+		return false, S("There is no player with interact privilege named '@1'. Aborting.", player_name)
 	end
 
 	-- if it is an elevator, determine the network name through x and z coordinates
@@ -23,14 +21,11 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 	end
 
 	if travelnet.is_falsey_string(station_name) then
-		travelnet.show_message(pos, player_name, S("Error"), S("Please provide a name for this station."))
-		return
+		return false, S("Please provide a name for this station.")
 	end
 
 	if travelnet.is_falsey_string(network_name) then
-		travelnet.show_message(pos, player_name, S("Error"),
-				S("Please provide the name of the network this station ought to be connected to."))
-		return
+		return false, S("Please provide the name of the network this station ought to be connected to.")
 	end
 
 	if travelnet.is_falsey_string(owner_name) or owner_name == player_name or is_elevator then -- elevator networks
@@ -38,10 +33,8 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 	elseif	not minetest.check_player_privs(player_name, { travelnet_attach=true })
 		and not travelnet.allow_attach(player_name, owner_name, network_name)
 	then
-		travelnet.show_message(pos, player_name, S("Error"),
-				S("You do not have the travelnet_attach priv which is required to attach your box to " ..
-					"the network of someone else. Aborting."))
-		return
+		return false, S("You do not have the travelnet_attach priv which is required to attach your box to " ..
+			"the network of someone else. Aborting.")
 	end
 
 	local network = travelnet.get_or_create_network(owner_name, network_name)
@@ -50,19 +43,15 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 	local station_count = 1  -- start at one, assume the station about to be created already exists
 	for existing_station_name in pairs(network) do
 		if existing_station_name == station_name then
-			travelnet.show_message(pos, player_name, S("Error"),
-					S("A station named '@1' already exists on this network. Please choose a different name!", station_name))
-			return
+			return false, S("A station named '@1' already exists on this network. Please choose a different name!", station_name)
 		end
 		station_count = station_count+1
 	end
 
 	-- we don't want too many stations in the same network because that would get confusing when displaying the targets
 	if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and station_count > travelnet.MAX_STATIONS_PER_NETWORK then
-		travelnet.show_message(pos, player_name, S("Error"),
-				S("Network '@1', already contains the maximum number (@2) of allowed stations per network. " ..
-					"Please choose a different/new network name.", network_name, travelnet.MAX_STATIONS_PER_NETWORK))
-		return
+		return false, S("Network '@1', already contains the maximum number (@2) of allowed stations per network. " ..
+			"Please choose a different/new network name.", network_name, travelnet.MAX_STATIONS_PER_NETWORK)
 	end
 
 	-- add this station
@@ -92,5 +81,11 @@ function travelnet.add_target(station_name, network_name, pos, player_name, meta
 
 		-- save the updated network data in a savefile over server restart
 		travelnet.save_data()
+
+		return true, { formspec = "primary", options = {
+			station_name = station_name,
+			station_network = network_name,
+			owner_name = owner_name
+		} }
 	end
 end
