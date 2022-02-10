@@ -101,7 +101,6 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		pos = player_formspec_data[name].pos
 	end
 
-	-- player_formspec_data[name].wait_mode = true
 	if not pos or not player then
 		travelnet.set_formspec(name, "")
 		return

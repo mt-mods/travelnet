@@ -622,9 +622,9 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
 
-	return true, { formspec = "primary", {
+	return true, { formspec = "primary", options = {
 		station_name = fields.station_name
-	}}
+	} }
 end
 
 
