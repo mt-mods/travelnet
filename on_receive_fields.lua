@@ -40,6 +40,7 @@ local function validate_travelnet(pos, meta)
 end
 
 local function decide_action(fields, props)
+	-- if paging is enabled and the player wants to change pages
 	if (travelnet.MAX_STATIONS_PER_NETWORK == 0 or travelnet.MAX_STATIONS_PER_NETWORK > 24)
 		and fields.page_number
 		and (
@@ -57,6 +58,7 @@ local function decide_action(fields, props)
 		return travelnet.actions.remove_station
 	end
 
+	-- the player wants to open the edit form
 	if fields.station_edit then
 		return travelnet.actions.edit_station
 	end
@@ -71,6 +73,7 @@ local function decide_action(fields, props)
 		return travelnet.actions.update_station
 	end
 
+	-- pressed the "open door" button
 	if fields.open_door then
 		return travelnet.actions.toggle_door
 	end
@@ -93,6 +96,8 @@ local function decide_action(fields, props)
 end
 
 function travelnet.on_receive_fields(pos, _, fields, player)
+	if not player then return end
+
 	local name = player:get_player_name()
 	player_formspec_data[name] = player_formspec_data[name] or {}
 	if pos then
@@ -101,33 +106,38 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		pos = player_formspec_data[name].pos
 	end
 
-	if not pos or not player then
-		travelnet.set_formspec(name, "")
+	if not pos then
+		travelnet.show_formspec(name, "")
 		return
 	end
 
 	-- the player wants to quit/exit the formspec; do not save/update anything
-	if fields and ((fields.station_exit and fields.station_exit ~= "") or (fields.quit and fields.quit ~= "")) then
-		travelnet.set_formspec(name, "")
+	local closed = not fields or (fields.station_exit and fields.station_exit ~= "") or (fields.quit and fields.quit ~= "")
+	if closed then
+		player_formspec_data[name] = nil
+		travelnet.show_formspec(name, "")
 		return
 	end
 
+	-- Validate node's meta data
 	local meta = minetest.get_meta(pos)
 	local valid, props = validate_travelnet(pos, meta)
 	if not valid then
-		travelnet.set_formspec(name, "")
+		travelnet.show_formspec(name, "")
 		return
 	end
 
+	-- Decide which action to run based on fields given
 	local action = decide_action(fields, props)
 	if not action then
-		travelnet.set_formspec(name, "")
+		travelnet.show_formspec(name, "")
 		return
 	end
 
 	local node = minetest.get_node(pos)
 	props.is_elevator = travelnet.is_elevator(node.name)
 
+	-- Perform the action
 	local success, result = action({
 		node = node,
 		props = props,
@@ -135,6 +145,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		pos = pos
 	}, fields, player)
 
+	-- Respond with a formspec
 	if success then
 		if result and result.formspec then
 			if result.options then
@@ -142,15 +153,11 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 					props[k] = v
 				end
 			end
-			travelnet.set_formspec(name, travelnet.formspecs[result.formspec](props))
+			travelnet.show_formspec(name, travelnet.formspecs[result.formspec](props))
 		else
-			travelnet.set_formspec(name, "")
+			travelnet.show_formspec(name, "")
 		end
 	else
-		travelnet.set_formspec(name, travelnet.formspecs.error_message({ message = result }))
-	end
-
-	if fields.quit or closed then
-		player_formspec_data[name] = nil
+		travelnet.show_formspec(name, travelnet.formspecs.error_message({ message = result }))
 	end
 end

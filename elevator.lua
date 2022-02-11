@@ -86,7 +86,7 @@ local function on_interact(pos, _, player)
 
 	if travelnet.is_falsey_string(station_network) then
 		-- request initial data
-		travelnet.set_formspec(player:get_player_name(), travelnet.formspecs.create_elevator())
+		travelnet.show_formspec(player:get_player_name(), travelnet.formspecs.create_elevator())
 	else
 		travelnet.show_current_formspec(pos, nil, player_name)
 	end

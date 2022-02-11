@@ -13,7 +13,7 @@ function travelnet.show_message(pos, player_name, title, message)
 		title = title,
 		message = message
 	})
-	travelnet.set_formspec(player_name, formspec)
+	travelnet.show_formspec(player_name, formspec)
 end
 
 -- show the player the formspec they would see when right-clicking the node;
@@ -42,9 +42,9 @@ function travelnet.form_input_handler(player, formname, fields)
 				local node = minetest.get_node(pos)
 				local is_elevator = travelnet.is_elevator(node.name)
 				if is_elevator then
-					return travelnet.set_formspec(player_name, travelnet.formspecs.edit_elevator())
+					return travelnet.show_formspec(player_name, travelnet.formspecs.edit_elevator())
 				else
-					return travelnet.set_formspec(player_name, travelnet.formspecs.edit_travelnet())
+					return travelnet.show_formspec(player_name, travelnet.formspecs.edit_travelnet())
 				end
 			else
 				return travelnet.show_current_formspec(pos, nil, player_name)
@@ -90,7 +90,7 @@ function travelnet.edit_formspec(pos, meta, player_name)
 	})
 
 	-- show the formspec manually
-	travelnet.set_formspec(player_name, formspec)
+	travelnet.show_formspec(player_name, formspec)
 end
 
 
@@ -105,32 +105,23 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 	local formspec = travelnet.formspecs.edit_elevator({ station_name = station_name })
 
 	-- show the formspec manually
-	travelnet.set_formspec(player_name, formspec)
+	travelnet.show_formspec(player_name, formspec)
 end
 
-function travelnet.set_formspec(player_name, formspec)
-	if player_formspec_data[player_name] and player_formspec_data[player_name].wait_mode then
-		player_formspec_data[player_name].formspec = formspec
-	else
-		minetest.show_formspec(player_name, travelnet_form_name, formspec)
-	end
-end
-
-function travelnet.show_formspec(player_name)
-	local formspec = player_formspec_data[player_name] and player_formspec_data[player_name].formspec
+function travelnet.show_formspec(player_name, formspec)
 	if formspec then
 		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+		return true
 	else
 		minetest.show_formspec(player_name, "", "")
+		return false
 	end
-	player_formspec_data[player_name].formspec = nil
-	return formspec
 end
 
 function travelnet.page_formspec(pos, player_name, page)
 	local formspec = travelnet.primary_formspec(pos, player_name, nil, page)
 	if formspec then
-		travelnet.set_formspec(player_name, formspec)
+		travelnet.show_formspec(player_name, formspec)
 		return
 	end
 end

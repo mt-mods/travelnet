@@ -25,7 +25,7 @@ local function on_interact(pos, _, player)
 
 	if travelnet.is_falsey_string(station_network) then
 		-- request initinal data
-		travelnet.set_formspec(player_name, travelnet.formspecs.edit_travelnet())
+		travelnet.show_formspec(player_name, travelnet.formspecs.edit_travelnet())
 	else
 		travelnet.show_current_formspec(pos, nil, player_name)
 	end
