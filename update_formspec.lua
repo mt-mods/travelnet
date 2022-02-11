@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local player_formspec_data = travelnet.player_formspec_data
 
 function travelnet.primary_formspec(pos, puncher_name, _)
 
@@ -15,7 +15,7 @@ function travelnet.primary_formspec(pos, puncher_name, _)
 	local station_network = meta:get_string("station_network")
 	local props = {
 		station_name = station_name,
-		station_network = network_name,
+		station_network = station_network,
 		owner_name = owner_name,
 		is_elevator = is_elevator
 	}

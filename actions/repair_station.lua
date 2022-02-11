@@ -1,10 +1,9 @@
+local S = minetest.get_translator("travelnet")
 
 return function (node_info, _, player)
-
-	local owner_name      = node_info.props.get_string("owner")
-	local station_name    = node_info.props.get_string("station_name")
-	local station_network = node_info.props.get_string("station_network")
-	local player_name     = player:get_player_name()
+	local owner_name      = node_info.props.owner
+	local station_name    = node_info.props.station_name
+	local station_network = node_info.props.station_network
 
 	if not owner_name
 	   or not station_name

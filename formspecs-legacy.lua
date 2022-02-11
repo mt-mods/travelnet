@@ -1,7 +1,5 @@
 local travelnet_form_name = "travelnet:show"
 
-local player_formspec_data = travelnet.player_formspec_data
-
 -- minetest.chat_send_player is sometimes not so well visible
 function travelnet.show_message(pos, player_name, title, message)
 	if not pos or not player_name or not message then
