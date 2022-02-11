@@ -1,6 +1,6 @@
 local S = minetest.get_translator("travelnet")
 
-return function (node_info, fields, player)
+return function (node_info, _, player)
 
 	local player_name = player:get_player_name()
 

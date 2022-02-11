@@ -9,26 +9,23 @@ local function validate_travelnet(pos, meta)
 
 	-- if there is something wrong with the data
 	if not owner_name or not station_network or not station_name then
-		minetest.chat_send_player(name, S("Error") .. ": " ..
-				S("There is something wrong with the configuration of this station.") ..
-					" DEBUG DATA: owner: " .. (owner_name or "?") ..
-					" station_name: " .. (station_name or "?") ..
-					" station_network: " .. (station_network or "?") .. "."
-		)
 		print(
 			"ERROR: The travelnet at " .. minetest.pos_to_string(pos) .. " has a problem: " ..
 			" DATA: owner: " .. (owner_name or "?") ..
 			" station_name: " .. (station_name or "?") ..
 			" station_network: " .. (station_network or "?") .. "."
 		)
-		return false
+		return false, S("Error") .. ": " ..
+				S("There is something wrong with the configuration of this station.") ..
+					" DEBUG DATA: owner: " .. (owner_name or "?") ..
+					" station_name: " .. (station_name or "?") ..
+					" station_network: " .. (station_network or "?") .. "."
 	end
 
 	-- TODO: This check seems odd, re-think this. Don't get node twice, don't hard-code node names.
 	local description = travelnet.node_description(pos)
 	if not description then
-		minetest.chat_send_player(name, "Error: Unknown node.")
-		return false
+		return false, "Error: Unknown node."
 	end
 
 	return true, {
@@ -123,6 +120,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	local meta = minetest.get_meta(pos)
 	local valid, props = validate_travelnet(pos, meta)
 	if not valid then
+		minetest.chat_send_player(name, props)
 		travelnet.show_formspec(name, "")
 		return
 	end

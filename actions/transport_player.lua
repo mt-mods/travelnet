@@ -51,7 +51,7 @@ return function (node_info, fields, player)
 	end
 
 	if travelnet.travelnet_effect_enabled then
-		minetest.add_entity(vector.add(node_info.pos, { x=0, y=0.5, z=0 }), "travelnet:effect")  -- it self-destructs after 20 turns
+		minetest.add_entity(vector.add(node_info.pos, { x=0, y=0.5, z=0 }), "travelnet:effect")
 	end
 
 	-- close the doors at the sending station

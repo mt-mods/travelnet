@@ -1,5 +1,3 @@
-local S = minetest.get_translator("travelnet")
-
 local travelnet_form_name = "travelnet:show"
 
 local player_formspec_data = travelnet.player_formspec_data

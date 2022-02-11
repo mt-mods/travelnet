@@ -2,7 +2,7 @@ local S = minetest.get_translator("travelnet")
 
 travelnet.actions = {}
 
-function travelnet.actions.navigate_page(node_info, fields, player)
+function travelnet.actions.navigate_page(node_info, fields, _)
 	local page = 1
 	local network = travelnet.get_network(node_info.props.owner_name, node_info.props.station_network)
 	local station_count = 0
@@ -27,7 +27,7 @@ function travelnet.actions.navigate_page(node_info, fields, player)
 	return true, { formspec = "primary", options = { page_number = page } }
 end
 
-function travelnet.actions.remove_station(node_info, fields, player)
+function travelnet.actions.remove_station(node_info, _, player)
 	local player_name = player:get_player_name()
 
 	-- abort if protected by another mod
@@ -35,7 +35,8 @@ function travelnet.actions.remove_station(node_info, fields, player)
 		and not minetest.check_player_privs(player_name, { protection_bypass = true })
 	then
 		minetest.record_protection_violation(node_info.pos, player_name)
-		return false, S("This @1 belongs to @2. You can't remove it.", node_info.props.description, node_info.props.owner_name)
+		return false,
+			S("This @1 belongs to @2. You can't remove it.", node_info.props.description, node_info.props.owner_name)
 	end
 
 	-- players with travelnet_remove priv can dig the station
@@ -48,7 +49,8 @@ function travelnet.actions.remove_station(node_info, fields, player)
 		-- stations without owner can be removed/edited by anybody
 		and node_info.props.owner_name ~= ""
 	then
-		return false, S("This @1 belongs to @2. You can't remove it.", node_info.props.description, node_info.props.owner_name)
+		return false,
+			S("This @1 belongs to @2. You can't remove it.", node_info.props.description, node_info.props.owner_name)
 	end
 
 	-- remove station
@@ -67,7 +69,7 @@ function travelnet.actions.remove_station(node_info, fields, player)
 	return true
 end
 
-function travelnet.actions.edit_station(node_info, fields, player)
+function travelnet.actions.edit_station(node_info, _, player)
 	local player_name = player:get_player_name()
 	-- abort if protected by another mod
 	if minetest.is_protected(node_info.pos, player_name)
@@ -91,12 +93,12 @@ function travelnet.actions.update_station(node_info, fields, player)
 	end
 end
 
-function travelnet.actions.toggle_door(node_info, fields, player)
+function travelnet.actions.toggle_door(node_info, _, player)
 	travelnet.open_close_door(node_info.pos, player, "toggle")
 	return true
 end
 
-function travelnet.actions.instruct_player(node_info, fields, player)
+function travelnet.actions.instruct_player(_, _, player)
 	minetest.chat_send_player(player:get_player_name(), S("Please click on the target you want to travel to."))
 	return true
 end

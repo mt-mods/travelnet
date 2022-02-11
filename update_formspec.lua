@@ -1,6 +1,6 @@
 local S = minetest.get_translator("travelnet")
 
-function travelnet.primary_formspec(pos, puncher_name, _, page_number)
+function travelnet.primary_formspec(pos, puncher_name, _)
 	local meta = minetest.get_meta(pos)
 	local node = minetest.get_node(pos)
 	local is_elevator = travelnet.is_elevator(node.name)

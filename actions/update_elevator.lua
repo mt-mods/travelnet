@@ -10,8 +10,6 @@ return function (node_info, fields, player)
 	local station_name	  = node_info.props.station_name
 	local description     = node_info.props.description
 
-	local new_owner_name, new_station_network, new_station_name
-
 	if not description then
 		return false, S("Unknown node.")
 	end

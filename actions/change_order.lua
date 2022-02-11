@@ -18,7 +18,11 @@ return function (node_info, fields, player)
 		if not network then
 			return false, S("This station does not have a network.")
 		end
-		local stations = travelnet.get_ordered_stations(node_info.props.owner_name, node_info.props.station_network, node_info.props.is_elevator)
+		local stations = travelnet.get_ordered_stations(
+			node_info.props.owner_name,
+			node_info.props.station_network,
+			node_info.props.is_elevator
+		)
 
 		local current_pos = -1
 		for index, k in ipairs(stations) do

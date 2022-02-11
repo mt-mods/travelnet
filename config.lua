@@ -1,6 +1,6 @@
 
 -- set this to 0 if you want no limit
-travelnet.MAX_STATIONS_PER_NETWORK = 0--tonumber(minetest.settings:get("travelnet.MAX_STATIONS_PER_NETWORK")) or 24
+travelnet.MAX_STATIONS_PER_NETWORK = tonumber(minetest.settings:get("travelnet.MAX_STATIONS_PER_NETWORK")) or 24
 
 -- set this to true if you want a simulated beam effect
 travelnet.travelnet_effect_enabled = minetest.settings:get_bool("travelnet.travelnet_effect_enabled", false)
