@@ -86,7 +86,7 @@ return function (node_info, fields, player)
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
 
-	return true, { formspec = "primary", options = {
+	return true, { formspec = travelnet.formspecs.primary, options = {
 		station_name = fields.station_name
 	} }
 end

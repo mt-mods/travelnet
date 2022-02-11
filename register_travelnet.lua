@@ -13,22 +13,15 @@ local travelnet_dyes = {}
 
 local function on_interact(pos, _, player)
 	local meta = minetest.get_meta(pos)
-	local station_network = meta:get_string("station_network")
-	local player_name = player:get_player_name()
 	local legacy_formspec = meta:get_string("formspec")
 	if not travelnet.is_falsey_string(legacy_formspec) then
 		meta:set_string("formspec", "")
 	end
 
+	local player_name = player:get_player_name()
 	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
 	player_formspec_data[player_name].pos = pos
-
-	if travelnet.is_falsey_string(station_network) then
-		-- request initinal data
-		travelnet.show_formspec(player_name, travelnet.formspecs.edit_travelnet())
-	else
-		travelnet.show_current_formspec(pos, nil, player_name)
-	end
+	travelnet.show_current_formspec(pos, meta, player_name)
 end
 
 -- travelnet box register function

@@ -24,7 +24,7 @@ return function (node_info, fields, player)
 		and station_network == fields.station_network
 		and station_name == fields.station_name
 	then
-		return true, { formspec = "primary" }
+		return true, { formspec = travelnet.formspecs.primary }
 	end
 
 	-- sanitize inputs
@@ -200,7 +200,7 @@ return function (node_info, fields, player)
 	-- save the updated network data in a savefile over server restart
 	travelnet.save_data()
 
-	return true, { formspec = "primary", options = {
+	return true, { formspec = travelnet.formspecs.primary, options = {
 		station_name = new_station_name or station_name,
 		station_network = new_station_network or station_network,
 		owner_name = new_owner_name or owner_name

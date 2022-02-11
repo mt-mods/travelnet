@@ -37,6 +37,16 @@ local function validate_travelnet(pos, meta)
 end
 
 local function decide_action(fields, props)
+	-- the player wants to quit/exit the formspec; do not save/update anything
+	if (fields.station_exit and fields.station_exit ~= "") or (fields.quit and fields.quit ~= "") then
+		return travelnet.actions.end_input
+	end
+
+	-- back button leads back to the previous form
+	if fields.back and fields.back ~= "" then
+		return travelnet.actions.return_to_form
+	end
+
 	-- if paging is enabled and the player wants to change pages
 	if (travelnet.MAX_STATIONS_PER_NETWORK == 0 or travelnet.MAX_STATIONS_PER_NETWORK > 24)
 		and fields.page_number
@@ -93,7 +103,9 @@ local function decide_action(fields, props)
 end
 
 function travelnet.on_receive_fields(pos, _, fields, player)
-	if not player then return end
+	if not player then
+		return
+	end
 
 	local name = player:get_player_name()
 	player_formspec_data[name] = player_formspec_data[name] or {}
@@ -103,16 +115,9 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		pos = player_formspec_data[name].pos
 	end
 
-	if not pos then
-		travelnet.show_formspec(name, "")
-		return
-	end
-
-	-- the player wants to quit/exit the formspec; do not save/update anything
-	local closed = not fields or (fields.station_exit and fields.station_exit ~= "") or (fields.quit and fields.quit ~= "")
-	if closed then
+	if not pos or not fields then
 		player_formspec_data[name] = nil
-		travelnet.show_formspec(name, "")
+		travelnet.show_formspec(name, false)
 		return
 	end
 
@@ -120,15 +125,17 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	local meta = minetest.get_meta(pos)
 	local valid, props = validate_travelnet(pos, meta)
 	if not valid then
+		player_formspec_data[name] = nil
 		minetest.chat_send_player(name, props)
-		travelnet.show_formspec(name, "")
+		travelnet.show_formspec(name, false)
 		return
 	end
 
 	-- Decide which action to run based on fields given
 	local action = decide_action(fields, props)
 	if not action then
-		travelnet.show_formspec(name, "")
+		player_formspec_data[name] = nil
+		travelnet.show_formspec(name, false)
 		return
 	end
 
@@ -146,14 +153,18 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	-- Respond with a formspec
 	if success then
 		if result and result.formspec then
+			if result.formspec ~= travelnet.formspecs.current then
+				player_formspec_data[name].current_form = result.formspec
+			end
 			if result.options then
 				for k,v in pairs(result.options) do
 					props[k] = v
 				end
 			end
-			travelnet.show_formspec(name, travelnet.formspecs[result.formspec](props))
+			travelnet.show_formspec(name, result.formspec(props, name))
 		else
-			travelnet.show_formspec(name, "")
+			player_formspec_data[name] = nil
+			travelnet.show_formspec(name, false)
 		end
 	else
 		travelnet.show_formspec(name, travelnet.formspecs.error_message({ message = result }))

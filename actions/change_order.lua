@@ -62,7 +62,7 @@ return function (node_info, fields, player)
 
 			-- store the changed order
 			travelnet.save_data()
-			return true, { formspec = "primary" }
+			return true, { formspec = travelnet.formspecs.primary }
 		end
 	end
 	return false, S("This @1 belongs to @2. You can't edit it.",

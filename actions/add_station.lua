@@ -1,6 +1,6 @@
 local S = minetest.get_translator("travelnet")
 
-return function (node_info, _, player)
+return function (node_info, fields, player)
 
 	local player_name = player:get_player_name()
 
@@ -14,9 +14,9 @@ return function (node_info, _, player)
 
 	local pos = node_info.pos
 	local meta = node_info.meta
-	local station_name = node_info.props.station_name
-	local station_network = node_info.props.station_network
-	local owner_name = node_info.props.owner_name
+	local station_name = fields.station_name or node_info.props.station_name
+	local station_network = fields.station_network or node_info.props.station_network
+	local owner_name = fields.owner_name or node_info.props.owner_name
 
 	-- if it is an elevator, determine the network name through x and z coordinates
 	local is_elevator = node_info.props.is_elevator
@@ -90,7 +90,7 @@ return function (node_info, _, player)
 		-- save the updated network data in a savefile over server restart
 		travelnet.save_data()
 
-		return true, { formspec = "primary", options = {
+		return true, { formspec = travelnet.formspecs.primary, options = {
 			station_name = station_name,
 			station_network = station_network,
 			owner_name = owner_name

@@ -220,7 +220,6 @@ function travelnet.check_if_trying_to_dig(puncher)
 	return true
 end
 
-
 -- allow doors to open
 function travelnet.open_close_door(pos, player, mode)
 	local this_node = minetest.get_node_or_nil(pos)
@@ -380,7 +379,6 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 		minetest.chat_send_player(player_name, result)
 	end
 end
-
 
 travelnet.can_dig = function()
 	-- forbid digging of the travelnet

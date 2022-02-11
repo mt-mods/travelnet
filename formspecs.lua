@@ -1,6 +1,25 @@
 local S = minetest.get_translator("travelnet")
 
+local player_formspec_data = travelnet.player_formspec_data
+
 travelnet.formspecs = {}
+
+function travelnet.formspecs.current(options, player_name)
+	local current_form = player_formspec_data[player_name] and player_formspec_data[player_name].current_form
+	if current_form then
+		return current_form(options, player_name)
+	end
+	if travelnet.is_falsey_string(options.station_network) then
+		-- request initinal data
+		if options.is_elevator then
+			return travelnet.formspecs.edit_elevator(options, player_name)
+		else
+			return travelnet.formspecs.edit_travelnet(options, player_name)
+		end
+	else
+		return travelnet.formspecs.primary(options, player_name)
+	end
+end
 
 function travelnet.formspecs.error_message(options)
 	if not options then options = {} end
@@ -43,7 +62,11 @@ function travelnet.formspecs.edit_travelnet(options)
 		minetest.formspec_escape(options.station_name or ""),
 		S("What do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
 		S("Assign to network:"),
-		minetest.formspec_escape(options.station_network or default_network),
+		minetest.formspec_escape(
+			travelnet.is_falsey_string(options.station_network)
+				and default_network
+				or options.station_network
+		),
 		S("You can have more than one network. If unsure, use \"@1\".", default_network),
 		S("Owned by:"),
 		minetest.formspec_escape(options.owner_name or ""),
@@ -72,21 +95,12 @@ function travelnet.formspecs.edit_elevator(options)
 	)
 end
 
-function travelnet.formspecs.create_elevator()
-	return ([[
-		size[12,10]
-		field[0.3,5.6;6,0.7;station_name;%s;]
-		button[6.3,6.2;1.7,0.7;station_set;%s]
-	]]):format(S("Name of this station:"), S("Store"))
-end
-
-function travelnet.formspecs.primary(options)
+function travelnet.formspecs.primary(options, player_name)
 	if not options then options = {} end
 	-- add name of station + network + owner + update-button
 	local formspec = ([[
 			size[12,10]
 			label[3.3,0.0;%s:]
-			label[6.3,0.0;%s]
 			label[0.3,0.4;%s]
 			label[6.3,0.4;%s]
 			label[0.3,0.8;%s]
@@ -94,16 +108,17 @@ function travelnet.formspecs.primary(options)
 			label[0.3,1.2;%s]
 			label[6.3,1.2;%s]
 			label[3.3,1.6;%s]
+			button[11.3,0.0;1.0,0.5;station_exit;%s]
 		]]):format(
 			S("Travelnet-Box"),
-			S("Punch box to update target list."),
 			S("Name of this station:"),
 			minetest.formspec_escape(options.station_name or "?"),
 			S("Assigned to Network:"),
 			minetest.formspec_escape(options.station_network or "?"),
 			S("Owned by:"),
 			minetest.formspec_escape(options.owner_name or "?"),
-			S("Click on target to travel there:")
+			S("Click on target to travel there:"),
+			S("Exit")
 		)
 
 	local x = 0
@@ -168,19 +183,31 @@ function travelnet.formspecs.primary(options)
 		y = y+1
 	end
 
-	formspec = formspec .. ([[
-			label[8.0,1.6;%s]
-			button[11.3,0.0;1.0,0.5;station_exit;%s]
-			button[10.0,0.5;2.2,0.7;station_edit;%s]
-			button[9.6,1.6;1.4,0.5;move_up;%s]
-			button[10.9,1.6;1.4,0.5;move_down;%s]
-		]]):format(
-			S("Position in list:"),
-			S("Exit"),
-			S("Edit station"),
-			S("move up"),
-			S("move down")
-		)
+	if player_name == options.owner_name
+	or minetest.check_player_privs(player_name, { travelnet_attach = true })
+	then
+		formspec = formspec .. ([[
+				label[8.0,1.6;%s]
+				button[9.6,1.6;1.4,0.5;move_up;%s]
+				button[10.9,1.6;1.4,0.5;move_down;%s]
+			]]):format(
+				S("Position in list:"),
+				S("move up"),
+				S("move down")
+			)
+	end
+
+	if player_name == options.owner_name
+	or minetest.check_player_privs(player_name, { travelnet_remove = true })
+	or travelnet.allow_dig(player_name, options.owner_name, options.station_network, player_formspec_data[player_name].pos)
+	then
+		formspec = formspec .. ([[
+				button[10.0,0.5;2.2,0.7;station_edit;%s]
+			]]):format(
+				S("Edit station")
+			)
+	end
+
 	if paging then
 		if page_number > 2 then
 			formspec = formspec .. ("button[0,9.2;2,1;first_page;%s]"):format(minetest.formspec_escape(S("<<")))

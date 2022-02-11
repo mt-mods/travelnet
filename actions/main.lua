@@ -1,5 +1,7 @@
 local S = minetest.get_translator("travelnet")
 
+local player_formspec_data = travelnet.player_formspec_data
+
 travelnet.actions = {}
 
 function travelnet.actions.navigate_page(node_info, fields, _)
@@ -24,7 +26,7 @@ function travelnet.actions.navigate_page(node_info, fields, _)
 			end
 		end
 	end
-	return true, { formspec = "primary", options = { page_number = page } }
+	return true, { formspec = travelnet.formspecs.primary, options = { page_number = page } }
 end
 
 function travelnet.actions.remove_station(node_info, _, player)
@@ -82,7 +84,11 @@ function travelnet.actions.edit_station(node_info, _, player)
 			)
 	end
 
-	return true, { formspec = node_info.props.is_elevator and "edit_elevator" or "edit_travelnet" }
+	return true, {
+		formspec = node_info.props.is_elevator
+			and travelnet.formspecs.edit_elevator
+			or travelnet.formspecs.edit_travelnet
+	}
 end
 
 function travelnet.actions.update_station(node_info, fields, player)
@@ -103,6 +109,16 @@ function travelnet.actions.instruct_player(_, _, player)
 	return true
 end
 
+function travelnet.actions.end_input(_, _, player)
+	player_formspec_data[player:get_player_name()] = nil
+	return true
+end
+
+function travelnet.actions.return_to_form()
+	return true, { formspec = travelnet.formspecs.current }
+end
+
+travelnet.actions.repair_station   = dofile(travelnet.path .. "/actions/repair_station.lua")
 travelnet.actions.change_order     = dofile(travelnet.path .. "/actions/change_order.lua")
 travelnet.actions.add_station      = dofile(travelnet.path .. "/actions/add_station.lua")
 travelnet.actions.transport_player = dofile(travelnet.path .. "/actions/transport_player.lua")

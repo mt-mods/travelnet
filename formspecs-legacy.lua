@@ -16,40 +16,23 @@ end
 
 -- show the player the formspec they would see when right-clicking the node;
 -- needs to be simulated this way as calling on_rightclick would not do
-function travelnet.show_current_formspec(pos, _, player_name)
-	travelnet.page_formspec(pos, player_name)
+function travelnet.show_current_formspec(pos, meta, player_name)
+	local node = minetest.get_node(pos)
+	travelnet.show_formspec(player_name,
+		travelnet.formspecs.current({
+			station_network = meta:get_string("station_network"),
+			station_name = meta:get_string("station_name"),
+			owner_name = meta:get_string("owner"),
+			is_elevator = travelnet.is_elevator(node.name)
+		}, minetest.get_player_by_name(player_name)))
 end
 
 -- a player clicked on something in the formspec hse was manually shown
 -- (back from help page, moved travelnet up or down etc.)
 function travelnet.form_input_handler(player, formname, fields)
 	if formname ~= travelnet_form_name then return end
-	if fields then
-		-- back button leads back to the main menu
-		if fields.back and fields.back ~= "" then
-			local player_name = player:get_player_name()
-			local pos = player_formspec_data[player_name] and player_formspec_data[player_name].pos
-			if not pos then
-				return
-			end
 
-			local meta = minetest.get_meta(pos)
-			local station_network = meta:get_string("station_network")
-
-			if travelnet.is_falsey_string(station_network) then
-				local node = minetest.get_node(pos)
-				local is_elevator = travelnet.is_elevator(node.name)
-				if is_elevator then
-					return travelnet.show_formspec(player_name, travelnet.formspecs.edit_elevator())
-				else
-					return travelnet.show_formspec(player_name, travelnet.formspecs.edit_travelnet())
-				end
-			else
-				return travelnet.show_current_formspec(pos, nil, player_name)
-			end
-		end
-		return travelnet.on_receive_fields(nil, formname, fields, player)
-	end
+	return travelnet.on_receive_fields(nil, nil, fields, player)
 end
 
 -- most formspecs the travelnet uses are stored in the travelnet node itself,
@@ -76,16 +59,12 @@ function travelnet.edit_formspec(pos, meta, player_name)
 		return travelnet.edit_formspec_elevator(pos, meta, player_name)
 	end
 
-	local owner = meta:get_string("owner")
-	local station_name = meta:get_string("station_name")
-	local station_network = meta:get_string("station_network")
-
 	-- request changed data
 	local formspec = travelnet.formspecs.edit_travelnet({
-		owner_name = owner,
-		station_network = station_network,
-		station_name = station_name
-	})
+		owner_name      = meta:get_string("owner"),
+		station_network = meta:get_string("station_network"),
+		station_name    = meta:get_string("station_name")
+	}, player_name)
 
 	-- show the formspec manually
 	travelnet.show_formspec(player_name, formspec)
@@ -97,29 +76,22 @@ function travelnet.edit_formspec_elevator(pos, meta, player_name)
 		return
 	end
 
-	local station_name = meta:get_string("station_name")
-
 	-- request changed data
-	local formspec = travelnet.formspecs.edit_elevator({ station_name = station_name })
+	local formspec = travelnet.formspecs.edit_elevator(
+		{ station_name = meta:get_string("station_name") },
+		player_name
+	)
 
 	-- show the formspec manually
 	travelnet.show_formspec(player_name, formspec)
 end
 
 function travelnet.show_formspec(player_name, formspec)
-	if formspec then
+	if formspec and formspec ~= "" then
 		minetest.show_formspec(player_name, travelnet_form_name, formspec)
 		return true
 	else
 		minetest.show_formspec(player_name, "", "")
 		return false
-	end
-end
-
-function travelnet.page_formspec(pos, player_name, page)
-	local formspec = travelnet.primary_formspec(pos, player_name, nil, page)
-	if formspec then
-		travelnet.show_formspec(player_name, formspec)
-		return
 	end
 end
