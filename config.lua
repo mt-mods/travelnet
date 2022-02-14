@@ -11,7 +11,7 @@ travelnet.travelnet_sound_enabled  = minetest.settings:get_bool("travelnet.trave
 -- (this may be useful if you want nothing but the elevators on your server)
 travelnet.travelnet_enabled        = minetest.settings:get_bool("travelnet.travelnet_enabled", true)
 
-travelnet.travelnet_migrate_meta = minetest.settings:get_bool("travelnet.travelnet_migrate_meta", false)
+travelnet.travelnet_cleanup_lbm = minetest.settings:get_bool("travelnet.travelnet_cleanup_lbm", false)
 
 -- if you set travelnet.elevator_enabled to false, you will not be able to
 -- craft, place or use elevators
