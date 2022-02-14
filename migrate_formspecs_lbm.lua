@@ -4,11 +4,7 @@ minetest.register_lbm({
     name = "travelnet:migrate_formspecs",
     nodenames = {"group:travelnet"},
     action = function(pos)
-        -- check formspec meta-field and clear it
-        local meta = minetest.get_meta(pos)
-        local legacy_formspec = meta:get_string("formspec")
-        if not travelnet.is_falsey_string(legacy_formspec) then
-            meta:set_string("formspec", "")
-        end
+        -- clear formspec meta-field
+        minetest.get_meta(pos):set_string("formspec", "")
     end
 })
