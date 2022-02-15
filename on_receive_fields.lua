@@ -108,12 +108,6 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	end
 
 	local name = player:get_player_name()
-	player_formspec_data[name] = player_formspec_data[name] or {}
-	if pos then
-		player_formspec_data[name].pos = pos
-	else
-		pos = player_formspec_data[name].pos
-	end
 
 	if not pos or not fields then
 		player_formspec_data[name] = nil
