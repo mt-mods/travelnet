@@ -173,7 +173,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			end
 			travelnet.show_formspec(name, result.formspec(props, name))
 		else
-			travelnet.actions.end_input(_, _, player)
+			travelnet.actions.end_input(action_args, fields, player)
 			travelnet.show_formspec(name, false)
 		end
 	else
