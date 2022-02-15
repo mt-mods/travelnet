@@ -108,9 +108,15 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	end
 
 	local name = player:get_player_name()
+	player_formspec_data[name] = player_formspec_data[name] or {}
+	if pos then
+		player_formspec_data[name].pos = pos
+	else
+		pos = player_formspec_data[name].pos
+	end
 
 	if not pos or not fields then
-		player_formspec_data[name] = nil
+		travelnet.actions.end_input(_, _, player)
 		travelnet.show_formspec(name, false)
 		return
 	end
@@ -119,8 +125,8 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	local meta = minetest.get_meta(pos)
 	local valid, props = validate_travelnet(pos, meta)
 	if not valid then
-		player_formspec_data[name] = nil
 		minetest.chat_send_player(name, props)
+		travelnet.actions.end_input(_, _, player)
 		travelnet.show_formspec(name, false)
 		return
 	end
@@ -128,7 +134,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	-- Decide which action to run based on fields given
 	local action = decide_action(fields, props)
 	if not action then
-		player_formspec_data[name] = nil
+		travelnet.actions.end_input(_, _, player)
 		travelnet.show_formspec(name, false)
 		return
 	end
@@ -157,7 +163,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 			end
 			travelnet.show_formspec(name, result.formspec(props, name))
 		else
-			player_formspec_data[name] = nil
+			travelnet.actions.end_input(_, _, player)
 			travelnet.show_formspec(name, false)
 		end
 	else

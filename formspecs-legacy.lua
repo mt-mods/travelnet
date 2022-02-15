@@ -37,11 +37,7 @@ function travelnet.form_input_handler(player, formname, fields)
 
 	local name = player:get_player_name()
 	player_formspec_data[name] = player_formspec_data[name] or {}
-	if pos then
-		player_formspec_data[name].pos = pos
-	else
-		pos = player_formspec_data[name].pos
-	end
+	local pos = player_formspec_data[name].pos
 
 	return travelnet.on_receive_fields(pos, nil, fields, player)
 end
