@@ -127,7 +127,6 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 	end
 
 	local node = minetest.get_node(pos)
-	props.is_elevator = travelnet.is_elevator(node.name)
 	action_args.node = node
 
 	local meta = minetest.get_meta(pos)
@@ -141,6 +140,7 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 
 	-- Validate node's meta data
 	local valid, props = validate_travelnet(pos, meta)
+	props.is_elevator = travelnet.is_elevator(node.name)
 	if not valid then
 		minetest.chat_send_player(name, props)
 		travelnet.actions.end_input(action_args, fields, player)
