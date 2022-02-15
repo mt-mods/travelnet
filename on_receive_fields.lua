@@ -115,40 +115,50 @@ function travelnet.on_receive_fields(pos, _, fields, player)
 		pos = player_formspec_data[name].pos
 	end
 
-	if not pos or not fields then
-		travelnet.actions.end_input(_, _, player)
-		travelnet.show_formspec(name, false)
-		return
-	end
+	local action_args = {
+		pos = pos,
+		props = {}
+	}
 
-	-- Validate node's meta data
-	local meta = minetest.get_meta(pos)
-	local valid, props = validate_travelnet(pos, meta)
-	if not valid then
-		minetest.chat_send_player(name, props)
-		travelnet.actions.end_input(_, _, player)
-		travelnet.show_formspec(name, false)
-		return
-	end
-
-	-- Decide which action to run based on fields given
-	local action = decide_action(fields, props)
-	if not action then
-		travelnet.actions.end_input(_, _, player)
+	if not pos then
+		travelnet.actions.end_input(action_args, fields or {}, player)
 		travelnet.show_formspec(name, false)
 		return
 	end
 
 	local node = minetest.get_node(pos)
 	props.is_elevator = travelnet.is_elevator(node.name)
+	action_args.node = node
+
+	local meta = minetest.get_meta(pos)
+	action_args.meta = meta
+
+	if not fields then
+		travelnet.actions.end_input(action_args, {}, player)
+		travelnet.show_formspec(name, false)
+		return
+	end
+
+	-- Validate node's meta data
+	local valid, props = validate_travelnet(pos, meta)
+	if not valid then
+		minetest.chat_send_player(name, props)
+		travelnet.actions.end_input(action_args, fields, player)
+		travelnet.show_formspec(name, false)
+		return
+	end
+	action_args.props = props
+
+	-- Decide which action to run based on fields given
+	local action = decide_action(fields, props)
+	if not action then
+		travelnet.actions.end_input(action_args, fields, player)
+		travelnet.show_formspec(name, false)
+		return
+	end
 
 	-- Perform the action
-	local success, result = action({
-		node = node,
-		props = props,
-		meta = meta,
-		pos = pos
-	}, fields, player)
+	local success, result = action(action_args, fields, player)
 
 	-- Respond with a formspec
 	if success then
