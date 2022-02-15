@@ -47,6 +47,10 @@ local function decide_action(fields, props)
 		return travelnet.actions.return_to_form
 	end
 
+	if fields.station_repair then
+		return travelnet.actions.repair_station
+	end
+
 	-- if paging is enabled and the player wants to change pages
 	if (travelnet.MAX_STATIONS_PER_NETWORK == 0 or travelnet.MAX_STATIONS_PER_NETWORK > 24)
 		and fields.page_number

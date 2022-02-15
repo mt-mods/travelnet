@@ -204,8 +204,10 @@ function travelnet.formspecs.primary(options, player_name)
 	then
 		formspec = formspec .. ([[
 				button[10.0,0.5;2.2,0.7;station_edit;%s]
+				button[9.5,0;2,0.5;station_repair;%s]
 			]]):format(
-				S("Edit station")
+				S("Edit station"),
+				S("Repair")
 			)
 	end
 
