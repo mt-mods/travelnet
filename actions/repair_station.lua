@@ -1,7 +1,7 @@
 local S = minetest.get_translator("travelnet")
 
 return function (node_info, _, player)
-	local owner_name      = node_info.props.owner
+	local owner_name      = node_info.props.owner_name
 	local station_name    = node_info.props.station_name
 	local station_network = node_info.props.station_network
 
@@ -22,6 +22,20 @@ return function (node_info, _, player)
 		local zeit = node_info.meta:get_int("timestamp")
 		if not zeit or type(zeit) ~= "number" or zeit < 100000 then
 			zeit = os.time()
+		end
+
+		local station_count = 1  -- start at one, assume the station about to be created already exists
+		for existing_station_name in pairs(network) do
+			if existing_station_name == station_name then
+				return false, S("A station named '@1' already exists on this network. Please choose a different name!", station_name)
+			end
+			station_count = station_count+1
+		end
+
+		-- we don't want too many stations in the same network because that would get confusing when displaying the targets
+		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and station_count > travelnet.MAX_STATIONS_PER_NETWORK then
+			return false, S("Network '@1', already contains the maximum number (@2) of allowed stations per network. " ..
+				"Please choose a different/new network name.", station_network, travelnet.MAX_STATIONS_PER_NETWORK)
 		end
 
 		-- add this station
