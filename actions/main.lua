@@ -60,12 +60,11 @@ function travelnet.actions.remove_station(node_info, _, player)
 	if not player_inventory:room_for_item("main", node_info.node.name) then
 		return false, S("You do not have enough room in your inventory.")
 	end
+
 	-- give the player the box
 	player_inventory:add_item("main", node_info.node.name)
-
 	-- remove the box from the data structure
-	travelnet.remove_box(node_info.pos, nil, oldmetadata, player)
-
+	travelnet.remove_box(node_info.pos, nil, node_info.meta:to_table(), player)
 	-- remove the node as such
 	minetest.remove_node(node_info.pos)
 
