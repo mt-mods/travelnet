@@ -7,14 +7,17 @@ You do not have the travelnet_attach priv which is required to attach your box t
 A station named '@1' already exists on this network. Please choose a different name!=Stacja o nazwie '@1' już istnieje w tej sieci. Wybierz inną nazwę!
 Network '@1', already contains the maximum number (@2) of allowed stations per network. Please choose a different/new network name.=Sieć '@1', już zawiera maksymalną liczbę (@2) dozwolonych stacji w danej sieci Wybierz inną/nową nazwę sieci.
 Station '@1' has been added to the network '@2', which now consists of @3 station(s).=Stacja '@1' została dodana do sieci '@2', która teraz składa się z @3 stacji.
+at @1 m=w @1 m
+Station '@1' on network '@2' (owned by @3) ready for usage.=Stacja '@1' w sieci '@2' (należy do @3) gotowe do użycia.
+Error=Błąd
 This station does not have a network.=
 This station is already the first one on the list.=Ta stacja już jest pierwsza na liście.
 This station is already the last one on the list.=Ta stacja już jest ostatnia na liście.
 elevator door (open)=drzwi windy (otwarte)
 elevator door (closed)=drzwi windy (zamknięte)
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=Gratulacje! To Twoja pierwsza winda. Możesz utworzyć sieć wind poprzez postawienie kolejnych wind gdzieś nad lub pod tą. Tylkoupewnij się, że koordynaty x i z są takie same.
-This elevator will automaticly connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Ta winda automatycznie podłączy się do wind postawionych na innych wysokościach. Wpisz nazwę stację i kliknij na "piętro" aby ją ustawić. Albo po prostu ją uderz, aby ustawić taką samą wysokość jak ta na której znajduje się dana stacja
-This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at differnt heights will be able to connect to this elevator.=To Twoja pierwsza winda. Różni od siecipodróży tylko tym, że pozwala na poruszanie się pionowo (w górę lub w dół). Każda następna winda postawiona na tych samych koordynatach x, z na różnych wysokościach połączy się z tą windą.
+This elevator will automatically connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Ta winda automatycznie podłączy się do wind postawionych na innych wysokościach. Wpisz nazwę stację i kliknij na "piętro" aby ją ustawić. Albo po prostu ją uderz, aby ustawić taką samą wysokość jak ta na której znajduje się dana stacja
+This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at different heights will be able to connect to this elevator.=To Twoja pierwsza winda. Różni od siecipodróży tylko tym, że pozwala na poruszanie się pionowo (w górę lub w dół). Każda następna winda postawiona na tych samych koordynatach x, z na różnych wysokościach połączy się z tą windą.
 m to the right=m na prawo
 m behind this elevator and=m za tą windą i
 m to the left=m na lewo
@@ -48,7 +51,6 @@ Edit station=
 Page @1/@2=
 >=
 >>=
-Error=Błąd
 Travelnet-Box=Kabina-Siecipodróży
 Could not find information about the station that is to be removed.=Nie można znaleźć informacji o stacji do usunięcia.
 Could not find the station that is to be removed.=Nie można znaleźć stacji do usunięcia.
@@ -69,13 +71,13 @@ Station '@1' has been reattached to the network '@2'.=Stacja '@1' została ponow
 Station '@1' does not exist (anymore?) on this network.=Stacja '@1' już nie istnieje w tej sieci.
 You are not allowed to travel to this station.=
 Initiating transfer to station '@1'.=Inicjuję transfer do stacji '@1'.
-at @1 m=w @1 m
-Station '@1' on travelnet '@2' (owned by @3) ready for usage.=Stacja '@1' w siecipodróży '@2' (należy do @3) gotowe do użycia.
-Unknown node.=
+elevator=
 Invalid data or node.=
 Station "@1" already exists on network "@2".=
 Station does exist.=
 Station "@1" has been renamed to "@2" on network "@3".=
+This @1 belongs to @2. You can't edit it.=
+Unknown node.=
 Please provide a station name.=
 Please provide a network name.=
 Please provide an owner.=
@@ -84,7 +86,6 @@ Network "@1", already contains the maximum number (@2) of allowed stations per n
 Station does not have network.=
 Station "@1" has been renamed to "@2", moved from network "@3" to network "@4" and from owner "@5" to owner "@6".=
 Station "@1" has been renamed to "@2" and moved from network "@3" to network "@4".=
-This @1 belongs to @2. You can't edit it.=
 
 
 ##### not used anymore #####
