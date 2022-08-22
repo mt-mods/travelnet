@@ -13,8 +13,8 @@ Error=
 This station does not have a network.=
 This station is already the first one on the list.=
 This station is already the last one on the list.=
-elevator door (open)=
-elevator door (closed)=
+Elevator door (open)=
+Elevator door (closed)=
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=
 This elevator will automatically connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=
 This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at different heights will be able to connect to this elevator.=
@@ -86,3 +86,5 @@ Network "@1", already contains the maximum number (@2) of allowed stations per n
 Station does not have network.=
 Station "@1" has been renamed to "@2", moved from network "@3" to network "@4" and from owner "@5" to owner "@6".=
 Station "@1" has been renamed to "@2" and moved from network "@3" to network "@4".=
+Elevator:=
+Travelnet-Box:=

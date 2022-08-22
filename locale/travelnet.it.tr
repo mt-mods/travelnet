@@ -13,8 +13,8 @@ Error=Errore
 This station does not have a network.=
 This station is already the first one on the list.=Questa stazione è già la prima dell'elenco.
 This station is already the last one on the list.=Questa stazione è già l'ultima dell'elenco.
-elevator door (open)=Porta dell'ascensore (aperta)
-elevator door (closed)=Porta dell'ascensore (chiusa)
+Elevator door (open)=Porta dell'ascensore (aperta)
+Elevator door (closed)=Porta dell'ascensore (chiusa)
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=Congratulazioni! Questo è il tuo primo ascensore. Puoi costruire una rete di ascensori posizionando ulteriori ascensori da qualche parte sopra o sotto a questo. Accertati solamente che le coordinate x e z siano le stesse.
 This elevator will automatically connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Questo ascensore si collegherà automaticamente agli altri ascensori che hai posizionato ad altezze differenti. Inserisci semplicemente un nome per la stazione e premi "salva" per impostarlo. Oppure colpiscilo semplicemente per impostare l'altezza come nome della stazione.
 This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at different heights will be able to connect to this elevator.=Questo è il tuo primo ascensore. È diverso dalle reti travelnet perché consente il movimento solo in direzione verticale (su o giù). Tutti gli ulteriori ascensori che posizionerai alle stesse coordinate x, z a varie altezze saranno in grado di collegarsi a questo ascensore.
@@ -86,6 +86,8 @@ Network "@1", already contains the maximum number (@2) of allowed stations per n
 Station does not have network.=
 Station "@1" has been renamed to "@2", moved from network "@3" to network "@4" and from owner "@5" to owner "@6".=
 Station "@1" has been renamed to "@2" and moved from network "@3" to network "@4".=
+Elevator:=Ascensore:
+Travelnet-Box:=Cabina-travelnet:
 
 
 ##### not used anymore #####

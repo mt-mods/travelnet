@@ -13,8 +13,8 @@ Error=Fehler
 This station does not have a network.=
 This station is already the first one on the list.=Diese Reisenetz-Box ist bereits die erste auf der Liste.
 This station is already the last one on the list.=Diese Reisenetz-Box ist bereits die letzte auf der Liste.
-elevator door (open)=Aufzugstür (offen)
-elevator door (closed)=Aufzugstür (geschlossen)
+Elevator door (open)=Aufzugstür (offen)
+Elevator door (closed)=Aufzugstür (geschlossen)
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=
 This elevator will automatically connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Dieser Aufzug wird sich automatisch mit anderen Aufzügen verbinden die du auf unterschiedlichen Höhen positioniert hast. Gib einfach einen Namen für diese Station hier ein und klicke auf "speichern" um die Station einzurichten. Oder mache einen Linksklick um die Höhe als Stationsname zu setzen.
 This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at different heights will be able to connect to this elevator.=Dies ist dein erster Aufzug. Der Aufzug unterscheidet sich von Reisenetz-Boxen insofern als daß er nur Reisen in vertikaler Richtung (hoch und runter) erlaubt. Alle folgenden Aufzüge, die du an die selben x,z Koordinaten auf verschiedenen Höhenpositionen setzen wirst, werden sich automatisch mit diesem Aufzug verbinden.
@@ -86,6 +86,8 @@ Network "@1", already contains the maximum number (@2) of allowed stations per n
 Station does not have network.=
 Station "@1" has been renamed to "@2", moved from network "@3" to network "@4" and from owner "@5" to owner "@6".=Die Station "@1" wurde in "@2" umbenannt, vom Netzwerk "@3" in das Netzwerk "@4" und vom Eigentümer "@5" zum Eigentümer "@6" verschoben.
 Station "@1" has been renamed to "@2" and moved from network "@3" to network "@4".=Die Station "@1" wurde in "@2" umbenannt, vom Netzwerk "@3" in das Netzwerk "@4" verschoben.
+Elevator:=Aufzug:
+Travelnet-Box:=Reisenetz-Box:
 
 
 ##### not used anymore #####

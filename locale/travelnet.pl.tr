@@ -13,8 +13,8 @@ Error=Błąd
 This station does not have a network.=
 This station is already the first one on the list.=Ta stacja już jest pierwsza na liście.
 This station is already the last one on the list.=Ta stacja już jest ostatnia na liście.
-elevator door (open)=drzwi windy (otwarte)
-elevator door (closed)=drzwi windy (zamknięte)
+Elevator door (open)=Drzwi windy (otwarte)
+Elevator door (closed)=Drzwi windy (zamknięte)
 Congratulations! This is your first elevator. You can build an elevator network by placing further elevators somewhere above or below this one. Just make sure that the x and z coordinate are the same.=Gratulacje! To Twoja pierwsza winda. Możesz utworzyć sieć wind poprzez postawienie kolejnych wind gdzieś nad lub pod tą. Tylkoupewnij się, że koordynaty x i z są takie same.
 This elevator will automatically connect to the other elevators you have placed at different heights. Just enter a station name and click on "store" to set it up. Or just punch it to set the height as station name.=Ta winda automatycznie podłączy się do wind postawionych na innych wysokościach. Wpisz nazwę stację i kliknij na "piętro" aby ją ustawić. Albo po prostu ją uderz, aby ustawić taką samą wysokość jak ta na której znajduje się dana stacja
 This is your first elevator. It differs from travelnet networks by only allowing movement in vertical direction (up or down). All further elevators which you will place at the same x,z coordinates at different heights will be able to connect to this elevator.=To Twoja pierwsza winda. Różni od siecipodróży tylko tym, że pozwala na poruszanie się pionowo (w górę lub w dół). Każda następna winda postawiona na tych samych koordynatach x, z na różnych wysokościach połączy się z tą windą.
@@ -86,6 +86,8 @@ Network "@1", already contains the maximum number (@2) of allowed stations per n
 Station does not have network.=
 Station "@1" has been renamed to "@2", moved from network "@3" to network "@4" and from owner "@5" to owner "@6".=
 Station "@1" has been renamed to "@2" and moved from network "@3" to network "@4".=
+Elevator:=Winda:
+Travelnet-Box:=Kabina-Siecipodróży:
 
 
 ##### not used anymore #####
