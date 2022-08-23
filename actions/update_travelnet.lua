@@ -54,7 +54,7 @@ return function (node_info, fields, player)
 		and owner_name ~= ""
 	then
 		return false, S("This @1 belongs to @2. You can't edit it.",
-				S(description),
+				description,
 				tostring(owner_name)
 			)
 	end
@@ -65,7 +65,7 @@ return function (node_info, fields, player)
 	then
 		minetest.record_protection_violation(pos, player_name)
 		return false, S("This @1 belongs to @2. You can't edit it.",
-				S(description),
+				description,
 				tostring(owner_name)
 			)
 	end
