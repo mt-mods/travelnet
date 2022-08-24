@@ -70,7 +70,7 @@ function travelnet.formspecs.edit_travelnet(options)
 		S("You can have more than one network. If unsure, use \"@1\".", default_network),
 		S("Owned by:"),
 		minetest.formspec_escape(options.owner_name or ""),
-		S("Unless you know what you are doing, leave this empty."),
+		S("Unless you know what you are doing, leave this as is."),
 		S("Save"),
 		S("Exit")
 	)
