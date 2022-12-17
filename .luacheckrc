@@ -8,5 +8,5 @@ read_globals = {
 	"vector",
 
 	-- Deps
-	"creative", "mesecon",, "mtt
+	"creative", "mesecon", "mtt"
 }
