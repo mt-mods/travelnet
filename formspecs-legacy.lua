@@ -1,3 +1,5 @@
+local S = minetest.get_translator("travelnet")
+
 local travelnet_form_name = "travelnet:show"
 
 local player_formspec_data = travelnet.player_formspec_data
@@ -20,13 +22,27 @@ function travelnet.show_current_formspec(pos, meta, player_name)
 	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
 	player_formspec_data[player_name].pos = pos
 	local node = minetest.get_node(pos)
+	local props = {
+		station_network = meta:get_string("station_network"),
+		station_name = meta:get_string("station_name"),
+		owner_name = meta:get_string("owner"),
+		is_elevator = travelnet.is_elevator(node.name)
+	}
+	if not travelnet.is_falsey_string(props.station_network) then
+		local success, result = travelnet.actions.repair_station({
+			pos = pos,
+			meta = meta,
+			node = node,
+			props = props
+		}, {}, minetest.get_player_by_name(player_name))
+
+		if not success then
+			minetest.chat_send_player(player_name, S("Error") .. ": " .. result)
+		end
+	end
+
 	travelnet.show_formspec(player_name,
-		travelnet.formspecs.current({
-			station_network = meta:get_string("station_network"),
-			station_name = meta:get_string("station_name"),
-			owner_name = meta:get_string("owner"),
-			is_elevator = travelnet.is_elevator(node.name)
-		}, player_name))
+		travelnet.formspecs.current(props, player_name))
 end
 
 -- a player clicked on something in the formspec hse was manually shown
