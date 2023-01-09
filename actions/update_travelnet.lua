@@ -73,7 +73,8 @@ return function (node_info, fields, player)
 	local network
 	local timestamp = os.time()
 	if owner_name ~= fields.owner_name then
-		if not minetest.check_player_privs(player_name, { travelnet_attach = true }) then
+		if not minetest.check_player_privs(player_name, { travelnet_attach = true })
+			and not travelnet.allow_attach(player_name, owner_name, fields.station_network) then
 			minetest.record_protection_violation(pos, player_name)
 			return false, S("You don't have permission to change the owner of this travelnet")
 		end
