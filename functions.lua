@@ -257,11 +257,11 @@ function travelnet.open_close_door(pos, player, mode)
 			-- Get the player again in case it doesn't exist anymore (logged out)
 			local pplayer = minetest.get_player_by_name(playername)
 			if pplayer then
-				right_click_action(door_pos, door_node, pplayer)
+				right_click_action(door_pos, door_node, pplayer, pplayer:get_wielded_item())
 			end
 		end)
 	else
-		right_click_action(door_pos, door_node, player)
+		right_click_action(door_pos, door_node, player, player:get_wielded_item())
 	end
 end
 
