@@ -234,6 +234,10 @@ function travelnet.open_close_door(pos, player, mode)
 	local right_click_action = minetest.registered_nodes[door_node.name].on_rightclick
 	if not right_click_action then return end
 
+	if not minetest.registered_nodes[door_node.name].groups["door"] then
+		return
+	end
+
 	-- Map to old API in case anyone is using it externally
 	if     mode == 0 then mode = "toggle"
 	elseif mode == 1 then mode = "close"
@@ -257,13 +261,11 @@ function travelnet.open_close_door(pos, player, mode)
 			-- Get the player again in case it doesn't exist anymore (logged out)
 			local pplayer = minetest.get_player_by_name(playername)
 			if pplayer then
-				local stack = pplayer:get_wielded_item()
-				pplayer:set_wielded_item(right_click_action(door_pos, door_node, pplayer, stack) or stack)
+				right_click_action(door_pos, door_node, pplayer, ItemStack(""))
 			end
 		end)
 	else
-		local stack = player:get_wielded_item()
-		player:set_wielded_item(right_click_action(door_pos, door_node, player, stack) or stack)
+		right_click_action(door_pos, door_node, player, ItemStack(""))
 	end
 end
 

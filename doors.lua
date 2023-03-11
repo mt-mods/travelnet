@@ -21,7 +21,8 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 			snappy = 2,
 			choppy = 2,
 			oddly_breakable_by_hand = 2,
-			not_in_creative_inventory = 1
+			not_in_creative_inventory = 1,
+			door = 1
 		},
 		-- larger than one node but slightly smaller than a half node so
 		-- that wallmounted torches pose no problem
@@ -58,7 +59,8 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 		groups = {
 			snappy = 2,
 			choppy = 2,
-			oddly_breakable_by_hand = 2
+			oddly_breakable_by_hand = 2,
+			door = 1
 		},
 		node_box = {
 			type = "fixed",
