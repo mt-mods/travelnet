@@ -10,7 +10,7 @@ return function (node_info, fields, player)
 		and not travelnet.is_falsey_string(node_info.props.owner_name)
 		and (
 			   (node_info.props.owner_name == player_name)
-			or (minetest.check_player_privs(player_name, { travelnet_attach=true }))
+			or (minetest.get_player_privs(player_name)[travelnet.attach_priv])
 		)
 	then
 		local network = travelnet.get_network(node_info.props.owner_name, node_info.props.station_network)

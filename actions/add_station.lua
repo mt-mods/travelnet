@@ -38,7 +38,7 @@ return function (node_info, fields, player)
 
 	if travelnet.is_falsey_string(owner_name) or owner_name == player_name or is_elevator then -- elevator networks
 		owner_name = player_name
-	elseif	not minetest.check_player_privs(player_name, { travelnet_attach=true })
+	elseif	not minetest.get_player_privs(player_name)[travelnet.attach_priv]
 		and not travelnet.allow_attach(player_name, owner_name, station_network)
 	then
 		return false, S("You do not have the travelnet_attach priv which is required to attach your box to " ..

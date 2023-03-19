@@ -185,7 +185,7 @@ function travelnet.formspecs.primary(options, player_name)
 	end
 
 	if player_name == options.owner_name
-	or minetest.check_player_privs(player_name, { travelnet_attach = true })
+	or minetest.get_player_privs(player_name)[travelnet.attach_priv]
 	then
 		formspec = formspec .. ([[
 				label[8.0,1.6;%s]
@@ -199,7 +199,7 @@ function travelnet.formspecs.primary(options, player_name)
 	end
 
 	if player_name == options.owner_name
-	or minetest.check_player_privs(player_name, { travelnet_remove = true })
+	or minetest.get_player_privs(player_name)[travelnet.remove_priv]
 	or travelnet.allow_dig(player_name, options.owner_name, options.station_network, player_formspec_data[player_name].pos)
 	then
 		formspec = formspec .. ([[

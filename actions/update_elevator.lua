@@ -29,7 +29,7 @@ return function (node_info, fields, player)
 	end
 
 	-- players with travelnet_remove priv can dig the station
-	if not minetest.check_player_privs(player_name, { travelnet_remove = true })
+	if not minetest.get_player_privs(player_name)[travelnet.remove_priv]
 		-- the function travelnet.allow_dig(..) may allow additional digging
 		and not travelnet.allow_dig(player_name, owner_name, station_network, pos)
 		-- the owner can remove the station

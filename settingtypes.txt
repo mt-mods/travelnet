@@ -19,3 +19,9 @@ travelnet.allow_dig (allow anyone to remove travelnets from any network) bool fa
 
 #    Determines if a user may use the travel network created by another user.
 travelnet.allow_travel (allow players to use other networks) bool true
+
+#   Allows an custom attach priv
+travelnet.attach_priv (set an custom 'travelnet_attach' priv) string travelnet_attach
+
+#   Allows an custom remove priv
+travelnet.remove_priv (set an custom 'travelnet_remove' priv) string travelent_remove

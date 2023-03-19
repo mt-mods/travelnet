@@ -88,3 +88,9 @@ end
 travelnet.allow_travel = function()
 	return minetest.settings:get_bool("travelnet.allow_travel", true)
 end
+
+-- allows an custom attach priv
+travelnet.attach_priv = minetest.settings:get("travelnet.attach_priv") or "travelnet_attach"
+
+-- allows an custom remove priv
+travelnet.remove_priv = minetest.settings:get("travelnet.remove_priv") or "travelnet_remove"
