@@ -21,25 +21,10 @@ Sets and saves the updated travelnet data for the player
 -- retrieve the player-data
 local travelnets = travelnet.get_travelnets(playername)
 -- add a station stub
-travelnets["my_networks"] = {}
+travelnets["my_network"] = {}
 -- save the modified data (calls `travelnet.save_data()` to persist the data)
 travelnet.set_travelnets(playername, travelnets)
 ```
-
-## travelnet.save_data(playername)
-
-Saves the runtime travelnet data to disk
-Can be used in place of `travelnet.set_travelnets` to save all player travelnet data that was modified
-
-```lua
--- save 
-local travelnets = travelnet.get_travelnets(playername)
--- call other function that might modify the data
-other_fn(travelnet)
--- call "save_data" directly to persist changes of the runtime data
-travelnet.save_data(playername)
-```
-
 
 ## travelnet.register_travelnet_box
 

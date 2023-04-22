@@ -2,45 +2,49 @@ local S = minetest.get_translator("travelnet")
 
 local mod_data_path = minetest.get_worldpath() .. "/mod_travelnet.data"
 
--- called whenever a station is added or removed
-function travelnet.save_data()
-	local data = minetest.write_json(travelnet.targets)
+local storage = minetest.get_mod_storage()
 
-	local success = minetest.safe_file_write(mod_data_path, data)
-	if not success then
-		print(S("[Mod travelnet] Error: Savefile '@1' could not be written.", mod_data_path))
+-- called whenever a station is added or removed
+function travelnet.save_data(playername)
+	if playername then
+		-- only save the players travelnet data
+		storage:set_string(playername, minetest.write_json(travelnet.targets[playername]))
+	else
+		-- save _everything_
+		for save_playername, player_targets in pairs(targets) do
+			storage:set_string(save_playername, minetest.write_json(player_targets))
+		end
 	end
 end
 
-
-function travelnet.restore_data()
+-- migrate file-based storage to mod-storage
+local function migrate_file_storage()
 	local file = io.open(mod_data_path, "r")
 	if not file then
-		print(S("[Mod travelnet] Error: Savefile '@1' not found.", mod_data_path))
 		return
 	end
 
+	-- load from file
 	local data = file:read("*all")
+	local old_targets
 	if data:sub(1, 1) == "{" then
-		travelnet.targets = minetest.parse_json(data)
+		minetest.log("info", S("[travelnet] migrating from json-file to mod-storage"))
+		old_targets = minetest.parse_json(data)
 	else
-		travelnet.targets = minetest.deserialize(data)
+		minetest.log("info", S("[travelnet] migrating from serialize-file to mod-storage"))
+		old_targets = minetest.deserialize(data)
 	end
 
-	if not travelnet.targets then
-		local backup_file = mod_data_path .. ".bak"
-		print(S("[Mod travelnet] Error: Savefile '@1' is damaged." .. " " ..
-				"Saved the backup as '@2'.", mod_data_path, backup_file))
-
-		minetest.safe_file_write(backup_file, data)
-		travelnet.targets = {}
+	for playername, player_targets in pairs(old_targets) do
+		storage:set_string(playername, minetest.write_json(player_targets))
 	end
-	file:close()
+
+	-- rename old file
+	os.rename(mod_data_path, mod_data_path .. ".bak")
 end
 
--- getter/setter for the legacy `travelnet.targets` table
--- use those methods to access the per-player data, direct table access is deprecated
--- and will be removed in the future
+-- migrate old data as soon as possible
+migrate_file_storage()
 
 -- returns the player's travelnets
 function travelnet.get_travelnets(playername, create)

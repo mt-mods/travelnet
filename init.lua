@@ -25,7 +25,6 @@ end
 travelnet = {}
 
 travelnet.player_formspec_data = {}
-travelnet.targets = {}
 travelnet.path = minetest.get_modpath(minetest.get_current_modname())
 
 local function mod_dofile(filename)
