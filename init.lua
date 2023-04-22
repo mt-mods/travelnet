@@ -134,7 +134,6 @@ if travelnet.enable_abm then
 end
 
 -- upon server start, read the savefile
-travelnet.restore_data()
 travelnet.player_formspec_data = nil
 
 if minetest.get_modpath("mtt") and mtt.enabled then
