@@ -138,4 +138,5 @@ travelnet.player_formspec_data = nil
 
 if minetest.get_modpath("mtt") and mtt.enabled then
 	mod_dofile("mtt")
+	mod_dofile("persistence.spec")
 end
