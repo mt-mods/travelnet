@@ -70,7 +70,6 @@ return function (node_info, fields, player)
 			)
 	end
 
-	local network
 	local timestamp = os.time()
 	if owner_name ~= fields.owner_name then
 		if not minetest.get_player_privs(player_name)[travelnet.attach_priv]
@@ -82,31 +81,44 @@ return function (node_info, fields, player)
 		-- new owner -> remove station from old network then add to new owner
 		-- but only if there is space on the network
 		-- get the new network
-		network = travelnet.get_or_create_network(fields.owner_name, fields.station_network)
+
+		local old_travelnets = travelnet.get_travelnets(owner_name)
+		local new_travelnets = travelnet.get_travelnets(fields.owner_name)
+
+		local new_network = new_travelnets[fields.station_network]
+		if not new_network then
+			new_network = {}
+			new_travelnets[fields.station_network] = new_network
+		end
+
 		-- does a station with the new name already exist?
-		if network[fields.station_name] then
+		if new_network[fields.station_name] then
 			return false, S('Station "@1" already exists on network "@2" of player "@3".',
 					fields.station_name, fields.station_network, fields.owner_name)
 		end
+
 		-- does the new network have space at all?
-		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
+		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #new_network > travelnet.MAX_STATIONS_PER_NETWORK then
 			return false,
 				S('Network "@1", already contains the maximum number (@2) of '
 					.. 'allowed stations per network. Please choose a '
 					.. 'different network name.', fields.station_network,
 						travelnet.MAX_STATIONS_PER_NETWORK)
 		end
+
 		-- get the old network
-		local old_network = travelnet.get_network(owner_name, station_network)
+		local old_network = old_travelnets[station_network]
 		if not old_network then
 			print("TRAVELNET: failed to get old network when re-owning "
 				.. "travelnet/elevator at pos " .. minetest.pos_to_string(pos))
 			return false, S("Station does not have network.")
 		end
+
 		-- remove old station from old network
 		old_network[station_name] = nil
 		-- add new station to new network
-		network[fields.station_name] = { pos = pos, timestamp = timestamp }
+		new_network[fields.station_name] = { pos = pos, timestamp = timestamp }
+
 		-- update meta
 		meta:set_string("station_name",    fields.station_name)
 		meta:set_string("station_network", fields.station_network)
@@ -124,16 +136,27 @@ return function (node_info, fields, player)
 		new_owner_name = fields.owner_name
 		new_station_network = fields.station_network
 		new_station_name = fields.station_name
+
+		travelnet.set_travelnets(owner_name, old_travelnets)
+		travelnet.set_travelnets(fields.owner_name, new_travelnets)
+
 	elseif station_network ~= fields.station_network then
 		-- same owner but different network -> remove station from old network
 		-- but only if there is space on the new network and no other station with that name
 		-- get the new network
-		network = travelnet.get_or_create_network(owner_name, fields.station_network)
+		local travelnets = travelnet.get_travelnets(owner_name)
+		local network = travelnets[fields.station_network]
+		if not network then
+			network = {}
+			travelnets[fields.station_network] = network
+		end
+
 		-- does a station with the new name already exist?
 		if network[fields.station_name] then
 			return false, S('Station "@1" already exists on network "@2".',
 					fields.station_name, fields.station_network)
 		end
+
 		-- does the new network have space at all?
 		if travelnet.MAX_STATIONS_PER_NETWORK ~= 0 and 1 + #network > travelnet.MAX_STATIONS_PER_NETWORK then
 			return false,
@@ -143,7 +166,7 @@ return function (node_info, fields, player)
 						travelnet.MAX_STATIONS_PER_NETWORK)
 		end
 		-- get the old network
-		local old_network = travelnet.get_network(owner_name, station_network)
+		local old_network = travelnets[station_network]
 		if not old_network then
 			print("TRAVELNET: failed to get old network when re-networking "
 				.. "travelnet/elevator at pos " .. minetest.pos_to_string(pos))
@@ -166,9 +189,18 @@ return function (node_info, fields, player)
 
 		new_station_network = fields.station_network
 		new_station_name = fields.station_name
+
+		travelnet.set_travelnets(owner_name, travelnets)
+
 	else
 		-- only name changed -> change name but keep timestamp to preserve order
-		network = travelnet.get_network(owner_name, station_network)
+		local travelnets = travelnet.get_travelnets(owner_name)
+		local network = travelnets[station_network]
+		if not network then
+			network = {}
+			travelnets[station_network] = network
+		end
+
 		-- does a station with the new name already exist?
 		if network[fields.station_name] then
 			return false, S('Station "@1" already exists on network "@2".',
@@ -192,6 +224,7 @@ return function (node_info, fields, player)
 				station_name, fields.station_name, station_network))
 
 		new_station_name = fields.station_name
+		travelnet.set_travelnets(owner_name, travelnets)
 	end
 
 	meta:set_string("infotext",
@@ -202,12 +235,6 @@ return function (node_info, fields, player)
 				tostring(new_station_network or station_network),
 				tostring(new_owner_name or owner_name)
 			))
-
-	-- save the updated network data
-	travelnet.save_data(owner_name)
-	if new_owner_name then
-		travelnet.save_data(new_owner_name)
-	end
 
 	return true, { formspec = travelnet.formspecs.primary, options = {
 		station_name = new_station_name or station_name,

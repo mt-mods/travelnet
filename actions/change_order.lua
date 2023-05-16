@@ -13,7 +13,8 @@ return function (node_info, fields, player)
 			or (minetest.get_player_privs(player_name)[travelnet.attach_priv])
 		)
 	then
-		local network = travelnet.get_network(node_info.props.owner_name, node_info.props.station_network)
+		local travelnets = travelnet.get_travelnets(node_info.props.owner_name)
+		local network = travelnets[node_info.props.station_network]
 
 		if not network then
 			return false, S("This station does not have a network.")
@@ -61,7 +62,7 @@ return function (node_info, fields, player)
 			end
 
 			-- store the changed order
-			travelnet.save_data(player_name)
+			travelnet.set_travelnets(player_name, travelnets)
 			return true, { formspec = travelnet.formspecs.primary }
 		end
 	end

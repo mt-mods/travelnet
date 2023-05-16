@@ -15,25 +15,31 @@ return function (node_info, _, player)
 		return false, S("Update failed! Resetting this box on the travelnet.")
 	end
 
-	-- if the station got lost from the network for some reason (savefile corrupted?) then add it again
-	if not travelnet.get_station(owner_name, station_network, station_name) then
-		local network = travelnet.get_or_create_network(owner_name, station_network)
+	local travelnets = travelnet.get_travelnets(owner_name)
+	local network = travelnets[station_network]
+	if not network then
+		network = {}
+		travelnets[station_network] = network
+	end
 
-		local zeit = node_info.meta:get_int("timestamp")
-		if not zeit or type(zeit) ~= "number" or zeit < 100000 then
-			zeit = os.time()
+	-- if the station got lost from the network for some reason (savefile corrupted?) then add it again
+	if not network[station_name] then
+		local timestamp = node_info.meta:get_int("timestamp")
+		if not timestamp or type(timestamp) ~= "number" or timestamp < 100000 then
+			timestamp = os.time()
 		end
 
 		-- add this station
 		network[station_name] = {
 			pos = node_info.pos,
-			timestamp = zeit
+			timestamp = timestamp
 		}
 
 		minetest.chat_send_player(owner_name,
 				S("Station '@1'" .. " " ..
 					"has been reattached to the network '@2'.", station_name, station_network))
-		travelnet.save_data(owner_name)
+
+		travelnet.set_travelnets(owner_name, travelnets)
 	end
 	return true, { formspec = travelnet.formspecs.primary }
 end

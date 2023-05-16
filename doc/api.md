@@ -22,7 +22,7 @@ Sets and saves the updated travelnet data for the player
 local travelnets = travelnet.get_travelnets(playername)
 -- add a station stub
 travelnets["my_network"] = {}
--- save the modified data (calls `travelnet.save_data()` to persist the data)
+-- save the modified data
 travelnet.set_travelnets(playername, travelnets)
 ```
 

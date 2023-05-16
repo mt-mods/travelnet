@@ -45,7 +45,12 @@ return function (node_info, fields, player)
 			"the network of someone else. Aborting.")
 	end
 
-	local network = travelnet.get_or_create_network(owner_name, station_network)
+	local travelnets = travelnet.get_travelnets(owner_name)
+	local network = travelnets[station_network]
+	if not network then
+		network = {}
+		travelnet[station_network] = network
+	end
 
 	-- lua doesn't allow efficient counting here
 	local station_count = 1  -- start at one, assume the station about to be created already exists
@@ -88,7 +93,7 @@ return function (node_info, fields, player)
 					tostring(station_name), tostring(station_network), tostring(owner_name)))
 
 		-- save the updated network data in a savefile over server restart
-		travelnet.save_data(owner_name)
+		travelnet.set_travelnets(owner_name, travelnets)
 
 		return true, { formspec = travelnet.formspecs.primary, options = {
 			station_name = station_name,

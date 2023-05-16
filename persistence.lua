@@ -4,19 +4,6 @@ local mod_data_path = minetest.get_worldpath() .. "/mod_travelnet.data"
 
 local storage = minetest.get_mod_storage()
 
--- called whenever a station is added or removed
-function travelnet.save_data(playername)
-	if playername then
-		-- only save the players travelnet data
-		storage:set_string(playername, minetest.write_json(travelnet.targets[playername]))
-	else
-		-- save _everything_
-		for save_playername, player_targets in pairs(targets) do
-			storage:set_string(save_playername, minetest.write_json(player_targets))
-		end
-	end
-end
-
 -- migrate file-based storage to mod-storage
 local function migrate_file_storage()
 	local file = io.open(mod_data_path, "r")
@@ -47,16 +34,11 @@ end
 migrate_file_storage()
 
 -- returns the player's travelnets
-function travelnet.get_travelnets(playername, create)
-	if not travelnet.targets[playername] and create then
-		-- create a new entry
-		travelnet.targets[playername] = {}
-	end
-	return travelnet.targets[playername]
+function travelnet.get_travelnets(playername)
+	return minetest.parse_json(storage:get_string(playername) or "{}") or {}
 end
 
 -- saves the player's modified travelnets
 function travelnet.set_travelnets(playername, travelnets)
-	travelnet.targets[playername] = travelnets
-	travelnet.save_data(playername)
+	storage:set_string(playername, minetest.write_json(travelnets))
 end
