@@ -35,7 +35,12 @@ migrate_file_storage()
 
 -- returns the player's travelnets
 function travelnet.get_travelnets(playername)
-	return minetest.parse_json(storage:get_string(playername) or "{}") or {}
+	local json = storage:get_string(playername)
+	if not json or json == "" or json == "null" then
+		-- default to empty object
+		json = "{}"
+	end
+	return minetest.parse_json(json)
 end
 
 -- saves the player's modified travelnets

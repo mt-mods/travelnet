@@ -49,7 +49,7 @@ return function (node_info, fields, player)
 	local network = travelnets[station_network]
 	if not network then
 		network = {}
-		travelnet[station_network] = network
+		travelnets[station_network] = network
 	end
 
 	-- lua doesn't allow efficient counting here
