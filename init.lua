@@ -65,23 +65,14 @@ end
 
 -- invisible node to place inside top of travelnet box and elevator
 minetest.register_node("travelnet:hidden_top", {
-	drawtype = "nodebox",
+	drawtype = "airlike",
 	paramtype = "light",
 	sunlight_propagates = true,
+	walkable = false,
 	pointable = false,
 	diggable = false,
+	groups = {not_in_creative_inventory = 1},
 	drop = "",
-	groups = { not_in_creative_inventory=1 },
-	tiles = { "travelnet_blank.png" },
-	use_texture_alpha = "clip",
-	node_box = {
-		type = "fixed",
-		fixed = { -0.5, 0.45, -0.5, 0.5, 0.5, 0.5 },
-	},
-	collision_box = {
-		type = "fixed",
-		fixed = { -0.5, 0.45, -0.5, 0.5, 0.5, 0.5 },
-	},
 })
 
 
