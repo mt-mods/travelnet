@@ -30,23 +30,8 @@ function travelnet.register_travelnet_box(cfg)
 		paramtype = "light",
 		paramtype2 = "facedir",
 		wield_scale = { x=0.6, y=0.6, z=0.6 },
-		selection_box = {
-			type = "fixed",
-			fixed = { -0.5, -0.5, -0.5, 0.5, 1.5, 0.5 }
-		},
-
-		collision_box = {
-			type = "fixed",
-			fixed = {
-				{ 0.45,  -0.5, -0.5,   0.5, 1.45, 0.5 },
-				{ -0.5 , -0.5, 0.45,  0.45, 1.45, 0.5 },
-				{ -0.5,  -0.5, -0.5, -0.45, 1.45, 0.5 },
-				--groundplate to stand on
-				{ -0.5,  -0.5, -0.5,  0.5, -0.45, 0.5 },
-				--roof
-				{ -0.5,  1.45, -0.5,  0.5,   1.5, 0.5 },
-			},
-		},
+		selection_box = travelnet.node_box,
+		collision_box = travelnet.node_box,
 
 		tiles = {
 			"(travelnet_travelnet_front_color.png^[multiply:" .. cfg.color .. ")^travelnet_travelnet_front.png", -- backward view

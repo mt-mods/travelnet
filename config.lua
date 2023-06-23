@@ -56,6 +56,17 @@ if minetest.registered_nodes["mcl_core:wood"] then
 	}
 end
 
+travelnet.node_box = {
+	type = "fixed",
+	fixed = {
+		{-0.5, -0.5, 0.4375, 0.5, 1.5, 0.5},  -- Back
+		{-0.5, -0.5, -0.5, -0.4375, 1.5, 0.5},  -- Right
+		{0.4375, -0.5, -0.5, 0.5, 1.5, 0.5},  -- Left
+		{-0.5, -0.5, -0.5, 0.5, -0.4375, 0.5},  -- Floor
+		{-0.5, 1.4375, -0.5, 0.5, 1.5, 0.5},  -- Roof
+	}
+}
+
 -- if this function returns true, the player with the name player_name is
 -- allowed to add a box to the network named network_name, which is owned
 -- by the player owner_name;
