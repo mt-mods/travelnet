@@ -1,7 +1,8 @@
 
-local yellow, red, orange, blue, cyan, green, dark_green, violet, pink, magenta, brown, grey, dark_grey, black, white = ""
+local yellow, red, orange, blue, cyan, green, dark_green, violet = ""
+local pink, magenta, brown, grey, dark_grey, black, white = ""
 
-if core.get_modpath("dye") then
+if minetest.get_modpath("dye") then
    yellow = "dye:yellow"
    red = "dye:red"
    orange = "dye:orange"
@@ -19,7 +20,7 @@ if core.get_modpath("dye") then
    white = "dye:white"
 end
 
-if core.get_modpath("mcl_dye") then
+if minetest.get_modpath("mcl_dye") then
    yellow = "mcl_dye:yellow"
    red = "mcl_dye:red"
    orange = "mcl_dye:orange"
