@@ -21,6 +21,8 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 			snappy = 2,
 			choppy = 2,
 			oddly_breakable_by_hand = 2,
+			pickaxey = 1,
+			handy = 1,
 			not_in_creative_inventory = 1,
 			door = 1
 		},
@@ -60,8 +62,12 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 			snappy = 2,
 			choppy = 2,
 			oddly_breakable_by_hand = 2,
+			pickaxey = 1,
+			handy = 1,
 			door = 1
 		},
+		_mcl_blast_resistance = 1,
+		_mcl_hardness = 0.7,
 		node_box = {
 			type = "fixed",
 			fixed = {
