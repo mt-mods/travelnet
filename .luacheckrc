@@ -9,5 +9,5 @@ read_globals = {
 	"ItemStack",
 
 	-- Deps
-	"creative", "mesecon", "mtt"
+	"creative", "mesecon", "mtt", "mcl_worlds"
 }
