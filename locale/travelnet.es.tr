@@ -91,6 +91,8 @@ Network "@1", already contains the maximum number (@2) of allowed stations per n
 Station does not have network.=
 Station "@1" has been renamed to "@2", moved from network "@3" to network "@4" and from owner "@5" to owner "@6".=La estación "@1" ha sido renombrada a "@2", movida de la red "@3" a la red "@4" y del propietario "@5" al propietario "@6".
 Station "@1" has been renamed to "@2" and moved from network "@3" to network "@4".=La estación "@1" ha sido renombrada a "@2", movida de la red "@3" a la red "@4".
+You can not place travelnets in this dimension=No puedes colocar estaciones en esta dimensión
+You can not place elevators in this dimension=No puedes colocar elevadores en esta dimensión
 
 
 ##### not used anymore #####
