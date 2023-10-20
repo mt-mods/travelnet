@@ -25,3 +25,9 @@ travelnet.attach_priv (set a custom 'travelnet_attach' priv) string travelnet_at
 
 #   Allows a custom remove priv
 travelnet.remove_priv (set a custom 'travelnet_remove' priv) string travelent_remove
+
+# If you are in MCL you can prevent travelnets from being placed in the Nether or End dimension
+
+travelnet.allow_place_in_nether (allow place travelnets in MCL Nether dimension) bool true
+
+travelnet.allow_place_in_end (allow place travelnets in MCL End dimension) bool true

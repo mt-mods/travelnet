@@ -105,3 +105,12 @@ travelnet.attach_priv = minetest.settings:get("travelnet.attach_priv") or "trave
 
 -- allows an custom remove priv
 travelnet.remove_priv = minetest.settings:get("travelnet.remove_priv") or "travelnet_remove"
+
+-- If you are in MCL you can prevent travelnets from being placed in the Nether or End dimension
+travelnet.allow_place_in_nether = function()
+	return minetest.settings:get_bool("travelnet.allow_place_in_nether", true)
+end
+
+travelnet.allow_place_in_end = function()
+	return minetest.settings:get_bool("travelnet.allow_place_in_end", true)
+end

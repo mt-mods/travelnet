@@ -132,12 +132,26 @@ minetest.register_node("travelnet:elevator", {
 	on_place = function(itemstack, placer, pointed_thing)
 		local node = minetest.get_node(vector.add(pointed_thing.above, { x=0, y=1, z=0 }))
 		local def = minetest.registered_nodes[node.name]
+		local pos = placer:get_pos()
+		local dim = "overworld"
+		local is_admin = minetest.check_player_privs(placer, { travelnet_remove=true })
 		-- leftover top nodes can be removed by placing a new elevator underneath
 		if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
 			minetest.chat_send_player(
 				placer:get_player_name(),
 				S("Not enough vertical space to place the travelnet box!")
 			)
+			return
+		end
+		if minetest.get_modpath("mcl_worlds") and pos then
+			dim = mcl_worlds.pos_to_dimension(pos)
+		end
+		if dim == "nether" and not travelnet.allow_place_in_nether() and not is_admin then
+			minetest.chat_send_player(placer:get_player_name(), S("You can not place elevators in this dimension"))
+			return
+		end
+		if dim == "end" and not travelnet.allow_place_in_end() and not is_admin then
+			minetest.chat_send_player(placer:get_player_name(), S("You can not place elevators in this dimension"))
 			return
 		end
 		return minetest.item_place(itemstack, placer, pointed_thing)
