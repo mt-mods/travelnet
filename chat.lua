@@ -6,7 +6,7 @@ minetest.register_chatcommand("travelnet", {
         teleport = true
     },
     func = function(playername, network_name)
-        if not network_name or network_name == "" then
+        if network_name == "" then
             network_name = travelnet.default_network
         end
         local networks = travelnet.get_travelnets(playername)
