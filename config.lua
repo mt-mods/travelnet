@@ -96,8 +96,12 @@ end
 -- you can use this code to i.e. charge the player money for the transfer or to limit
 -- usage of stations to players in the same fraction on PvP servers
 -- params: player_name, owner_name, network_name, station_name_start, station_name_target
-travelnet.allow_travel = function()
-	return minetest.settings:get_bool("travelnet.allow_travel", true)
+travelnet.allow_travel = function(player_name, owner_name)
+	local setting = minetest.settings:get_bool("travelnet.allow_travel", true)
+	if setting == false then
+		return player_name == owner_name
+	end
+	return setting
 end
 
 -- allows an custom attach priv

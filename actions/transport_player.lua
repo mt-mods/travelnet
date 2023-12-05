@@ -29,7 +29,7 @@ return function (node_info, fields, player)
 		node_info.props.station_network,
 		node_info.props.station_name,
 		fields.target
-	) and player_name ~= node_info.props.owner_name then
+	) then
 		return false, S("You are not allowed to travel to this station.")
 	end
 	minetest.chat_send_player(player_name, S("Initiating transfer to station '@1'.", fields.target or "?"))
