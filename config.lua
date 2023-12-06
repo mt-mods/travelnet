@@ -98,10 +98,7 @@ end
 -- params: player_name, owner_name, network_name, station_name_start, station_name_target
 travelnet.allow_travel = function(player_name, owner_name)
 	local setting = minetest.settings:get_bool("travelnet.allow_travel", true)
-	if setting == false then
-		return player_name == owner_name
-	end
-	return setting
+	return setting or player_name == owner_name
 end
 
 -- allows an custom attach priv
