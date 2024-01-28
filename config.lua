@@ -43,7 +43,7 @@ travelnet.tiles_elevator = {
 }
 travelnet.elevator_inventory_image  = "travelnet_elevator_inv.png"
 
-if minetest.registered_nodes["mcl_core:wood"] then
+if minetest.get_modpath("mcl_core") then
 	travelnet.travelnet_recipe = {
 		{ "mcl_core:glass", "mcl_core:iron_ingot",          "mcl_core:glass" },
 		{ "mcl_core:glass", "mesecons_torch:redstoneblock", "mcl_core:glass" },
