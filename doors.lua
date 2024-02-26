@@ -15,7 +15,7 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 		use_texture_alpha = "clip",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		is_ground_content = true,
+		is_ground_content = false,
 		-- only the closed variant is in creative inventory
 		groups = {
 			snappy = 2,
@@ -57,7 +57,7 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 		use_texture_alpha = "clip",
 		paramtype = "light",
 		paramtype2 = "facedir",
-		is_ground_content = true,
+		is_ground_content = false,
 		groups = {
 			snappy = 2,
 			choppy = 2,
