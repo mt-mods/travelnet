@@ -327,11 +327,6 @@ msgid "does not exist (anymore?) on this network."
 msgstr ""
 
 #: init.lua
-#, lua-format
-msgid "Initiating transfer to station '%s'."
-msgstr ""
-
-#: init.lua
 msgid "Could not find information about the station that is to be removed."
 msgstr ""
 
