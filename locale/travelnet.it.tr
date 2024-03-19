@@ -74,7 +74,6 @@ Update failed! Resetting this box on the travelnet.=Aggiornamento fallito! Azzer
 Station '@1' has been reattached to the network '@2'.=Stazione '@1' è stata ricollegata alla rete '@2'.
 Station '@1' does not exist (anymore?) on this network.=Stazione '@1' non esiste (più?) su questa rete.
 You are not allowed to travel to this station.=
-Initiating transfer to station '@1'.=Inizio il trasferimento alla stazione '@1'.
 at @1 m=a @1 m
 Station '@1' on network '@2' (owned by @3) ready for usage.=Stazione '@1' sulla rete '@2' (di proprietà di @3) pronta per l'uso.
 This @1 belongs to @2. You can't edit it.=

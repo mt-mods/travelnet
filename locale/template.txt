@@ -74,7 +74,6 @@ Update failed! Resetting this box on the travelnet.=
 Station '@1' has been reattached to the network '@2'.=
 Station '@1' does not exist (anymore?) on this network.=
 You are not allowed to travel to this station.=
-Initiating transfer to station '@1'.=
 at @1 m=
 Station '@1' on network '@2' (owned by @3) ready for usage.=
 This @1 belongs to @2. You can't edit it.=
