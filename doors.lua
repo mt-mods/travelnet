@@ -127,13 +127,20 @@ end
 
 -- actually register the doors
 -- (but only if the materials for them exist)
-if minetest.get_modpath("default") then
-	travelnet.register_door("travelnet:elevator_door_steel", { "default_stone.png" },           "default:steel_ingot")
-	travelnet.register_door("travelnet:elevator_door_glass", { "travelnet_elevator_door_glass.png" }, "default:glass")
-	travelnet.register_door("travelnet:elevator_door_tin",   { "default_clay.png" },              "default:tin_ingot")
-
-elseif minetest.get_modpath("mcl_core") then
-	travelnet.register_door("travelnet:elevator_door_steel", { "default_stone.png" },           "mcl_core:iron_ingot")
-	travelnet.register_door("travelnet:elevator_door_glass", { "travelnet_elevator_door_glass.png" }, "mcl_core:glass")
-	-- travelnet.register_door("travelnet:elevator_door_tin",   { "default_clay.png" },              "default:tin_ingot")
+if minetest.get_modpath("default") or minetest.get_modpath("mcl_core") then
+	travelnet.register_door(
+		"travelnet:elevator_door_steel",
+		{ "default_stone.png" },
+		xcompat.materials.steel_ingot
+	)
+	travelnet.register_door(
+		"travelnet:elevator_door_glass",
+		{ "travelnet_elevator_door_glass.png" },
+		xcompat.materials.glass
+	)
+	travelnet.register_door(
+		"travelnet:elevator_door_tin",
+		{ "default_clay.png" },
+		xcompat.materials.tin_ingot
+	)
 end
