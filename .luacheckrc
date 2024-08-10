@@ -7,6 +7,7 @@ read_globals = {
 	"minetest",
 	"vector",
 	"ItemStack",
+	"xcompat",
 
 	-- Deps
 	"creative", "mesecon", "mtt"
