@@ -24,16 +24,22 @@ end
 function travelnet.formspecs.error_message(options)
 	if not options then options = {} end
 	return ([[
-			size[8,3]
-			label[3,0;%s]
-			textarea[0.5,0.5;7,1.5;;%s;]
-			button[3.5,2.5;1.0,0.5;back;%s]
-			button[6.8,2.5;1.0,0.5;station_exit;%s]
+			formspec_version[6]
+			size[10,4]
+			bgcolor[#1e1e2ecc]
+			box[0.3,0.2;9.4,0.8;#c01c28]
+			label[4.2,0.6;%s]
+			box[0.3,1.2;9.4,1.8;#3d3846]
+			textarea[0.5,1.4;9.0,1.4;;%s;]
+			style[back;bgcolor=#1a5fb4;textcolor=#ffffff]
+			style[station_exit;bgcolor=#77767b;textcolor=#ffffff]
+			button[3.0,3.2;2.0,0.6;back;%s]
+			button[5.2,3.2;2.0,0.6;station_exit;%s]
 		]]):format(
 			minetest.formspec_escape(options.title or S("Error")),
 			minetest.formspec_escape(options.message or "- nothing -"),
 			S("Back"),
-			S("Exit")
+			S("Back")
 		)
 end
 
@@ -41,54 +47,84 @@ function travelnet.formspecs.edit_travelnet(options)
 	if not options then options = {} end
 
 	return ([[
-		size[10,6.0]
-		label[2.0,0.0;--> %s <--]
-		button[8.0,0.0;2.2,0.7;station_dig;%s]
-		field[0.3,1.2;9,0.9;station_name;%s;%s]
-		label[0.3,1.5;%s]
-		field[0.3,2.8;9,0.9;station_network;%s;%s]
-		label[0.3,3.1;%s]
-		field[0.3,4.4;9,0.9;owner_name;%s;%s]
-		label[0.3,4.7;%s]
-		button[3.8,5.3;1.7,0.7;station_set;%s]
-		button[6.3,5.3;1.7,0.7;station_exit;%s]
+		formspec_version[6]
+		size[12,10]
+		bgcolor[#1e1e2ecc]
+		box[0.5,0.3;11,1.2;#1a5fb4]
+		label[3.5,0.9;%s]
+		style[station_dig;bgcolor=#c01c28;textcolor=#ffffff]
+		button[9.2,0.4;2.3,1.0;station_dig;%s]
+
+		box[0.5,1.7;11,2.0;#3d3846]
+		label[0.7,1.9;%s]
+		field[0.7,2.4;10.6,0.8;station_name;;%s]
+		field_close_on_enter[station_name;false]
+		label[0.7,3.4;%s]
+
+		box[0.5,3.9;11,2.0;#3d3846]
+		label[0.7,4.1;%s]
+		field[0.7,4.6;10.6,0.8;station_network;;%s]
+		field_close_on_enter[station_network;false]
+		label[0.7,5.6;%s]
+
+		box[0.5,6.1;11,2.0;#3d3846]
+		label[0.7,6.3;%s]
+		field[0.7,6.8;10.6,0.8;owner_name;;%s]
+		field_close_on_enter[owner_name;false]
+		label[0.7,7.8;%s]
+
+		style[station_set;bgcolor=#26a269;textcolor=#ffffff]
+		style[station_exit;bgcolor=#77767b;textcolor=#ffffff]
+		button[3.0,8.5;2.8,1.2;station_set;%s]
+		button[6.0,8.5;2.8,1.2;station_exit;%s]
 	]]):format(
 		S("Configure this travelnet station"),
-		S("Remove station"),
+		S("Delete"),
 		S("Name of this station:"),
 		minetest.formspec_escape(options.station_name or ""),
-		S("What do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
+		S("Example: \"my house\", \"mine\", \"shop\"..."),
 		S("Assign to network:"),
 		minetest.formspec_escape(
 			travelnet.is_falsey_string(options.station_network)
 				and travelnet.default_network
 				or options.station_network
 		),
-		S("You can have more than one network. If unsure, use \"@1\".", travelnet.default_network),
+		S("If unsure, use \"@1\".", travelnet.default_network),
 		S("Owned by:"),
 		minetest.formspec_escape(options.owner_name or ""),
-		S("Unless you know what you are doing, leave this as is."),
+		S("Leave this as is unless you know what you're doing."),
 		S("Save"),
-		S("Exit")
+		S("Back")
 	)
 end
 
 function travelnet.formspecs.edit_elevator(options)
 	if not options then options = {} end
 	return ([[
-		size[10,6.0]
-		label[2.0,0.0;--> %s <--]
-		button[8.0,0.0;2.2,0.7;station_dig;%s]
-		field[0.3,1.2;9,0.9;station_name;%s;%s]
-		button[3.8,5.3;1.7,0.7;station_set;%s]
-		button[6.3,5.3;1.7,0.7;station_exit;%s]
+		formspec_version[6]
+		size[12,5.2]
+		bgcolor[#1e1e2ecc]
+		box[0.5,0.3;11,1.2;#1a5fb4]
+		label[3.8,0.9;%s]
+		style[station_dig;bgcolor=#c01c28;textcolor=#ffffff]
+		button[9.2,0.4;2.3,1.0;station_dig;%s]
+
+		box[0.5,1.7;11,1.6;#3d3846]
+		label[0.7,1.9;%s]
+		field[0.7,2.4;10.6,0.7;station_name;;%s]
+		field_close_on_enter[station_name;false]
+
+		style[station_set;bgcolor=#26a269;textcolor=#ffffff]
+		style[station_exit;bgcolor=#77767b;textcolor=#ffffff]
+		button[3.0,3.8;2.8,1.2;station_set;%s]
+		button[6.0,3.8;2.8,1.2;station_exit;%s]
 	]]):format(
 		S("Configure this elevator station"),
-		S("Remove station"),
+		S("Delete"),
 		S("Name of this station:"),
-		minetest.formspec_escape(options.station_name),
+		minetest.formspec_escape(options.station_name or ""),
 		S("Save"),
-		S("Exit")
+		S("Back")
 	)
 end
 
@@ -96,16 +132,22 @@ function travelnet.formspecs.primary(options, player_name)
 	if not options then options = {} end
 	-- add name of station + network + owner + update-button
 	local formspec = ([[
+			formspec_version[6]
 			size[12,%s]
-			label[3.3,0.0;%s]
-			label[0.3,0.4;%s]
-			label[6.3,0.4;%s]
-			label[0.3,0.8;%s]
-			label[6.3,0.8;%s]
-			label[0.3,1.2;%s]
-			label[6.3,1.2;%s]
-			label[3.3,1.6;%s]
-			button[11.3,0.0;1.0,0.5;station_exit;%s]
+			bgcolor[#1e1e2ecc]
+			box[0.2,0.2;11.6,1.8;#3d3846]
+			style_type[label;textcolor=#ffffff]
+			label[4.5,0.4;%s]
+			label[0.4,0.7;%s]
+			label[5.0,0.7;%s]
+			label[0.4,1.0;%s]
+			label[5.0,1.0;%s]
+			label[0.4,1.3;%s]
+			label[5.0,1.3;%s]
+			label[4.0,1.7;%s]
+			style[station_exit;bgcolor=#77767b;textcolor=#ffffff]
+			button[10.5,0.3;1.3,0.6;station_exit;%s]
+			style_type[button;bgcolor=#1a5fb4;textcolor=#ffffff]
 		]]):format(
 			tostring(options.height or 10),
 			options.is_elevator and S("Elevator:") or S("Travelnet-Box:"),
@@ -116,7 +158,7 @@ function travelnet.formspecs.primary(options, player_name)
 			S("Owned by:"),
 			minetest.formspec_escape(options.owner_name or "?"),
 			S("Click on target to travel there:"),
-			S("Exit")
+			S("Back")
 		)
 
 	local x = 0
@@ -164,8 +206,8 @@ function travelnet.formspecs.primary(options, player_name)
 		-- check if there is an elevator door in front that needs to be opened
 		if k == options.station_name then
 			formspec = formspec ..
-				("button[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
-						:format(x, y + 2.5, x + 0.9, y + 2.35, k)
+				("style[open_door;bgcolor=#26a269;textcolor=#ffffff]button[%f,%f;4,0.5;open_door;%s]")
+						:format(x, y + 2.5, minetest.formspec_escape(k) .. " *")
 		elseif options.is_elevator then
 			local travelnets = travelnet.get_travelnets(options.owner_name)
 			local network = travelnets[options.station_network]
@@ -192,13 +234,15 @@ function travelnet.formspecs.primary(options, player_name)
 	or minetest.get_player_privs(player_name)[travelnet.attach_priv]
 	then
 		formspec = formspec .. ([[
-				label[8.0,1.6;%s]
-				button[9.6,1.6;1.4,0.5;move_up;%s]
-				button[10.9,1.6;1.4,0.5;move_down;%s]
+				label[7.5,1.7;%s]
+				style[move_up;bgcolor=#26a269;textcolor=#ffffff]
+				style[move_down;bgcolor=#e66100;textcolor=#ffffff]
+				button[9.2,1.55;1.2,0.5;move_up;%s]
+				button[10.5,1.55;1.2,0.5;move_down;%s]
 			]]):format(
-				S("Position in list:"),
-				S("move up"),
-				S("move down")
+				S("Position:"),
+				S("Up"),
+				S("Down")
 			)
 	end
 
@@ -207,9 +251,10 @@ function travelnet.formspecs.primary(options, player_name)
 	or travelnet.allow_dig(player_name, options.owner_name, options.station_network, player_formspec_data[player_name].pos)
 	then
 		formspec = formspec .. ([[
-				button[10.0,0.5;2.2,0.7;station_edit;%s]
+				style[station_edit;bgcolor=#9141ac;textcolor=#ffffff]
+				button[9.8,0.95;2.0,0.6;station_edit;%s]
 			]]):format(
-				S("Edit station")
+				S("Edit")
 			)
 	end
 
