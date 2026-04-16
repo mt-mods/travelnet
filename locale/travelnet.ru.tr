@@ -1,13 +1,13 @@
 # textdomain: travelnet
 The give player is not a player=Не является игроком для выдачи.
 There is no player with interact privilege named '@1'. Aborting.=Нету игрока названного '@1' с привилегией interact. Отменяю.
-Please provide a name for this station.=Пожалуйста, предоставьте имя для станции.
-Please provide the name of the network this station ought to be connected to.=Пожалуйста, предоставьте имя сети, к которой подключена станция.
+Please provide a name for this station.=Пожалуйста, предоставьте имя для этой станции.
+Please provide the name of the network this station ought to be connected to.=Пожалуйста, предоставьте имя сети, к которой подключена эта станция.
 You do not have the travelnet_attach priv which is required to attach your box to the network of someone else. Aborting.=У вас нет привилегии travelnet_attach, которая требуется, чтобы привязать вашу коробку к сети кого-то ещё. Отменяю.
 A station named '@1' already exists on this network. Please choose a different name!=Станция с именем '@1' уже существует в этой сети. Пожалуйста, выберите другое имя!
 Network '@1', already contains the maximum number (@2) of allowed stations per network. Please choose a different/new network name.=Сеть '@1', уже содержит максимальное число (@2) разрешённых станций на сеть. Пожалуйста, выберите другое/новое имя сети.
 Station '@1' has been added to the network '@2', which now consists of @3 station(s).=Станция '@1' была добавлена в сеть '@2', которая содержит более @3 станций(-ую).
-at @1 m= на @1 м
+at @1 m=на @1 м
 Station '@1' on network '@2' (owned by @3) ready for usage.=Станция '@1' на сети '2' (владелец: @3) готова к использованию.
 This station does not have a network.=Эта станция не имеет сети.
 This station is already the first one on the list.=Эта станция уже первая в списке.
