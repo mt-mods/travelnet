@@ -1,4 +1,5 @@
 local S = minetest.get_translator("travelnet")
+local F = minetest.formspec_escape
 
 local player_formspec_data = travelnet.player_formspec_data
 
@@ -30,8 +31,8 @@ function travelnet.formspecs.error_message(options)
 			button[3.5,2.5;1.0,0.5;back;%s]
 			button[6.8,2.5;1.0,0.5;station_exit;%s]
 		]]):format(
-			minetest.formspec_escape(options.title or S("Error")),
-			minetest.formspec_escape(options.message or "- nothing -"),
+			F(options.title or S("Error")),
+			F(options.message or "- nothing -"),
 			S("Back"),
 			S("Exit")
 		)
@@ -56,17 +57,17 @@ function travelnet.formspecs.edit_travelnet(options)
 		S("Configure this travelnet station"),
 		S("Remove station"),
 		S("Name of this station:"),
-		minetest.formspec_escape(options.station_name or ""),
+		F(options.station_name or ""),
 		S("What do you call this place here? Example: \"my first house\", \"mine\", \"shop\"..."),
 		S("Assign to network:"),
-		minetest.formspec_escape(
+		F(
 			travelnet.is_falsey_string(options.station_network)
 				and travelnet.default_network
 				or options.station_network
 		),
 		S("You can have more than one network. If unsure, use \"@1\".", travelnet.default_network),
 		S("Owned by:"),
-		minetest.formspec_escape(options.owner_name or ""),
+		F(options.owner_name or ""),
 		S("Unless you know what you are doing, leave this as is."),
 		S("Save"),
 		S("Exit")
@@ -86,7 +87,7 @@ function travelnet.formspecs.edit_elevator(options)
 		S("Configure this elevator station"),
 		S("Remove station"),
 		S("Name of this station:"),
-		minetest.formspec_escape(options.station_name),
+		F(options.station_name),
 		S("Save"),
 		S("Exit")
 	)
@@ -110,11 +111,11 @@ function travelnet.formspecs.primary(options, player_name)
 			tostring(options.height or 10),
 			options.is_elevator and S("Elevator:") or S("Travelnet-Box:"),
 			S("Name of this station:"),
-			minetest.formspec_escape(options.station_name or "?"),
+			F(options.station_name or "?"),
 			S("Assigned to Network:"),
-			minetest.formspec_escape(options.station_network or "?"),
+			F(options.station_network or "?"),
 			S("Owned by:"),
-			minetest.formspec_escape(options.owner_name or "?"),
+			F(options.owner_name or "?"),
 			S("Click on target to travel there:"),
 			S("Exit")
 		)
@@ -165,7 +166,7 @@ function travelnet.formspecs.primary(options, player_name)
 		if k == options.station_name then
 			formspec = formspec ..
 				("button[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
-						:format(x, y + 2.5, x + 0.9, y + 2.35, k)
+						:format(x, y + 2.5, x + 0.9, y + 2.35, F(k))
 		elseif options.is_elevator then
 			local travelnets = travelnet.get_travelnets(options.owner_name)
 			local network = travelnets[options.station_network]
@@ -178,11 +179,11 @@ function travelnet.formspecs.primary(options, player_name)
 
 			formspec = formspec ..
 				("button[%f,%f;1,0.5;target;%s]label[%f,%f;%s]")
-						:format(x, y + 2.5, minetest.formspec_escape(tostring(network[k].nr)), x + 0.9, y + 2.35, k)
+						:format(x, y + 2.5, F(tostring(network[k].nr)), x + 0.9, y + 2.35, F(k))
 		else
 			formspec = formspec ..
 				("button[%f,%f;4,0.5;target;%s]")
-						:format(x, y + 2.5, minetest.formspec_escape(k))
+						:format(x, y + 2.5, F(k))
 		end
 
 		y = y+1
@@ -215,19 +216,19 @@ function travelnet.formspecs.primary(options, player_name)
 
 	if paging then
 		if page_number > 2 then
-			formspec = formspec .. ("button[0,9.2;2,1;first_page;%s]"):format(minetest.formspec_escape(S("<<")))
+			formspec = formspec .. ("button[0,9.2;2,1;first_page;%s]"):format(F(S("<<")))
 		end
 		if page_number > 1 then
-			formspec = formspec .. ("button[2,9.2;2,1;prev_page;%s]"):format(minetest.formspec_escape(S("<")))
+			formspec = formspec .. ("button[2,9.2;2,1;prev_page;%s]"):format(F(S("<")))
 		end
 		formspec = formspec
-			.. ("label[5,9.4;%s]"):format(minetest.formspec_escape(S("Page @1/@2", page_number, pages)))
+			.. ("label[5,9.4;%s]"):format(F(S("Page @1/@2", page_number, pages)))
 			.. ("field[20,20;0.1,0.1;page_number;Page;%i]"):format(page_number)
 		if page_number < pages then
-			formspec = formspec .. ("button[8,9.2;2,1;next_page;%s]"):format(minetest.formspec_escape(S(">")))
+			formspec = formspec .. ("button[8,9.2;2,1;next_page;%s]"):format(F(S(">")))
 		end
 		if page_number < pages-1 then
-			formspec = formspec .. ("button[10,9.2;2,1;last_page;%s]"):format(minetest.formspec_escape(S(">>")))
+			formspec = formspec .. ("button[10,9.2;2,1;last_page;%s]"):format(F(S(">>")))
 		end
 	end
 
