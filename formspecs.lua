@@ -94,6 +94,7 @@ end
 
 function travelnet.formspecs.primary(options, player_name)
 	if not options then options = {} end
+	local F = minetest.formspec_escape
 	-- add name of station + network + owner + update-button
 	local formspec = ([[
 			size[12,%s]
@@ -165,7 +166,7 @@ function travelnet.formspecs.primary(options, player_name)
 		if k == options.station_name then
 			formspec = formspec ..
 				("button[%f,%f;1,0.5;open_door;<>]label[%f,%f;%s]")
-						:format(x, y + 2.5, x + 0.9, y + 2.35, k)
+						:format(x, y + 2.5, x + 0.9, y + 2.35, F(k))
 		elseif options.is_elevator then
 			local travelnets = travelnet.get_travelnets(options.owner_name)
 			local network = travelnets[options.station_network]
@@ -178,11 +179,11 @@ function travelnet.formspecs.primary(options, player_name)
 
 			formspec = formspec ..
 				("button[%f,%f;1,0.5;target;%s]label[%f,%f;%s]")
-						:format(x, y + 2.5, minetest.formspec_escape(tostring(network[k].nr)), x + 0.9, y + 2.35, k)
+						:format(x, y + 2.5, F(tostring(network[k].nr)), x + 0.9, y + 2.35, F(k))
 		else
 			formspec = formspec ..
 				("button[%f,%f;4,0.5;target;%s]")
-						:format(x, y + 2.5, minetest.formspec_escape(k))
+						:format(x, y + 2.5, F(k))
 		end
 
 		y = y+1
