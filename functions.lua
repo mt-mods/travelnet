@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 
 local function string_endswith(str, ends)
@@ -21,14 +21,14 @@ end
 
 function travelnet.node_description(pos)
 
-	local node = minetest.get_node_or_nil(pos)
+	local node = core.get_node_or_nil(pos)
 	if not node then return end
 
 	local description
 
-	if minetest.get_item_group(node.name, "travelnet") == 1 then
+	if core.get_item_group(node.name, "travelnet") == 1 then
 		description = S("travelnet box")
-	elseif minetest.get_item_group(node.name, "elevator") == 1 then
+	elseif core.get_item_group(node.name, "elevator") == 1 then
 		description = S("elevator")
 	elseif node.name == "locked_travelnet:travelnet" then
 		description = S("locked travelnet")
@@ -210,26 +210,26 @@ end
 
 -- allow doors to open
 function travelnet.open_close_door(pos, player, mode)
-	local this_node = minetest.get_node_or_nil(pos)
+	local this_node = core.get_node_or_nil(pos)
 	-- give up if the area is *still* not loaded
 	if not this_node then
 		return
 	end
 
 	local opposite_direction = (this_node.param2 + 2) % 4
-	local door_pos = vector.add(pos, minetest.facedir_to_dir(opposite_direction))
+	local door_pos = vector.add(pos, core.facedir_to_dir(opposite_direction))
 
-	local door_node = minetest.get_node_or_nil(door_pos)
+	local door_node = core.get_node_or_nil(door_pos)
 
 	if not door_node or door_node.name == "ignore" or door_node.name == "air"
-			or not minetest.registered_nodes[door_node.name] then
+			or not core.registered_nodes[door_node.name] then
 		return
 	end
 
-	local right_click_action = minetest.registered_nodes[door_node.name].on_rightclick
+	local right_click_action = core.registered_nodes[door_node.name].on_rightclick
 	if not right_click_action then return end
 
-	if not minetest.registered_nodes[door_node.name].groups["door"] then
+	if not core.registered_nodes[door_node.name].groups["door"] then
 		return
 	end
 
@@ -252,9 +252,9 @@ function travelnet.open_close_door(pos, player, mode)
 
 	if mode == "open" then
 		local playername = player:get_player_name()
-		minetest.after(1, function()
+		core.after(1, function()
 			-- Get the player again in case it doesn't exist anymore (logged out)
-			local pplayer = minetest.get_player_by_name(playername)
+			local pplayer = core.get_player_by_name(playername)
 			if pplayer then
 				right_click_action(door_pos, door_node, pplayer, ItemStack(""))
 			end
@@ -265,7 +265,7 @@ function travelnet.open_close_door(pos, player, mode)
 end
 
 travelnet.rotate_player = function(target_pos, player)
-	local target_node = minetest.get_node_or_nil(target_pos)
+	local target_node = core.get_node_or_nil(target_pos)
 	if target_node == nil then return end
 
 	-- play sound at the target position as well
@@ -275,7 +275,7 @@ travelnet.rotate_player = function(target_pos, player)
 			sound = "travelnet_bell"
 		end
 
-		minetest.sound_play(sound, {
+		core.sound_play(sound, {
 			pos = target_pos,
 			gain = 0.75,
 			max_hear_distance = 10
@@ -324,10 +324,10 @@ travelnet.remove_box_message = function(oldmetadata, digger)
 		oldmetadata.fields["station_network"]
 	)
 	local owner_name = oldmetadata.fields["owner"]
-	minetest.chat_send_player(owner_name, removal_message)
+	core.chat_send_player(owner_name, removal_message)
 	local digger_name = digger and digger:get_player_name()
 	if digger and owner_name ~= digger_name then
-		minetest.chat_send_player(digger_name, removal_message)
+		core.chat_send_player(digger_name, removal_message)
 	end
 end
 travelnet.remove_box = function(_, _, oldmetadata, digger)
@@ -336,7 +336,7 @@ travelnet.remove_box = function(_, _, oldmetadata, digger)
 	if success then
 		travelnet.remove_box_message(oldmetadata, digger)
 	else
-		minetest.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..reason)
+		core.chat_send_player(digger:get_player_name(), S("Error") .. ": " ..reason)
 	end
 end
 
@@ -355,9 +355,9 @@ function travelnet.edit_box(pos, fields, meta, player_name)
 			description = description,
 			is_elevator = is_elevator
 		}
-	}, fields, minetest.get_player_name(player_name))
+	}, fields, core.get_player_name(player_name))
 	if not success then
-		minetest.chat_send_player(player_name, result)
+		core.chat_send_player(player_name, result)
 	end
 end
 
@@ -374,9 +374,9 @@ function travelnet.edit_elevator(pos, fields, meta, player_name)
 			description = description,
 			is_elevator = is_elevator
 		}
-	}, fields, minetest.get_player_name(player_name))
+	}, fields, core.get_player_name(player_name))
 	if not success then
-		minetest.chat_send_player(player_name, result)
+		core.chat_send_player(player_name, result)
 	end
 end
 

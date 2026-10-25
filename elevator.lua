@@ -1,7 +1,7 @@
 -- This version of the travelnet box allows to move up or down only.
 -- The network name is determined automaticly from the position (x/z coordinates).
 -- Author: Sokomine
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 function travelnet.show_nearest_elevator(pos, owner_name, param2)
 	if not pos or not pos.x or not pos.z or not owner_name then
@@ -10,7 +10,7 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 
 	local player_travelnets = travelnet.get_travelnets(owner_name)
 	if not player_travelnets then
-		minetest.chat_send_player(owner_name,
+		core.chat_send_player(owner_name,
 				S("Congratulations! This is your first elevator. " ..
 					"You can build an elevator network by placing further elevators somewhere above " ..
 					"or below this one. Just make sure that the x and z coordinate are the same."))
@@ -23,7 +23,7 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 		-- does the network have any members at all?
 		and next(player_travelnets[network_name], nil)
 	then
-		minetest.chat_send_player(owner_name,
+		core.chat_send_player(owner_name,
 				S("This elevator will automatically connect to the " ..
 					"other elevators you have placed at different heights. Just enter a station name " ..
 					"and click on \"store\" to set it up. Or just punch it to set the height as station " ..
@@ -34,7 +34,7 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 	local nearest_name, nearest_dist = travelnet.find_nearest_elevator_network(pos, owner_name)
 
 	if not nearest_name then
-		minetest.chat_send_player(owner_name,
+		core.chat_send_player(owner_name,
 				S("This is your first elevator. It differs from " ..
 					"travelnet networks by only allowing movement in vertical direction (up or down). " ..
 					"All further elevators which you will place at the same x,z coordinates at different " ..
@@ -65,14 +65,14 @@ function travelnet.show_nearest_elevator(pos, owner_name, param2)
 		if index == 1 then text = text .. " " end
 	end
 
-	minetest.chat_send_player(owner_name, text .. S(", located at x") ..
+	core.chat_send_player(owner_name, text .. S(", located at x") ..
 			("=%f, z=%f. "):format(pos.x + nearest_dist.x, pos.z + nearest_dist.z) ..
 			S("This elevator here will start a new shaft/network."))
 end
 
 
 local function on_interact(pos, _, player)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local legacy_formspec = meta:get_string("formspec")
 	if not travelnet.is_falsey_string(legacy_formspec) then
 		meta:set_string("formspec", "")
@@ -82,7 +82,7 @@ local function on_interact(pos, _, player)
 	travelnet.show_current_formspec(pos, meta, player_name)
 end
 
-minetest.register_node("travelnet:elevator", {
+core.register_node("travelnet:elevator", {
 	description = S("Elevator"),
 	drawtype = "mesh",
 	mesh = "travelnet_elevator.obj",
@@ -104,14 +104,14 @@ minetest.register_node("travelnet:elevator", {
 	light_source = 10,
 
 	after_place_node  = function(pos, placer)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		meta:set_string("infotext",       S("Elevator (unconfigured)"))
 		meta:set_string("station_name",   "")
 		meta:set_string("station_network","")
 		meta:set_string("owner",          placer:get_player_name())
 
-		minetest.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
-		travelnet.show_nearest_elevator(pos, placer:get_player_name(), minetest.dir_to_facedir(placer:get_look_dir()))
+		core.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
+		travelnet.show_nearest_elevator(pos, placer:get_player_name(), core.dir_to_facedir(placer:get_look_dir()))
 	end,
 
 	on_rightclick = on_interact,
@@ -131,32 +131,32 @@ minetest.register_node("travelnet:elevator", {
 
 	-- taken from VanessaEs homedecor fridge
 	on_place = function(itemstack, placer, pointed_thing)
-		local node = minetest.get_node(vector.add(pointed_thing.above, { x=0, y=1, z=0 }))
-		local def = minetest.registered_nodes[node.name]
+		local node = core.get_node(vector.add(pointed_thing.above, { x=0, y=1, z=0 }))
+		local def = core.registered_nodes[node.name]
 		-- leftover top nodes can be removed by placing a new elevator underneath
 		if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
-			minetest.chat_send_player(
+			core.chat_send_player(
 				placer:get_player_name(),
 				S("Not enough vertical space to place the travelnet box!")
 			)
 			return
 		end
-		return minetest.item_place(itemstack, placer, pointed_thing)
+		return core.item_place(itemstack, placer, pointed_thing)
 	end,
 
 	on_destruct = function(pos)
 		local above = vector.add(pos, vector.new(0, 1, 0))
-		if minetest.get_node(above).name == "travelnet:hidden_top" then
-			minetest.remove_node(above)
+		if core.get_node(above).name == "travelnet:hidden_top" then
+			core.remove_node(above)
 		end
 	end
 })
 
-if minetest.get_modpath("mesecons_mvps") then
+if core.get_modpath("mesecons_mvps") then
 	mesecon.register_mvps_stopper("travelnet:elevator")
 end
 
-minetest.register_craft({
+core.register_craft({
 	output = "travelnet:elevator",
 	recipe = travelnet.elevator_recipe,
 })

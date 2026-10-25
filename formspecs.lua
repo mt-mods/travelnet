@@ -1,5 +1,5 @@
-local S = minetest.get_translator("travelnet")
-local F = minetest.formspec_escape
+local S = core.get_translator("travelnet")
+local F = core.formspec_escape
 
 local player_formspec_data = travelnet.player_formspec_data
 
@@ -232,7 +232,7 @@ function travelnet.formspecs.primary(options, player_name)
 	end
 
 	if player_name == options.owner_name
-	or minetest.get_player_privs(player_name)[travelnet.attach_priv]
+	or core.get_player_privs(player_name)[travelnet.attach_priv]
 	then
 		formspec = formspec .. ([[
 				label[7.5,1.7;%s]
@@ -248,7 +248,7 @@ function travelnet.formspecs.primary(options, player_name)
 	end
 
 	if player_name == options.owner_name
-	or minetest.get_player_privs(player_name)[travelnet.remove_priv]
+	or core.get_player_privs(player_name)[travelnet.remove_priv]
 	or travelnet.allow_dig(player_name, options.owner_name, options.station_network, player_formspec_data[player_name].pos)
 	then
 		formspec = formspec .. ([[

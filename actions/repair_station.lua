@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 return function (node_info, _, player)
 	local owner_name      = node_info.props.owner_name
@@ -35,7 +35,7 @@ return function (node_info, _, player)
 			timestamp = timestamp
 		}
 
-		minetest.chat_send_player(owner_name,
+		core.chat_send_player(owner_name,
 				S("Station '@1'" .. " " ..
 					"has been reattached to the network '@2'.", station_name, station_network))
 

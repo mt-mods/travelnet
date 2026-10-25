@@ -2,13 +2,13 @@
 -- All doors (not only these here) in front of a travelnet or elevator are opened automaticly when a player arrives
 -- and are closed when a player departs from the travelnet or elevator.
 -- Autor: Sokomine
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 function travelnet.register_door(node_base_name, def_tiles, material)
 	local closed_door = node_base_name .. "_closed"
 	local open_door = node_base_name .. "_open"
 
-	minetest.register_node(open_door, {
+	core.register_node(open_door, {
 		description = S("Elevator door (open)"),
 		drawtype = "nodebox",
 		tiles = def_tiles,
@@ -43,14 +43,14 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 		},
 		drop = closed_door,
 		on_rightclick = function(pos, node)
-			minetest.add_node(pos, {
+			core.add_node(pos, {
 				name = closed_door,
 				param2 = node.param2
 			})
 		end,
 	})
 
-	minetest.register_node(closed_door, {
+	core.register_node(closed_door, {
 		description = S("Elevator door (closed)"),
 		drawtype = "nodebox",
 		tiles = def_tiles,
@@ -82,7 +82,7 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 			},
 		},
 		on_rightclick = function(pos, node)
-			minetest.add_node(pos, {
+			core.add_node(pos, {
 				name = open_door,
 				param2 = node.param2
 			})
@@ -90,7 +90,7 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 	})
 
 	-- add a craft receipe for the door
-	minetest.register_craft({
+	core.register_craft({
 		output = closed_door,
 		recipe = {
 			{ material, "", material },
@@ -101,17 +101,17 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 
 
 	-- Make doors reacts to mesecons
-	if minetest.get_modpath("mesecons") then
+	if core.get_modpath("mesecons") then
 		local mesecons = {
 			effector = {
 				action_on = function(pos, node)
-					minetest.add_node(pos, {
+					core.add_node(pos, {
 						name = open_door,
 						param2 = node.param2
 					})
 				end,
 				action_off = function(pos, node)
-					minetest.add_node(pos, {
+					core.add_node(pos, {
 						name = closed_door,
 						param2 = node.param2
 					})
@@ -120,14 +120,14 @@ function travelnet.register_door(node_base_name, def_tiles, material)
 			}
 		}
 
-		minetest.override_item(closed_door, { mesecons=mesecons })
-		minetest.override_item(open_door,   { mesecons=mesecons })
+		core.override_item(closed_door, { mesecons=mesecons })
+		core.override_item(open_door,   { mesecons=mesecons })
 	end
 end
 
 -- actually register the doors
 -- (but only if the materials for them exist)
-if minetest.get_modpath("default") or minetest.get_modpath("mcl_core") then
+if core.get_modpath("default") or core.get_modpath("mcl_core") then
 	travelnet.register_door(
 		"travelnet:elevator_door_steel",
 		{ "default_stone.png" },

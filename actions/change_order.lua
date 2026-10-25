@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 return function (node_info, fields, player)
 	local player_name = player:get_player_name()
@@ -10,7 +10,7 @@ return function (node_info, fields, player)
 		and not travelnet.is_falsey_string(node_info.props.owner_name)
 		and (
 			   (node_info.props.owner_name == player_name)
-			or (minetest.get_player_privs(player_name)[travelnet.attach_priv])
+			or (core.get_player_privs(player_name)[travelnet.attach_priv])
 		)
 	then
 		local travelnets = travelnet.get_travelnets(node_info.props.owner_name)
