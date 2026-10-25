@@ -1,8 +1,8 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
-local mod_data_path = minetest.get_worldpath() .. "/mod_travelnet.data"
+local mod_data_path = core.get_worldpath() .. "/mod_travelnet.data"
 
-local storage = minetest.get_mod_storage()
+local storage = core.get_mod_storage()
 
 -- migrate file-based storage to mod-storage
 local function migrate_file_storage()
@@ -15,15 +15,15 @@ local function migrate_file_storage()
 	local data = file:read("*all")
 	local old_targets
 	if data:sub(1, 1) == "{" then
-		minetest.log("info", S("[travelnet] migrating from json-file to mod-storage"))
-		old_targets = minetest.parse_json(data)
+		core.log("info", S("[travelnet] migrating from json-file to mod-storage"))
+		old_targets = core.parse_json(data)
 	else
-		minetest.log("info", S("[travelnet] migrating from serialize-file to mod-storage"))
-		old_targets = minetest.deserialize(data)
+		core.log("info", S("[travelnet] migrating from serialize-file to mod-storage"))
+		old_targets = core.deserialize(data)
 	end
 
 	for playername, player_targets in pairs(old_targets) do
-		storage:set_string(playername, minetest.write_json(player_targets))
+		storage:set_string(playername, core.write_json(player_targets))
 	end
 
 	-- rename old file
@@ -41,11 +41,11 @@ function travelnet.get_travelnets(playername)
 		travelnet.log("action", "get_travelnets: player '" .. playername .. "' doesn't have an entry, creating one")
 		json = "{}"
 	end
-	return minetest.parse_json(json)
+	return core.parse_json(json)
 end
 
 -- saves the player's modified travelnets
 function travelnet.set_travelnets(playername, travelnets)
 	travelnet.log("action", "set_travelnets: persisting travelnets for player '" .. playername .. "'")
-	storage:set_string(playername, minetest.write_json(travelnets))
+	storage:set_string(playername, core.write_json(travelnets))
 end

@@ -2,7 +2,7 @@ local travelnet_form_name = "travelnet:show"
 
 local player_formspec_data = travelnet.player_formspec_data
 
--- minetest.chat_send_player is sometimes not so well visible
+-- core.chat_send_player is sometimes not so well visible
 function travelnet.show_message(pos, player_name, title, message)
 	if not pos or not player_name or not message then
 		return
@@ -19,7 +19,7 @@ end
 function travelnet.show_current_formspec(pos, meta, player_name)
 	player_formspec_data[player_name] = player_formspec_data[player_name] or {}
 	player_formspec_data[player_name].pos = pos
-	local node = minetest.get_node(pos)
+	local node = core.get_node(pos)
 	travelnet.show_formspec(player_name,
 		travelnet.formspecs.current({
 			station_network = meta:get_string("station_network"),
@@ -45,11 +45,11 @@ end
 -- most formspecs the travelnet uses are stored in the travelnet node itself,
 -- but some may require some "back"-button functionality (i.e. help page,
 -- move up/down etc.)
-minetest.register_on_player_receive_fields(travelnet.form_input_handler)
+core.register_on_player_receive_fields(travelnet.form_input_handler)
 
 
 function travelnet.reset_formspec()
-	minetest.log("warning",
+	core.log("warning",
 		"[travelnet] the travelnet.reset_formspec method is deprecated. "..
 		"Run meta:set_string('station_network', '') to reset the travelnet.")
 end
@@ -60,7 +60,7 @@ function travelnet.edit_formspec(pos, meta, player_name)
 		return
 	end
 
-	local node = minetest.get_node_or_nil(pos)
+	local node = core.get_node_or_nil(pos)
 	if not node then return end
 	if travelnet.is_elevator(node.name) then
 		return travelnet.edit_formspec_elevator(pos, meta, player_name)
@@ -95,10 +95,10 @@ end
 
 function travelnet.show_formspec(player_name, formspec)
 	if formspec and formspec ~= "" then
-		minetest.show_formspec(player_name, travelnet_form_name, formspec)
+		core.show_formspec(player_name, travelnet_form_name, formspec)
 		return true
 	else
-		minetest.show_formspec(player_name, "", "")
+		core.show_formspec(player_name, "", "")
 		return false
 	end
 end

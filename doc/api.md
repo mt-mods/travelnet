@@ -45,13 +45,13 @@ Any node can be travelnet box if configured accordingly
 
 Example to override mese to act as a travelnet:
 ```lua
-minetest.override_item("default:mese", {
+core.override_item("default:mese", {
 	groups = {
 		travelnet = 1
 	},
 
 	after_place_node  = function(pos, placer, itemstack)
-		local meta = minetest.get_meta(pos);
+		local meta = core.get_meta(pos);
 		travelnet.reset_formspec( meta );
 		meta:set_string("owner", placer:get_player_name());
 	end,

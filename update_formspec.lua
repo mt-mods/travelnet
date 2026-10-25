@@ -2,8 +2,8 @@ local player_formspec_data = travelnet.player_formspec_data
 
 function travelnet.primary_formspec(pos, puncher_name, _)
 
-	local meta = minetest.get_meta(pos)
-	local node = minetest.get_node(pos)
+	local meta = core.get_meta(pos)
+	local node = core.get_node(pos)
 	local is_elevator = travelnet.is_elevator(node.name)
 
 	if not meta then
@@ -25,7 +25,7 @@ function travelnet.primary_formspec(pos, puncher_name, _)
 		node = node,
 		meta = meta,
 		props = props,
-	}, {}, minetest.get_player_by_name(puncher_name))
+	}, {}, core.get_player_by_name(puncher_name))
 
 	if success then
 		if result and result.formspec then
@@ -45,7 +45,7 @@ function travelnet.primary_formspec(pos, puncher_name, _)
 end
 
 function travelnet.update_formspec()
-	minetest.log("warning",
+	core.log("warning",
 		"[travelnet] the travelnet.update_formspec method is deprecated. "..
 		"The formspec is now generated on each interaction.")
 end

@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 return function (node_info, fields, player)
 
@@ -35,13 +35,13 @@ return function (node_info, fields, player)
 
 	if travelnet.travelnet_sound_enabled then
 		if node_info.props.is_elevator then
-			minetest.sound_play("travelnet_bell", {
+			core.sound_play("travelnet_bell", {
 				pos = node_info.pos,
 				gain = 0.75,
 				max_hear_distance = 10
 			})
 		else
-			minetest.sound_play("travelnet_travel", {
+			core.sound_play("travelnet_travel", {
 				pos = node_info.pos,
 				gain = 0.75,
 				max_hear_distance = 10
@@ -50,7 +50,7 @@ return function (node_info, fields, player)
 	end
 
 	if travelnet.travelnet_effect_enabled then
-		minetest.add_entity(vector.add(node_info.pos, { x=0, y=0.5, z=0 }), "travelnet:effect")
+		core.add_entity(vector.add(node_info.pos, { x=0, y=0.5, z=0 }), "travelnet:effect")
 	end
 
 	-- close the doors at the sending station
@@ -59,24 +59,24 @@ return function (node_info, fields, player)
 	-- transport the player to the target location
 
 	-- may be 0.0 for some versions of MT 5 player model
-	local player_model_bottom = tonumber(minetest.settings:get("player_model_bottom")) or -.5
+	local player_model_bottom = tonumber(core.settings:get("player_model_bottom")) or -.5
 	local player_model_vec = vector.new(0, player_model_bottom, 0)
 	local target_pos = target_station.pos
 
 	local top_pos = vector.add(node_info.pos, { x=0, y=1, z=0 })
-	local top_node = minetest.get_node(top_pos)
+	local top_node = core.get_node(top_pos)
 	if top_node.name ~= "travelnet:hidden_top" then
-		local def = minetest.registered_nodes[top_node.name]
+		local def = core.registered_nodes[top_node.name]
 		if def and def.buildable_to then
-			minetest.set_node(top_pos, { name="travelnet:hidden_top" })
+			core.set_node(top_pos, { name="travelnet:hidden_top" })
 		end
 	end
 
-	minetest.load_area(target_pos)
+	core.load_area(target_pos)
 
-	local tnode = minetest.get_node(target_pos)
+	local tnode = core.get_node(target_pos)
 	-- check if the box has at the other end has been removed.
-	if minetest.get_item_group(tnode.name, "travelnet") == 0 and minetest.get_item_group(tnode.name, "elevator") == 0 then
+	if core.get_item_group(tnode.name, "travelnet") == 0 and core.get_item_group(tnode.name, "elevator") == 0 then
 		-- provide information necessary to identify the removed box
 		local oldmetadata = {
 			fields = {

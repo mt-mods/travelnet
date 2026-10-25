@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 return function (node_info, fields, player)
 	local pos = node_info.pos
@@ -29,7 +29,7 @@ return function (node_info, fields, player)
 	end
 
 	-- players with travelnet_remove priv can dig the station
-	if not minetest.get_player_privs(player_name)[travelnet.remove_priv]
+	if not core.get_player_privs(player_name)[travelnet.remove_priv]
 		-- the function travelnet.allow_dig(..) may allow additional digging
 		and not travelnet.allow_dig(player_name, owner_name, station_network, pos)
 		-- the owner can remove the station
@@ -68,7 +68,7 @@ return function (node_info, fields, player)
 	-- update station name in node meta
 	meta:set_string("station_name", fields.station_name)
 
-	minetest.chat_send_player(player_name,
+	core.chat_send_player(player_name,
 		S('Station "@1" has been renamed to "@2" on network "@3".',
 			station_name, fields.station_name, station_network))
 
