@@ -70,14 +70,18 @@ local function decide_action(fields, props)
 		return travelnet.actions.edit_station
 	end
 
-	-- if the box has not been configured yet
-	if travelnet.is_falsey_string(props.station_network) then
-		return travelnet.actions.add_station
+	-- save pressed after editing (button or Enter key in any field)
+	if fields.station_set or fields.key_enter_field then
+		-- if the box has not been configured yet, add station instead of update
+		if travelnet.is_falsey_string(props.station_network) then
+			return travelnet.actions.add_station
+		end
+		return travelnet.actions.update_station
 	end
 
-	-- save pressed after editing
-	if fields.station_set then
-		return travelnet.actions.update_station
+	-- if the box has not been configured yet (fallback without explicit save)
+	if travelnet.is_falsey_string(props.station_network) then
+		return travelnet.actions.add_station
 	end
 
 	-- pressed the "open door" button
