@@ -1,10 +1,10 @@
 
-minetest.register_abm({
+core.register_abm({
 	nodenames = { "travelnet:travelnet" },
 	interval = 20,
 	chance = 1,
 	action = function(pos)
-		local meta = minetest.get_meta(pos)
+		local meta = core.get_meta(pos)
 		local owner_name      = meta:get_string("owner")
 		local station_name    = meta:get_string("station_name")
 		local station_network = meta:get_string("station_network")

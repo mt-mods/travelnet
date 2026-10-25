@@ -5,12 +5,12 @@
 -- (this can be overrided in config.lua)
 -- Author: Sokomine
 
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 local travelnet_dyes = {}
 
 local function on_interact(pos, _, player)
-	local meta = minetest.get_meta(pos)
+	local meta = core.get_meta(pos)
 	local legacy_formspec = meta:get_string("formspec")
 	if not travelnet.is_falsey_string(legacy_formspec) then
 		meta:set_string("formspec", "")
@@ -22,7 +22,7 @@ end
 
 -- travelnet box register function
 function travelnet.register_travelnet_box(cfg)
-	minetest.register_node(cfg.nodename, {
+	core.register_node(cfg.nodename, {
 		description = S("Travelnet-Box"),
 		drawtype = "mesh",
 		mesh = "travelnet.obj",
@@ -49,12 +49,12 @@ function travelnet.register_travelnet_box(cfg)
 		},
 		light_source = cfg.light_source or 10,
 		after_place_node = function(pos, placer)
-			local meta = minetest.get_meta(pos)
+			local meta = core.get_meta(pos)
 			meta:set_string("infotext",       S("Travelnet-Box (unconfigured)"))
 			meta:set_string("station_name",   "")
 			meta:set_string("station_network","")
 			meta:set_string("owner", placer:get_player_name())
-			minetest.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
+			core.set_node(vector.add(pos, { x=0, y=1, z=0 }), { name="travelnet:hidden_top" })
 		end,
 
 		on_receive_fields = travelnet.on_receive_fields,
@@ -65,11 +65,11 @@ function travelnet.register_travelnet_box(cfg)
 			local player_name = puncher:get_player_name()
 			if	    travelnet_dyes[item_name]
 				and puncher:get_player_control().sneak
-				and not minetest.is_protected(pos, player_name)
+				and not core.is_protected(pos, player_name)
 			then
 				-- in-place travelnet coloring
 				node.name = travelnet_dyes[item_name]
-				minetest.swap_node(pos, node)
+				core.swap_node(pos, node)
 				item:take_item()
 				puncher:set_wielded_item(item)
 				return
@@ -90,30 +90,30 @@ function travelnet.register_travelnet_box(cfg)
 
 		-- taken from VanessaEs homedecor fridge
 		on_place = function(itemstack, placer, pointed_thing)
-			local node = minetest.get_node(vector.add(pointed_thing.above, { x=0, y=1, z=0 }))
-			local def = minetest.registered_nodes[node.name]
+			local node = core.get_node(vector.add(pointed_thing.above, { x=0, y=1, z=0 }))
+			local def = core.registered_nodes[node.name]
 			-- leftover top nodes can be removed by placing a new travelnet underneath
 			if (not def or not def.buildable_to) and node.name ~= "travelnet:hidden_top" then
-				minetest.chat_send_player(
+				core.chat_send_player(
 					placer:get_player_name(),
 					S("Not enough vertical space to place the travelnet box!")
 				)
 				return
 			end
-			return minetest.item_place(itemstack, placer, pointed_thing)
+			return core.item_place(itemstack, placer, pointed_thing)
 		end,
 
 		on_destruct = function(pos)
 			local above = vector.add(pos, vector.new(0, 1, 0))
-			if minetest.get_node(above).name == "travelnet:hidden_top" then
-				minetest.remove_node(above)
+			if core.get_node(above).name == "travelnet:hidden_top" then
+				core.remove_node(above)
 			end
 		end
 	})
 
 	if cfg.recipe then
 		-- normal recipe
-		minetest.register_craft({
+		core.register_craft({
 			output = cfg.nodename,
 			recipe = cfg.recipe,
 		})
@@ -121,14 +121,14 @@ function travelnet.register_travelnet_box(cfg)
 	if cfg.dye then
 		travelnet_dyes[cfg.dye] = cfg.nodename
 		-- dye recipe
-		minetest.register_craft({
+		core.register_craft({
 			output = cfg.nodename,
 			type = "shapeless",
 			recipe = { "group:travelnet", cfg.dye },
 		})
 	end
 
-	if minetest.get_modpath("mesecons_mvps") then
+	if core.get_modpath("mesecons_mvps") then
 		mesecon.register_mvps_stopper(cfg.nodename)
 	end
 end

@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 return function (node_info, fields, player)
 
@@ -8,7 +8,7 @@ return function (node_info, fields, player)
 		return false, S("The give player is not a player")
 	end -- this should never happen, but just in case
 
-	if not minetest.check_player_privs(player_name, { interact=true }) then
+	if not core.check_player_privs(player_name, { interact=true }) then
 		return false, S("There is no player with interact privilege named '@1'. Aborting.", player_name)
 	end
 
@@ -38,7 +38,7 @@ return function (node_info, fields, player)
 
 	if travelnet.is_falsey_string(owner_name) or owner_name == player_name or is_elevator then -- elevator networks
 		owner_name = player_name
-	elseif	not minetest.get_player_privs(player_name)[travelnet.attach_priv]
+	elseif	not core.get_player_privs(player_name)[travelnet.attach_priv]
 		and not travelnet.allow_attach(player_name, owner_name, station_network)
 	then
 		return false, S("You do not have the travelnet_attach priv which is required to attach your box to " ..
@@ -81,7 +81,7 @@ return function (node_info, fields, player)
 
 	-- do we have a new node to set up? (and are not just reading from a safefile?)
 	if meta then
-		minetest.chat_send_player(player_name,
+		core.chat_send_player(player_name,
 				S("Station '@1'" .. " " ..
 					"has been added to the network '@2'" ..
 					", which now consists of @3 station(s).", station_name, station_network, station_count))

@@ -16,7 +16,7 @@ local default_travelnets = {
 	{ nodename="travelnet:travelnet_grey", color="#a2a2a2", dye=materials.dye_grey },
 	{ nodename="travelnet:travelnet_dark_grey", color="#3d3d3d", dye=materials.dye_dark_grey },
 	{ nodename="travelnet:travelnet_black", color="#0f0f0f", dye=materials.dye_black, light_source=0 },
-	{ nodename="travelnet:travelnet_white", color="#ffffff", dye=materials.dye_white, light_source=minetest.LIGHT_MAX },
+	{ nodename="travelnet:travelnet_white", color="#ffffff", dye=materials.dye_white, light_source=core.LIGHT_MAX },
 }
 
 for _, cfg in ipairs(default_travelnets) do

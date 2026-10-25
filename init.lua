@@ -18,7 +18,7 @@
 --]]
 
 -- Required to save the travelnet data properly in all cases
-if not minetest.safe_file_write then
+if not core.safe_file_write then
 	error("[Mod travelnet] Your Minetest version is no longer supported. (version < 0.4.17)")
 end
 
@@ -28,9 +28,9 @@ travelnet = {
 	default_network = "net1"
 }
 
-travelnet.log = function(c, msg) minetest.log(c, "[travelnet] " .. msg) end
+travelnet.log = function(c, msg) core.log(c, "[travelnet] " .. msg) end
 travelnet.player_formspec_data = {}
-travelnet.path = minetest.get_modpath(minetest.get_current_modname())
+travelnet.path = core.get_modpath(core.get_current_modname())
 
 local function mod_dofile(filename)
 	dofile(travelnet.path .. "/"..filename..".lua")
@@ -71,7 +71,7 @@ if travelnet.travelnet_cleanup_lbm then
 end
 
 -- invisible node to place inside top of travelnet box and elevator
-minetest.register_node("travelnet:hidden_top", {
+core.register_node("travelnet:hidden_top", {
 	drawtype = "airlike",
 	paramtype = "light",
 	sunlight_propagates = true,
@@ -83,12 +83,12 @@ minetest.register_node("travelnet:hidden_top", {
 	drop = "",
 })
 
-if minetest.get_modpath("mesecons_mvps") then
+if core.get_modpath("mesecons_mvps") then
 	mesecon.register_mvps_stopper("travelnet:hidden_top")
 end
 
 if travelnet.travelnet_effect_enabled then
-	minetest.register_entity("travelnet:effect", {
+	core.register_entity("travelnet:effect", {
 		hp_max = 1,
 		physical = false,
 		weight = 5,
@@ -139,6 +139,6 @@ end
 -- upon server start, read the savefile
 travelnet.player_formspec_data = nil
 
-if minetest.get_modpath("mtt") and mtt.enabled then
+if core.get_modpath("mtt") and mtt.enabled then
 	mod_dofile("mtt")
 end

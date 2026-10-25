@@ -3,8 +3,8 @@ globals = {
 }
 
 read_globals = {
-	-- Minetest
-	"minetest",
+	-- Luanti
+	"core",
 	"vector",
 	"ItemStack",
 	"xcompat",

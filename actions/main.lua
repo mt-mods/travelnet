@@ -1,4 +1,4 @@
-local S = minetest.get_translator("travelnet")
+local S = core.get_translator("travelnet")
 
 local player_formspec_data = travelnet.player_formspec_data
 
@@ -34,7 +34,7 @@ function travelnet.actions.remove_station(node_info, _, player)
 
 	-- players with travelnet_remove priv can dig the station
 	if
-		not minetest.get_player_privs(player_name)[travelnet.remove_priv]
+		not core.get_player_privs(player_name)[travelnet.remove_priv]
 		-- the function travelnet.allow_dig(..) may allow additional digging
 		and not travelnet.allow_dig(player_name, node_info.props.owner_name, node_info.props.station_network, node_info.pos)
 		-- the owner can remove the station
@@ -57,7 +57,7 @@ function travelnet.actions.remove_station(node_info, _, player)
 	-- remove the box from the data structure
 	travelnet.remove_box(node_info.pos, nil, node_info.meta:to_table(), player)
 	-- remove the node as such
-	minetest.remove_node(node_info.pos)
+	core.remove_node(node_info.pos)
 
 	return true
 end
@@ -66,9 +66,9 @@ function travelnet.actions.edit_station(node_info, _, player)
 	local player_name = player:get_player_name()
 	-- abort if user isn't owner
 	if node_info.props.owner_name ~= player_name
-	   and not minetest.check_player_privs(player_name, { protection_bypass=true })
+	   and not core.check_player_privs(player_name, { protection_bypass=true })
 	then
-		minetest.record_protection_violation(node_info.pos, player_name)
+		core.record_protection_violation(node_info.pos, player_name)
 		return false, S("This @1 belongs to @2. You can't edit it.",
 				node_info.props.description,
 				tostring(node_info.props.owner_name)
@@ -96,7 +96,7 @@ function travelnet.actions.toggle_door(node_info, _, player)
 end
 
 function travelnet.actions.instruct_player(_, _, player)
-	minetest.chat_send_player(player:get_player_name(), S("Please click on the target you want to travel to."))
+	core.chat_send_player(player:get_player_name(), S("Please click on the target you want to travel to."))
 	return true
 end
 
