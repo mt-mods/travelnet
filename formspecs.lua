@@ -82,7 +82,7 @@ function travelnet.formspecs.edit_travelnet(options)
 		S("Configure this travelnet station"),
 		S("Delete"),
 		S("Name of this station:"),
-		minetest.formspec_escape(options.station_name or ""),
+		core.formspec_escape(options.station_name or ""),
 		S("Example: \"my house\", \"mine\", \"shop\"..."),
 		S("Assign to network:"),
 		F(
@@ -92,7 +92,7 @@ function travelnet.formspecs.edit_travelnet(options)
 		),
 		S("If unsure, use \"@1\".", travelnet.default_network),
 		S("Owned by:"),
-		minetest.formspec_escape(options.owner_name or ""),
+		core.formspec_escape(options.owner_name or ""),
 		S("Leave this as is unless you know what you're doing."),
 		S("Save"),
 		S("Back")
@@ -123,7 +123,7 @@ function travelnet.formspecs.edit_elevator(options)
 		S("Configure this elevator station"),
 		S("Delete"),
 		S("Name of this station:"),
-		minetest.formspec_escape(options.station_name or ""),
+		core.formspec_escape(options.station_name or ""),
 		S("Save"),
 		S("Back")
 	)
@@ -208,7 +208,7 @@ function travelnet.formspecs.primary(options, player_name)
 		if k == options.station_name then
 			formspec = formspec ..
 				("style[open_door;bgcolor=#26a269;textcolor=#ffffff]button[%f,%f;4,0.5;open_door;%s]")
-						:format(x, y + 2.5, minetest.formspec_escape(k) .. " *")
+						:format(x, y + 2.5, core.formspec_escape(k) .. " *")
 		elseif options.is_elevator then
 			local travelnets = travelnet.get_travelnets(options.owner_name)
 			local network = travelnets[options.station_network]
