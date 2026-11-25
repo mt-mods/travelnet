@@ -94,7 +94,7 @@ local function decide_action(fields, props)
 		return travelnet.actions.change_order
 	end
 
-	if not fields.target then
+	if not fields.target and not fields.target_station then
 		return travelnet.actions.instruct_player
 	end
 
