@@ -4,7 +4,11 @@ return function (node_info, fields, player)
 
 	local network = travelnet.get_network(node_info.props.owner_name, node_info.props.station_network)
 
-	if node_info.node ~= nil and node_info.props.is_elevator then
+	if fields.target_station then
+		-- elevator station name button: the value is the station name itself
+		fields.target = fields.target_station
+	elseif node_info.node ~= nil and node_info.props.is_elevator then
+		-- elevator floor number button: look up the station by its number
 		for k,_ in pairs(network) do
 			if network[k].nr == fields.target then
 				fields.target = k
